@@ -7,8 +7,8 @@ import java.awt.event.ActionListener;
 public class GameFrame implements ActionListener {
     private JFrame myFrame;
     private JMenuBar myOptionBar;
-    private JMenu mySetting, myHelp;
-    private JMenuItem myStart, myReset, myExit;
+    private JMenu myFile, myHelp;
+    private JMenuItem mySaveGame, myLoadGame, myExitGame, myAbout, myGamePlayInstruction;
 
     public GameFrame() {
         initializeFrame();
@@ -16,7 +16,7 @@ public class GameFrame implements ActionListener {
     }
 
     private void initializeFrame() {
-        this.myFrame = new JFrame();
+        this.myFrame = new JFrame("Trivia Maze");
         myFrame.setSize(650, 500);
         myFrame.setLocationRelativeTo(null);
         myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -27,30 +27,57 @@ public class GameFrame implements ActionListener {
         this.myOptionBar = new JMenuBar();
 
         // Setting option
-        this.mySetting = new JMenu("Setting");
+        this.myFile = new JMenu("File");
 
-        this.myStart = new JMenuItem("Start");
-        this.myReset = new JMenuItem("Rest");
-        this.myExit = new JMenuItem("Exit");
+        this.mySaveGame = new JMenuItem("Save Game");
+        this.myLoadGame = new JMenuItem("Load Game");
+        this.myExitGame = new JMenuItem("Exit");
 
-        myExit.addActionListener(this);
-        myReset.addActionListener(this);
-        myStart.addActionListener(this);
+        this.mySaveGame.addActionListener(this);
+        this.mySaveGame.addActionListener(this);
+        this.myExitGame.addActionListener(this);
 
-        this.mySetting.add(myStart);
-        this.mySetting.add(myReset);
-        this.mySetting.add(myExit);
+        this.myFile.add(mySaveGame);
+        this.myFile.add(myLoadGame);
+        this.myFile.add(myExitGame);
+
+        this.myOptionBar.add(myFile);
 
 
-        this.myOptionBar.add(mySetting);
+        // Help option
+        this.myHelp = new JMenu("Help");
+
+        this.myAbout = new JMenuItem("About");
+        this.myGamePlayInstruction = new JMenuItem("Game Play Instruction");
+
+        this.myAbout.addActionListener(this);
+        this.myGamePlayInstruction.addActionListener(this);
+
+        this.myHelp.add(myAbout);
+        this.myHelp.add(myGamePlayInstruction);
+
+        this.myOptionBar.add(myHelp);
 
         this.myFrame.setJMenuBar(myOptionBar);
-        // Help option
-
     }
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == myExit) {
-            myFrame.dispose();
+        if(e.getSource() == myExitGame) {
+            int option = JOptionPane.showConfirmDialog(myFrame, "Are you sure to exit?", "Exit Game",
+                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+            if(option == JOptionPane.OK_OPTION) {
+                myFrame.dispose();
+            }
+        }
+        if(e.getSource() == myAbout) {
+            StringBuilder about = new StringBuilder();
+            about.append("<html>");
+            about.append("This game is design with a goal of entertainment and eduction.<br>");
+            about.append("Developer Team: Huy Huynh, Drew Brown, Jafar.<br>");
+            about.append("App version: 1.0<br>");
+            about.append("</html>");
+
+            JOptionPane.showMessageDialog(myFrame, about.toString(), "Trivia Maza Game", JOptionPane.PLAIN_MESSAGE);
         }
     }
  }
