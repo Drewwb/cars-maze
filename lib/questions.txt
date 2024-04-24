@@ -1,0 +1,84 @@
+MC
+What was the first car brand to ever be created?
+Ford-Benz-Chevy-Volkswagon
+Benz
+Cars
+
+SAQ
+What truck brand has the #1 best selling Truck of all time?
+Ford
+Cars
+
+TF
+The Porsche 911 has always had its engine located at the rear of the car
+False
+Cars
+
+MC
+Which planet is known as the "Red Planet"?
+Mars-Earth-Venus-Mercury
+Mars
+Science
+
+SAQ
+Who is the author of the Harry Potter series?
+J.K. Rowling
+Literature
+
+TF
+The Earth is flat.
+False
+Science
+
+MC
+What is the capital of France?
+Paris-London-Berlin-Rome
+Paris
+Geography
+
+SAQ
+Who painted the Mona Lisa?
+Leonardo da Vinci
+Art
+
+TF
+The Great Wall of China is visible from space.
+False
+History
+
+MC
+Which of the following is a primary color?
+Red-Yellow-Purple-Green
+Red
+Art
+
+SAQ
+What is the largest mammal on Earth?
+Blue whale
+Science
+
+TF
+The sun rises in the west.
+False
+Geography
+
+TF
+Mount Everest is the tallest mountain in the world.
+True
+Geography
+
+MC
+Which programming language is used for Android app development?
+Java-Python-C++-Swift
+Java
+Technology
+
+SAQ
+What is the capital of Japan?
+Tokyo
+Geography
+
+TF
+The Amazon River is the longest river in the world.
+False
+Geography
