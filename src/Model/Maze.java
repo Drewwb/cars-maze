@@ -11,7 +11,8 @@ public class Maze {
     private void initializeRooms() {
         for(int i = 0; i < myRooms.length; i++) {
             for(int j = 0; j < myRooms[i].length; j++) {
-                myRooms[i][j] = new Room();
+                Room room = new Room(); // each room would have it own 4 questions
+                myRooms[i][j] = room;
             }
         }
     }

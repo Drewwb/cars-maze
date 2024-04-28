@@ -5,9 +5,11 @@ public class Door {
     private Question myQuestion;
     private boolean myDoorLock;
 
-    public Door(Direction theDirection, Question theQuestion) {
+    public Door(Direction theDirection) {
         this.myDirection = theDirection;
-        this.myQuestion = theQuestion;
+        QuestionFactory singleQuestion = new QuestionFactory();
+        this.myQuestion = singleQuestion.createQuestion();
+
         this.myDoorLock = false;
     }
     public void setDirection(Direction theDirection) {
