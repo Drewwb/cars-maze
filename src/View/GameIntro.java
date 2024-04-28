@@ -3,19 +3,25 @@ package src.View;
 import javax.sound.sampled.*;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 
-public class GameIntro implements ActionListener {
+public class GameIntro implements ActionListener, ChangeListener {
     private JFrame myFrame;
     private JLabel myLabel;
     private ImageIcon myImage;
     private JButton myStartButton, mySettingButton, myQuitButton;
     private JPanel optionPanel;
-    private Clip introSoundClip;
+    private Clip introSoundClip, clickSoundClip;
+    private JSlider volumeSlider, soundFXSlider;
+    private JComboBox<String> languageComboBox;
+
+    private String[] languages = {"English", "Vietnamese", "French"};
 
     public GameIntro() {
         InitializeMainFrame();
@@ -23,6 +29,7 @@ public class GameIntro implements ActionListener {
         InitializePicture();
         loadBackGroundMusic(); // Load the background music
         playBackgroundMusic(); // Start playing the background music
+        loadClickSound();
     }
     private void InitializeMainFrame() {
         myFrame = new JFrame("Trivia Maze");
@@ -48,7 +55,6 @@ public class GameIntro implements ActionListener {
         ImageIcon startIcon = new ImageIcon("Start.png");
         ImageIcon settingIcon = new ImageIcon("Setting.png");
         ImageIcon quitIcon = new ImageIcon("Quit.png");
-
 
 
         optionPanel = new JPanel();
@@ -86,18 +92,109 @@ public class GameIntro implements ActionListener {
         // Adding to frame
         myFrame.add(optionPanel);
     }
+    public void initializeSetting() {
+        JFrame settingFrame = new JFrame("Game Setting");
+        settingFrame.setSize(400, 300);
+        settingFrame.setResizable(false);
+        settingFrame.setVisible(true);
+        settingFrame.setLocationRelativeTo(null);
+        settingFrame.setLayout(null);
+
+        volumeSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 50);
+        volumeSlider.setBounds(110,20, 200,30);
+        volumeSlider.addChangeListener(this);
+
+        soundFXSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 50);
+        soundFXSlider.setBounds(110, 70, 200,30);
+
+        languageComboBox = new JComboBox<>(languages);
+        languageComboBox.setBounds(110, 120, 150,30);
+        languageComboBox.addActionListener(this);
+
+
+        JLabel volumeLabel = new JLabel("Volume");
+        volumeLabel.setBounds(20, 20, 70,20);
+        JLabel soundFXLabel = new JLabel("Sound fx");
+        soundFXLabel.setBounds(20, 70, 70, 20);
+        JLabel languageLabel = new JLabel("Language");
+        languageLabel.setBounds(20, 120, 70, 20);
+
+        settingFrame.add(soundFXLabel);
+        settingFrame.add(soundFXSlider);
+        settingFrame.add(volumeLabel);
+        settingFrame.add(volumeSlider);
+        settingFrame.add(languageLabel);
+        settingFrame.add(languageComboBox);
+
+
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == myStartButton) {
+            playClickSound();
             myFrame.dispose();
             GameFrame gameFrame = new GameFrame();
         }
         if(e.getSource() == myQuitButton) {
-            myFrame.dispose();
+            playClickSound();
+            int option = JOptionPane.showConfirmDialog(myFrame, "Are you sure to exit?", "Exit Game", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+            if(option == JOptionPane.OK_OPTION) {
+                myFrame.dispose();
+            }
+
+        }
+        if(e.getSource() == mySettingButton) {
+            playClickSound();
+            initializeSetting();
+        }
+        if(e.getSource() == languageComboBox) {
+            String selectedLanguage = (String) languageComboBox.getSelectedItem();
+            switchLanguage(selectedLanguage);
+        }
+    }
+    @Override
+    public void stateChanged(ChangeEvent e) {
+        if (e.getSource() == volumeSlider) {
+            setVolume(volumeSlider.getValue()); // Adjust volume based on slider value
+        }
+    }
+    /**
+     * Feature coming Soon!
+     */
+    public void switchLanguage(String language) {
+        System.out.println("Selected language: " + language);
+    }
+
+
+    public void setVolume(int volume) {
+        if (introSoundClip != null) {
+            FloatControl volumeControl = (FloatControl) introSoundClip.getControl(FloatControl.Type.MASTER_GAIN);
+            float range = volumeControl.getMaximum() - volumeControl.getMinimum();
+            float gain = (range * volume / 100) + volumeControl.getMinimum();
+            volumeControl.setValue(gain);
         }
     }
 
+    // Adding click sound for button.
+    public void loadClickSound() {
+        try {
+            File soundFile = new File("ClickSound.wav");
+            AudioInputStream audioIn = AudioSystem.getAudioInputStream(soundFile);
+            clickSoundClip = AudioSystem.getClip();
+            clickSoundClip.open(audioIn);
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void playClickSound() {
+        if(clickSoundClip != null) {
+            clickSoundClip.setFramePosition(0);
+            clickSoundClip.start();
+        }
+    }
 
     // Adding Intro Music.
     public void loadBackGroundMusic() {
@@ -113,6 +210,7 @@ public class GameIntro implements ActionListener {
 
     public void playBackgroundMusic() {
         if (introSoundClip != null) {
+            setVolume(50);
             introSoundClip.loop(Clip.LOOP_CONTINUOUSLY); // Loop the music continuously
         }
     }
