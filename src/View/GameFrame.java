@@ -17,9 +17,12 @@ public class GameFrame implements ActionListener {
 
     private void initializeFrame() {
         this.myFrame = new JFrame("Trivia Maze");
-        myFrame.setSize(650, 500);
+        myFrame.setSize(736, 736);
         myFrame.setLocationRelativeTo(null);
         myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+
+        myFrame.setResizable(false);
         myFrame.setLayout(null);
         myFrame.setVisible(true);
     }
