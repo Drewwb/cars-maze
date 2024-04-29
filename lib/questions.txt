@@ -82,3 +82,67 @@ TF
 The Amazon River is the longest river in the world.
 False
 Geography
+
+MC
+What is the largest organ in the human body?
+Brain-Skin-Heart-Lung
+Skin
+Biology
+
+SAQ
+Who wrote "To Kill a Mockingbird"?
+Harper Lee
+Literature
+
+TF
+The moon orbits the Earth.
+True
+Astronomy
+
+MC
+Which country is known as the Land of the Rising Sun?
+Japan-China-Korea-Vietnam
+Japan
+Geography
+
+SAQ
+What is the chemical symbol for gold?
+Au
+Chemistry
+
+TF
+Water boils at 100 degrees Celsius.
+True
+Science
+
+MC
+Which element has the chemical symbol 'Fe'?
+Iron-Copper-Silver-Gold
+Iron
+Chemistry
+
+SAQ
+Who discovered penicillin?
+Alexander Fleming
+Science
+
+TF
+Oxygen is the most abundant element in the Earth's atmosphere.
+False
+Science
+
+MC
+Which planet is known as the "Morning Star"?
+Venus-Mars-Jupiter-Saturn
+Venus
+Astronomy
+
+SAQ
+Who painted the famous artwork "The Starry Night"?
+Vincent van Gogh
+Art
+
+TF
+A flock of crows is called a "murder".
+True
+Nature

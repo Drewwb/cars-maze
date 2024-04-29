@@ -12,8 +12,9 @@ import java.util.Scanner;
 
 public class PopulateDatabase {
     public static void main(String[] args) {
-        String fileName = "questions.txt"; // Name of your text file
-        String url = "jdbc:sqlite:QATable.db"; // Adjust path to your SQLite database file
+        // Test jdbc connection
+        String fileName = "questions.txt";
+        String url = "jdbc:sqlite:QATable.db";
 
         try (Connection connection = DriverManager.getConnection(url)) {
             File file = new File(fileName);
