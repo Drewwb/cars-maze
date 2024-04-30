@@ -17,7 +17,7 @@ public class PopulateDatabase {
     }
 
     private static void clearDatabase(Connection connection) throws SQLException {
-        String[] tables = {"MultipleChoice", "ShortAnswer", "TrueFalse"};
+        String[] tables = {"MultipleChoice", "ShortAnswer", "TrueFalse", "QuestionsAsked"};
         for (String table : tables) {
             String sql = "DELETE FROM " + table;
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -31,6 +31,9 @@ public class PopulateDatabase {
         try {
             connection = ds.getConnection();
             connection.setAutoCommit(false);
+
+
+            createQuestionsAskedTable(connection);
 
             clearDatabase(connection);
 
@@ -101,6 +104,13 @@ public class PopulateDatabase {
                     System.err.println("SQL connection close exception: " + e.getMessage());
                 }
             }
+        }
+    }
+
+    private static void createQuestionsAskedTable(Connection connection) throws SQLException {
+        String sql = "CREATE TABLE IF NOT EXISTS QuestionsAsked (ID INTEGER PRIMARY KEY, Question TEXT)";
+        try (Statement stmt = connection.createStatement()) {
+            stmt.execute(sql);
         }
     }
 
