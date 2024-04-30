@@ -1,87 +1,147 @@
 package src.Model;
-//java.sql docs
-//https://docs.oracle.com/javase/8/docs/api/java/sql/package-summary.html
+
+import org.sqlite.SQLiteDataSource;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Scanner;
 
 public class PopulateDatabase {
+
     public static void main(String[] args) {
-        // Test jdbc connection
-        String fileName = "questions.txt";
-        String url = "jdbc:sqlite:QATable.db";
+        String fileName = "lib/questions.txt";
+        SQLiteDataSource ds = new SQLiteDataSource();
+        ds.setUrl("jdbc:sqlite:lib/QATable.db");
+        populateData(ds, fileName);
+    }
 
-        try (Connection connection = DriverManager.getConnection(url)) {
+    private static void clearDatabase(Connection connection) throws SQLException {
+        String[] tables = {"MultipleChoice", "ShortAnswer", "TrueFalse"};
+        for (String table : tables) {
+            String sql = "DELETE FROM " + table;
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.executeUpdate();
+            }
+        }
+    }
+
+    private static void populateData(SQLiteDataSource ds, String fileName) {
+        Connection connection = null;
+        try {
+            connection = ds.getConnection();
+            connection.setAutoCommit(false);
+
+            clearDatabase(connection);
+
             File file = new File(fileName);
-            Scanner scanner = new Scanner(file);
+            try (Scanner scanner = new Scanner(file)) {
+                while (scanner.hasNextLine()) {
+                    // Skip any initial empty lines
+                    String line = scanner.nextLine().trim();
+                    while (line.isEmpty() && scanner.hasNextLine()) {
+                        line = scanner.nextLine().trim();
+                    }
 
-            while (scanner.hasNextLine()) {
-                String type = scanner.nextLine().trim();
-                String question = scanner.nextLine().trim();
-                String options = "";
-                String answer = scanner.nextLine().trim();
-                String category = scanner.nextLine().trim();
+                    // Parse the ID
+                    int id = Integer.parseInt(line);
 
-                if (type.equals("MC")) {
-                    options = answer;
+                    // Read the question type
+                    if (!scanner.hasNextLine()) break;
+                    String type = scanner.nextLine().trim();
+
+                    // Read the question
+                    if (!scanner.hasNextLine()) break;
+                    String question = scanner.nextLine().trim();
+
+                    // Initialize variables
+                    String options = "";
+                    String answer;
+                    String category;
+
+                    // For 'MC' type questions, read the options
+                    if ("MC".equals(type)) {
+                        if (!scanner.hasNextLine()) break;
+                        options = scanner.nextLine().trim();
+                    }
+
+                    // For all question types, read the answer
+                    if (!scanner.hasNextLine()) break;
                     answer = scanner.nextLine().trim();
-                }
 
-                switch (type) {
-                    case "MC":
-                        insertMultipleChoiceQuestion(connection, question, options, answer, category);
-                        break;
-                    case "SAQ":
-                        insertShortAnswerQuestion(connection, question, answer, category);
-                        break;
-                    case "TF":
-                        insertTrueFalseQuestion(connection, question, answer, category);
-                        break;
+                    // Read the category
+                    if (!scanner.hasNextLine()) break;
+                    category = scanner.nextLine().trim();
+
+                    // Insert the question into the database
+                    insertQuestion(connection, type, id, question, options, answer, category);
+
+                    // Skip the empty line after the entry if it exists
+                    if (scanner.hasNextLine()) {
+                        scanner.nextLine();
+                    }
+                }
+                connection.commit(); // Commit all changes at the end
+            } catch (FileNotFoundException e) {
+                System.err.println("File not found: " + e.getMessage());
+            } catch (NumberFormatException e) {
+                System.err.println("Error parsing ID: " + e.getMessage());
+                connection.rollback(); // Rollback in case of an error
+            } catch (SQLException e) {
+                System.err.println("SQL exception: " + e.getMessage());
+                connection.rollback(); // Rollback in case of an error
+            }
+        } catch (SQLException e) {
+            System.err.println("SQL connection exception: " + e.getMessage());
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close(); // Ensure connection is closed
+                } catch (SQLException e) {
+                    System.err.println("SQL connection close exception: " + e.getMessage());
                 }
             }
-            scanner.close();
-            System.out.println("Data inserted successfully.");
-        } catch (FileNotFoundException | SQLException e) {
-            e.printStackTrace();
         }
     }
 
-    private static void insertMultipleChoiceQuestion(Connection connection, String question, String options, String answer, String category) throws SQLException {
-        String sql = "INSERT INTO MultipleChoice (QUESTION, OPTION1, OPTION2, OPTION3, OPTION4, ANSWER, CATEGORY) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        String[] optionArray = options.split("-");
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, question);
-            for (int i = 0; i < optionArray.length; i++) {
-                statement.setString(i + 2, optionArray[i]);
+    private static void insertQuestion(Connection connection, String type, int id, String question, String options, String answer, String category) throws SQLException {
+        String tableName = getTableName(type);
+        String sql = "";
+        if ("MC".equals(type)) {
+            sql = "INSERT INTO MultipleChoice (ID, QUESTION, OPTION1, OPTION2, OPTION3, OPTION4, ANSWER, CATEGORY) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                String[] optionArray = options.split("-");
+                statement.setInt(1, id);
+                statement.setString(2, question);
+                for (int i = 0; i < optionArray.length; i++) {
+                    statement.setString(i + 3, optionArray[i].trim());
+                }
+                statement.setString(7, answer);
+                statement.setString(8, category);
+                statement.executeUpdate();
             }
-            statement.setString(6, answer);
-            statement.setString(7, category);
-            statement.executeUpdate();
+        } else {
+            sql = "INSERT INTO " + tableName + " (ID, QUESTION, ANSWER, CATEGORY) VALUES (?, ?, ?, ?)";
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setInt(1, id);
+                statement.setString(2, question);
+                statement.setString(3, answer);
+                statement.setString(4, category);
+                statement.executeUpdate();
+            }
         }
     }
 
-    private static void insertShortAnswerQuestion(Connection connection, String question, String answer, String category) throws SQLException {
-        String sql = "INSERT INTO ShortAnswer (QUESTION, ANSWER, CATEGORY) VALUES (?, ?, ?)";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, question);
-            statement.setString(2, answer);
-            statement.setString(3, category);
-            statement.executeUpdate();
-        }
-    }
-
-    private static void insertTrueFalseQuestion(Connection connection, String question, String answer, String category) throws SQLException {
-        String sql = "INSERT INTO TrueFalse (QUESTION, ANSWER, CATEGORY) VALUES (?, ?, ?)";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, question);
-            statement.setString(2, answer);
-            statement.setString(3, category);
-            statement.executeUpdate();
+    private static String getTableName(String type) {
+        switch (type) {
+            case "MC":
+                return "MultipleChoice";
+            case "SAQ":
+                return "ShortAnswer";
+            case "TF":
+                return "TrueFalse";
+            default:
+                throw new IllegalArgumentException("Invalid question type: " + type);
         }
     }
 }

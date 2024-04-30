@@ -1,147 +1,175 @@
+2
 MC
 What was the first car brand to ever be created?
 Ford-Benz-Chevy-Volkswagon
 Benz
 Cars
 
+3
 SAQ
 What truck brand has the #1 best selling Truck of all time?
 Ford
 Cars
 
+4
 TF
 The Porsche 911 has always had its engine located at the rear of the car
 False
 Cars
 
+5
 MC
 Which planet is known as the "Red Planet"?
 Mars-Earth-Venus-Mercury
 Mars
 Science
 
+6
 SAQ
 Who is the author of the Harry Potter series?
 J.K. Rowling
 Literature
 
+7
 TF
 The Earth is flat.
 False
 Science
 
+8
 MC
 What is the capital of France?
 Paris-London-Berlin-Rome
 Paris
 Geography
 
+9
 SAQ
 Who painted the Mona Lisa?
 Leonardo da Vinci
 Art
 
+10
 TF
 The Great Wall of China is visible from space.
 False
 History
 
+11
 MC
 Which of the following is a primary color?
 Red-Yellow-Purple-Green
 Red
 Art
 
+12
 SAQ
 What is the largest mammal on Earth?
 Blue whale
 Science
 
+13
 TF
 The sun rises in the west.
 False
 Geography
 
+14
 TF
 Mount Everest is the tallest mountain in the world.
 True
 Geography
 
+15
 MC
 Which programming language is used for Android app development?
 Java-Python-C++-Swift
 Java
 Technology
 
+16
 SAQ
 What is the capital of Japan?
 Tokyo
 Geography
 
+17
 TF
 The Amazon River is the longest river in the world.
 False
 Geography
 
+18
 MC
 What is the largest organ in the human body?
 Brain-Skin-Heart-Lung
 Skin
 Biology
 
+19
 SAQ
 Who wrote "To Kill a Mockingbird"?
 Harper Lee
 Literature
 
+20
 TF
 The moon orbits the Earth.
 True
 Astronomy
 
+21
 MC
 Which country is known as the Land of the Rising Sun?
 Japan-China-Korea-Vietnam
 Japan
 Geography
 
+22
 SAQ
 What is the chemical symbol for gold?
 Au
 Chemistry
 
+23
 TF
 Water boils at 100 degrees Celsius.
 True
 Science
 
+24
 MC
 Which element has the chemical symbol 'Fe'?
 Iron-Copper-Silver-Gold
 Iron
 Chemistry
 
+25
 SAQ
 Who discovered penicillin?
 Alexander Fleming
 Science
 
+26
 TF
 Oxygen is the most abundant element in the Earth's atmosphere.
 False
 Science
 
+27
 MC
 Which planet is known as the "Morning Star"?
 Venus-Mars-Jupiter-Saturn
 Venus
 Astronomy
 
+28
 SAQ
 Who painted the famous artwork "The Starry Night"?
 Vincent van Gogh
 Art
 
+29
 TF
 A flock of crows is called a "murder".
 True
