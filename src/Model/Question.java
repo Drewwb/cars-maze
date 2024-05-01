@@ -13,6 +13,8 @@ public class Question {
     private String answer;
     private String category;
 
+    private String lineSeparator = System.lineSeparator();
+
     public Question(String type, int id) {
         this.type = type;
         this.id = id;
@@ -93,4 +95,17 @@ public class Question {
         }
         this.category = category;
     }
+    @Override
+    public String toString(){      //toString method tells us the state of the question object and other details.
+        StringBuilder myQuestionDetails = new StringBuilder();
+        myQuestionDetails.append("Question: " + question + lineSeparator);
+        myQuestionDetails.append("Answer: " + answer + lineSeparator);
+        myQuestionDetails.append("ID: " + id + lineSeparator);
+        myQuestionDetails.append("Type: " + type + lineSeparator);
+        myQuestionDetails.append("Category: " + category + lineSeparator);
+        return myQuestionDetails.toString();
+
+    }
+
+
 }
