@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 public class MultipleChoiceQuestion extends Question {
 
-    String[] options = new String[4];
+    private String[] options = new String[4];
 
     public MultipleChoiceQuestion(int id) {
         super("MultipleChoice", id);
