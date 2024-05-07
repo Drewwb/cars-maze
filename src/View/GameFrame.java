@@ -56,6 +56,32 @@ public class GameFrame implements ActionListener {
         controlPanel.setBounds(10, 450, 350,120);
         controlPanel.setBackground(new Color(0, 0, 0, 100));
 
+        ImageIcon up = new ImageIcon("cars-maze/soundimage/up.png");
+        JButton moveUp = new JButton();
+        moveUp.setIcon(up);
+        moveUp.setBounds(40, 15, 30,30);
+
+        ImageIcon left = new ImageIcon("cars-maze/soundimage/left.png");
+        JButton moveLeft = new JButton();
+        moveLeft.setIcon(left);
+        moveLeft.setBounds(5, 50, 30,30);
+
+        ImageIcon right = new ImageIcon("cars-maze/soundimage/right.png");
+        JButton moveRight = new JButton();
+        moveRight.setIcon(right);
+        moveRight.setBounds(75, 50, 30,30);
+
+        ImageIcon down = new ImageIcon("cars-maze/soundimage/down.png");
+        JButton moveDown = new JButton();
+        moveDown.setIcon(down);
+        moveDown.setBounds(40, 85, 30,30);
+
+
+        controlPanel.add(moveUp);
+        controlPanel.add(moveLeft);
+        controlPanel.add(moveRight);
+        controlPanel.add(moveDown);
+
         myFrame.add(controlPanel);
     }
 
