@@ -118,7 +118,7 @@ public class GameFrame implements ActionListener {
     }
 
     private void initializeBackGround() {
-        myBackGroundIcon = new ImageIcon("Background2.jpeg");
+        myBackGroundIcon = new ImageIcon("cars-maze/soundimage/Background2.jpeg");
         backGroundLabel = new JLabel(myBackGroundIcon);
         backGroundLabel.setBounds(0, 0, myFrame.getWidth(), myFrame.getHeight());
         myFrame.add(backGroundLabel);
