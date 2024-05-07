@@ -16,11 +16,27 @@ public class Question {
     private String lineSeparator = System.lineSeparator();
 
     public Question(String type, int id) {
-        this.type = type;
-        this.id = id;
+        setType(type);
+        setId(id);
         setQuestion(id);
         setAnswer(id);
         setCategory(id);
+    }
+
+    public void setType(String type) {
+        if (type != null) {
+            this.type = type;
+        } else {
+            throw new IllegalArgumentException("Invalid type");
+        }
+    }
+
+    public void setId(int id) {
+        if (id > 1 && id < 30) {
+            this.id = id;
+        } else {
+            throw new IllegalArgumentException("Invalid ID");
+        }
     }
 
     public String getQuestion() {
@@ -106,6 +122,5 @@ public class Question {
         return myQuestionDetails.toString();
 
     }
-
 
 }
