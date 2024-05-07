@@ -1,29 +1,54 @@
 package src.Test;
-import src.Model.Door;
-import static org.junit.Assert.*;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import src.Model.Direction;
+import src.Model.Door;
+import src.Model.Question;
+import src.Model.QuestionFactory;
 
-public class DoorTest {
+import static org.junit.jupiter.api.Assertions.*;
 
-    @org.junit.Test
-    public void setDirection() {
-        Door testDoor = new Door(Direction.WEST);
-        assertEquals(Direction.WEST, testDoor.getMyDirection());
+class DoorTest {
+    private Door door;
+
+    @BeforeEach
+    void setUp() {
+        door = new Door(Direction.NORTH);
     }
 
-    @org.junit.Test
-    public void getMyDirection() {
+    @Test
+    void testInitialDirection() {
+        assertEquals(Direction.NORTH, door.getMyDirection());
     }
 
-    @org.junit.Test
-    public void setQuestion() {
+    @Test
+    void testSetDirection() {
+        door.setDirection(Direction.EAST);
+        assertEquals(Direction.EAST, door.getMyDirection());
     }
 
-    @org.junit.Test
-    public void getMyQuestion() {
+    @Test
+    void testInitialDoorLock() {
+        assertTrue(door.isDoorLocked());
     }
 
-    @org.junit.Test
-    public void setDoorLock() {
+    @Test
+    void testSetDoorLock() {
+        door.setDoorLock(false);
+        assertFalse(door.isDoorLocked());
+    }
+
+    @Test
+    void testInitialQuestion() {
+        assertNotNull(door.getMyQuestion());
+    }
+
+    @Test
+    void testSetQuestion() {
+        QuestionFactory factory = new QuestionFactory();
+        Question newQuestion = factory.createMultipleChoiceQuestion();
+        door.setQuestion(newQuestion);
+        assertEquals(newQuestion, door.getMyQuestion());
     }
 }

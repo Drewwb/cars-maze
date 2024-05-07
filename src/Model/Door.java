@@ -10,7 +10,12 @@ public class Door {
         QuestionFactory singleQuestion = new QuestionFactory();
         this.myQuestion = singleQuestion.createQuestion();
 
-        this.myDoorLock = false;
+        //default value for the door -  True = locked, False = opened
+        this.myDoorLock = true;
+    }
+
+    public boolean isDoorLocked() {
+        return myDoorLock;
     }
     public void setDirection(Direction theDirection) {
         this.myDirection = theDirection;

@@ -27,7 +27,6 @@ public class QuestionFactory {
         };
     }
 
-
     public Question createMultipleChoiceQuestion() {
         return new MultipleChoiceQuestion(getIdFromDB("MultipleChoice"));
     }
