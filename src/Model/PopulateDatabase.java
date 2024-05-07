@@ -135,6 +135,7 @@ public class PopulateDatabase {
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setInt(1, id);
                 statement.setString(2, question);
+
                 statement.setString(3, answer);
                 statement.setString(4, category);
                 statement.executeUpdate();
