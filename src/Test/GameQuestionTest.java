@@ -9,7 +9,7 @@ class GameQuestionTest {
     @Test
     void testQuestionDetails() {
         // Hardcoded values for ID and expected outcomes
-        int testId = 2; // Assuming an ID that exists in your DB with known values
+        int testId = 2;
         String expectedQuestion = "What was the first car brand to ever be created?";
         String expectedAnswer = "Benz";
         String expectedCategory = "Cars";
