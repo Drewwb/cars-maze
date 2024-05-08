@@ -1,7 +1,5 @@
 package src.Model;
 
-import Model.SaveData;
-
 import java.io.Serializable;
 
 public class Maze implements Serializable {

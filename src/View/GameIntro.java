@@ -43,7 +43,7 @@ public class GameIntro implements ActionListener, ChangeListener {
 
     }
     private void InitializePicture() {
-        myImage = new ImageIcon("cars-maze/soundimage/Maze.jpeg");
+        myImage = new ImageIcon("Maze.jpeg");
 
         myLabel = new JLabel();
         myLabel.setIcon(myImage);
@@ -52,9 +52,9 @@ public class GameIntro implements ActionListener, ChangeListener {
         myFrame.add(myLabel, BorderLayout.CENTER);
     }
     private void InitializeOptionPanel() {
-        ImageIcon startIcon = new ImageIcon("cars-maze/soundimage/Start.png");
-        ImageIcon settingIcon = new ImageIcon("cars-maze/soundimage/Setting.png");
-        ImageIcon quitIcon = new ImageIcon("cars-maze/soundimage/Quit.png");
+        ImageIcon startIcon = new ImageIcon("soundimage/Start.png");
+        ImageIcon settingIcon = new ImageIcon("soundimage/Setting.png");
+        ImageIcon quitIcon = new ImageIcon("soundimage/Quit.png");
 
 
         optionPanel = new JPanel();
@@ -180,7 +180,7 @@ public class GameIntro implements ActionListener, ChangeListener {
     // Adding click sound for button.
     public void loadClickSound() {
         try {
-            File soundFile = new File("cars-maze/soundimage/ClickSound.wav");
+            File soundFile = new File("soundimage/ClickSound.wav");
             AudioInputStream audioIn = AudioSystem.getAudioInputStream(soundFile);
             clickSoundClip = AudioSystem.getClip();
             clickSoundClip.open(audioIn);
@@ -199,7 +199,7 @@ public class GameIntro implements ActionListener, ChangeListener {
     // Adding Intro Music.
     public void loadBackGroundMusic() {
         try {
-            File soundFile = new File("cars-maze/soundimage/IntroMusic.wav");
+            File soundFile = new File("soundimage/IntroMusic.wav");
             AudioInputStream audioIn = AudioSystem.getAudioInputStream(soundFile);
             introSoundClip = AudioSystem.getClip();
             introSoundClip.open(audioIn);
