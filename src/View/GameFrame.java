@@ -87,10 +87,43 @@ public class GameFrame implements ActionListener {
 
 
     private void initializeMazePanel() {
-        mazePanel = new JPanel();
+        mazePanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                int numRows = 8; // Number of rows in the maze
+                int numCols = 8; // Number of columns in the maze
+                int panelWidth = getWidth(); // Width of the panel
+                int panelHeight = getHeight(); // Height of the panel
+
+                int cellSize = Math.min(panelWidth / numCols, panelHeight / numRows); // Calculate cell size to fit the maze in the panel
+
+                int[][] maze = {
+                        {1, 1, 1, 1, 1, 1, 1, 1},
+                        {1, 0, 0, 0, 0, 0, 0, 1},
+                        {1, 0, 0, 0, 0, 0, 0, 1},
+                        {1, 0, 0, 0, 0, 0, 0, 1},
+                        {1, 0, 0, 0, 0, 0, 0, 1},
+                        {1, 0, 0, 0, 0, 0, 0, 1},
+                        {1, 0, 0, 0, 0, 0, 0, 1},
+                        {1, 1, 1, 1, 1, 1, 1, 1}
+                };
+                for (int i = 0; i < maze.length; i++) {
+                    for (int j = 0; j < maze[i].length; j++) {
+                        if (maze[i][j] == 1) {
+                            g.setColor(Color.BLACK);
+                            g.fillRect(j * cellSize, i * cellSize, cellSize, cellSize);
+                        } else {
+                            g.setColor(Color.WHITE);
+                            g.fillRect(j * cellSize, i * cellSize, cellSize, cellSize);
+                        }
+                    }
+                }
+            }
+        };
         mazePanel.setLayout(null);
         mazePanel.setBorder(new LineBorder(Color.darkGray, 3));
-        mazePanel.setBounds(10, 80, 350,350);
+        mazePanel.setBounds(10, 80, 350, 350);
         mazePanel.setBackground(new Color(0, 0, 0, 100));
 
         myFrame.add(mazePanel);
