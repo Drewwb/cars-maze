@@ -1,6 +1,10 @@
 package src.Model;
 
-public class Maze {
+import Model.SaveData;
+
+import java.io.Serializable;
+
+public class Maze implements Serializable {
     private Room[][] myRooms;
 
     public Maze() {
@@ -32,5 +36,14 @@ public class Maze {
         if(row >= 0 && row < myRooms.length && column >= 0 && column < myRooms[0].length) {
             myRooms[row][column] = room;
         }
+    }
+    // Method to save player data with a specific filename
+    public void save() {
+        SaveData.saveGame(this, "game_data.dat");
+    }
+
+    // Method to load player data with a specific filename
+    public static Maze load() {
+        return (Maze) SaveData.loadGame("game_data.dat");
     }
 }
