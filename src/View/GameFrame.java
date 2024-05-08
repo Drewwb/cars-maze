@@ -85,6 +85,22 @@ public class GameFrame implements ActionListener {
         myFrame.add(controlPanel);
     }
 
+    private void drawBrickWall(Graphics g, int x, int y, int size) {
+        int brickWidth = size / 5;
+        int brickHeight = size / 4;
+        Color brickColor1 = new Color(192, 128, 64);
+        Color brickColor2 = new Color(160, 96, 48);
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 4; j++) {
+                if ((i + j) % 2 == 0) {
+                    g.setColor(brickColor1);
+                } else {
+                    g.setColor(brickColor2);
+                }
+                g.fillRect(x + i * brickWidth, y + j * brickHeight, brickWidth, brickHeight);
+            }
+        }
+    }
 
     private void initializeMazePanel() {
         mazePanel = new JPanel() {
@@ -117,11 +133,7 @@ public class GameFrame implements ActionListener {
                 for (int i = 0; i < maze.length; i++) {
                     for (int j = 0; j < maze[i].length; j++) {
                         if (maze[i][j] == 1) {
-                            g.setColor(Color.BLACK);
-                            g.fillRect(xOffset + j * cellSize, yOffset + i * cellSize, cellSize, cellSize);
-                        } else {
-                            g.setColor(Color.WHITE);
-                            g.fillRect(xOffset + j * cellSize, yOffset + i * cellSize, cellSize, cellSize);
+                            drawBrickWall(g, xOffset + j * cellSize, yOffset + i * cellSize, cellSize);
                         }
                     }
                 }
@@ -134,6 +146,7 @@ public class GameFrame implements ActionListener {
 
         myFrame.add(mazePanel);
     }
+
 
 
     private void initializeUserPanel() {
