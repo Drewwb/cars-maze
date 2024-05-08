@@ -56,15 +56,74 @@ public class GameFrame implements ActionListener {
         controlPanel.setBounds(10, 450, 350,120);
         controlPanel.setBackground(new Color(0, 0, 0, 100));
 
+        ImageIcon up = new ImageIcon("cars-maze/soundimage/up.png");
+        JButton moveUp = new JButton();
+        moveUp.setIcon(up);
+        moveUp.setBounds(40, 15, 30,30);
+
+        ImageIcon left = new ImageIcon("cars-maze/soundimage/left.png");
+        JButton moveLeft = new JButton();
+        moveLeft.setIcon(left);
+        moveLeft.setBounds(5, 50, 30,30);
+
+        ImageIcon right = new ImageIcon("cars-maze/soundimage/right.png");
+        JButton moveRight = new JButton();
+        moveRight.setIcon(right);
+        moveRight.setBounds(75, 50, 30,30);
+
+        ImageIcon down = new ImageIcon("cars-maze/soundimage/down.png");
+        JButton moveDown = new JButton();
+        moveDown.setIcon(down);
+        moveDown.setBounds(40, 85, 30,30);
+
+
+        controlPanel.add(moveUp);
+        controlPanel.add(moveLeft);
+        controlPanel.add(moveRight);
+        controlPanel.add(moveDown);
+
         myFrame.add(controlPanel);
     }
 
 
     private void initializeMazePanel() {
-        mazePanel = new JPanel();
+        mazePanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                int numRows = 8; // Number of rows in the maze
+                int numCols = 8; // Number of columns in the maze
+                int panelWidth = getWidth(); // Width of the panel
+                int panelHeight = getHeight(); // Height of the panel
+
+                int cellSize = Math.min(panelWidth / numCols, panelHeight / numRows); // Calculate cell size to fit the maze in the panel
+
+                int[][] maze = {
+                        {1, 1, 1, 1, 1, 1, 1, 1},
+                        {1, 0, 0, 0, 0, 0, 0, 1},
+                        {1, 0, 0, 0, 0, 0, 0, 1},
+                        {1, 0, 0, 0, 0, 0, 0, 1},
+                        {1, 0, 0, 0, 0, 0, 0, 1},
+                        {1, 0, 0, 0, 0, 0, 0, 1},
+                        {1, 0, 0, 0, 0, 0, 0, 1},
+                        {1, 1, 1, 1, 1, 1, 1, 1}
+                };
+                for (int i = 0; i < maze.length; i++) {
+                    for (int j = 0; j < maze[i].length; j++) {
+                        if (maze[i][j] == 1) {
+                            g.setColor(Color.BLACK);
+                            g.fillRect(j * cellSize, i * cellSize, cellSize, cellSize);
+                        } else {
+                            g.setColor(Color.WHITE);
+                            g.fillRect(j * cellSize, i * cellSize, cellSize, cellSize);
+                        }
+                    }
+                }
+            }
+        };
         mazePanel.setLayout(null);
         mazePanel.setBorder(new LineBorder(Color.darkGray, 3));
-        mazePanel.setBounds(10, 80, 350,350);
+        mazePanel.setBounds(10, 80, 350, 350);
         mazePanel.setBackground(new Color(0, 0, 0, 100));
 
         myFrame.add(mazePanel);
@@ -118,7 +177,7 @@ public class GameFrame implements ActionListener {
     }
 
     private void initializeBackGround() {
-        myBackGroundIcon = new ImageIcon("Background2.jpeg");
+        myBackGroundIcon = new ImageIcon("cars-maze/soundimage/Background2.jpeg");
         backGroundLabel = new JLabel(myBackGroundIcon);
         backGroundLabel.setBounds(0, 0, myFrame.getWidth(), myFrame.getHeight());
         myFrame.add(backGroundLabel);
