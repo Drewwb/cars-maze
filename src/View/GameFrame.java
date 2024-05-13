@@ -25,14 +25,14 @@ public class GameFrame implements ActionListener {
         initializeMazePanel();
         initializeControlPanel();
         initializeSpellPanel();
-        initializeQuestionPanel();
+        initializeMCQuestionPanel();
 
         initializeBackGround();
         initializeOptionBar();
 
     }
 
-    private void initializeQuestionPanel() {
+    private void initializeMCQuestionPanel() {
         questionPanel = new JPanel();
         questionPanel.setLayout(null);
         questionPanel.setBorder(new LineBorder(Color.darkGray, 3));
@@ -82,6 +82,74 @@ public class GameFrame implements ActionListener {
 
         myFrame.add(questionPanel);
     }
+
+    private void initializeSAQQuestionPanel() { //add action listener for user input
+        questionPanel = new JPanel();
+        questionPanel.setLayout(null);
+        questionPanel.setBorder(new LineBorder(Color.darkGray, 3));
+        questionPanel.setBounds(385, 450, 335, 225);
+        questionPanel.setBackground(new Color(240, 240, 240));
+
+        JLabel questionLabel = new JLabel("What is the capital of France?");
+        questionLabel.setBounds(10, 10, 300, 30);
+
+        JTextField textField = new JTextField(20);
+
+        textField.setBounds(10, 50, 150, 30); // Set the bounds for option1
+
+        textField.setOpaque(false); // Set background color of radio buttons to transparent
+
+        submitButton = new JButton("Submit");
+        submitButton.setBounds(200, 170, 100, 30); // Set the bounds for the submit button
+        submitButton.addActionListener(this);
+
+        questionPanel.add(questionLabel);
+        questionPanel.add(textField);
+        questionPanel.add(submitButton);
+
+        myFrame.add(questionPanel);
+    }
+
+    private void initializeTFQuestionPanel() {
+        questionPanel = new JPanel();
+        questionPanel.setLayout(null);
+        questionPanel.setBorder(new LineBorder(Color.darkGray, 3));
+        questionPanel.setBounds(385, 450, 335, 225);
+        questionPanel.setBackground(new Color(240, 240, 240));
+
+        JLabel questionLabel = new JLabel("True or False?");
+        questionLabel.setBounds(10, 10, 300, 30);
+
+        option1 = new JRadioButton("True");
+        option2 = new JRadioButton("False");
+
+        option1.setBounds(10, 50, 150, 30); // Set the bounds for option1
+        option2.setBounds(10, 90, 150, 30); // Set the bounds for option2
+
+        option1.setOpaque(false); // Set background color of radio buttons to transparent
+        option2.setOpaque(false);
+
+        addDoubleClickListener(option1);
+        addDoubleClickListener(option2);
+
+        ButtonGroup optionGroup = new ButtonGroup();
+        optionGroup.add(option1);
+        optionGroup.add(option2);
+
+        submitButton = new JButton("Submit");
+        submitButton.setBounds(200, 170, 100, 30); // Set the bounds for the submit button
+        submitButton.addActionListener(this);
+
+
+        questionPanel.add(questionLabel);
+        questionPanel.add(option1);
+        questionPanel.add(option2);
+        questionPanel.add(submitButton);
+
+        myFrame.add(questionPanel);
+    }
+
+
 
     private void addDoubleClickListener(JRadioButton radioButton) {
         radioButton.addMouseListener(new MouseAdapter() {
