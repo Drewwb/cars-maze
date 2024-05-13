@@ -6,7 +6,7 @@ public class Maze implements Serializable {
     private Room[][] myRooms;
 
     public Maze() {
-        myRooms = new Room[8][8];
+        myRooms = new Room[6][6];
         initializeRooms();
     }
 

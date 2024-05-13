@@ -5,6 +5,8 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class GameFrame implements ActionListener {
     private JFrame myFrame;
@@ -14,6 +16,8 @@ public class GameFrame implements ActionListener {
     private JPanel myUserPanel, mazePanel, controlPanel, spellPanel, questionPanel;
     private JLabel backGroundLabel;
     private ImageIcon myBackGroundIcon;
+    private JRadioButton option1, option2, option3, option4;
+    private JButton submitButton;
 
     public GameFrame() {
         initializeFrame();
@@ -32,11 +36,64 @@ public class GameFrame implements ActionListener {
         questionPanel = new JPanel();
         questionPanel.setLayout(null);
         questionPanel.setBorder(new LineBorder(Color.darkGray, 3));
-        questionPanel.setBounds(385, 450, 335,225);
-        questionPanel.setBackground(new Color(0, 0, 0, 100));
+        questionPanel.setBounds(385, 450, 335, 225);
+        questionPanel.setBackground(new Color(240, 240, 240));
+
+        JLabel questionLabel = new JLabel("What is the capital of France?");
+        questionLabel.setBounds(10, 10, 300, 30);
+
+        option1 = new JRadioButton("Paris");
+        option2 = new JRadioButton("London");
+        option3 = new JRadioButton("Berlin");
+        option4 = new JRadioButton("Madrid");
+
+        option1.setBounds(10, 50, 150, 30); // Set the bounds for option1
+        option2.setBounds(10, 90, 150, 30); // Set the bounds for option2
+        option3.setBounds(10, 130, 150, 30); // Set the bounds for option3
+        option4.setBounds(10, 170, 150, 30); // Set the bounds for option4
+
+        option1.setOpaque(false); // Set background color of radio buttons to transparent
+        option2.setOpaque(false);
+        option3.setOpaque(false);
+        option4.setOpaque(false);
+
+        addDoubleClickListener(option1);
+        addDoubleClickListener(option2);
+        addDoubleClickListener(option3);
+        addDoubleClickListener(option4);
+
+        ButtonGroup optionGroup = new ButtonGroup();
+        optionGroup.add(option1);
+        optionGroup.add(option2);
+        optionGroup.add(option3);
+        optionGroup.add(option4);
+
+        submitButton = new JButton("Submit");
+        submitButton.setBounds(200, 170, 100, 30); // Set the bounds for the submit button
+        submitButton.addActionListener(this);
+
+
+        questionPanel.add(questionLabel);
+        questionPanel.add(option1);
+        questionPanel.add(option2);
+        questionPanel.add(option3);
+        questionPanel.add(option4);
+        questionPanel.add(submitButton);
 
         myFrame.add(questionPanel);
     }
+
+    private void addDoubleClickListener(JRadioButton radioButton) {
+        radioButton.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    radioButton.setSelected(false);
+                }
+            }
+        });
+    }
+
+
 
     private void initializeSpellPanel() {
         spellPanel = new JPanel();
@@ -56,22 +113,22 @@ public class GameFrame implements ActionListener {
         controlPanel.setBounds(10, 450, 350,120);
         controlPanel.setBackground(new Color(0, 0, 0, 100));
 
-        ImageIcon up = new ImageIcon("soundimage/up.png");
+        ImageIcon up = new ImageIcon("cars-maze/soundimage/up.png");
         JButton moveUp = new JButton();
         moveUp.setIcon(up);
         moveUp.setBounds(40, 15, 30,30);
 
-        ImageIcon left = new ImageIcon("soundimage/left.png");
+        ImageIcon left = new ImageIcon("cars-maze/soundimage/left.png");
         JButton moveLeft = new JButton();
         moveLeft.setIcon(left);
         moveLeft.setBounds(5, 50, 30,30);
 
-        ImageIcon right = new ImageIcon("soundimage/right.png");
+        ImageIcon right = new ImageIcon("cars-maze/soundimage/right.png");
         JButton moveRight = new JButton();
         moveRight.setIcon(right);
         moveRight.setBounds(75, 50, 30,30);
 
-        ImageIcon down = new ImageIcon("soundimage/down.png");
+        ImageIcon down = new ImageIcon("cars-maze/soundimage/down.png");
         JButton moveDown = new JButton();
         moveDown.setIcon(down);
         moveDown.setBounds(40, 85, 30,30);
@@ -197,7 +254,7 @@ public class GameFrame implements ActionListener {
     }
 
     private void initializeBackGround() {
-        myBackGroundIcon = new ImageIcon("soundimage/Background2.jpeg");
+        myBackGroundIcon = new ImageIcon("cars-maze/soundimage/Background2.jpeg");
         backGroundLabel = new JLabel(myBackGroundIcon);
         backGroundLabel.setBounds(0, 0, myFrame.getWidth(), myFrame.getHeight());
         myFrame.add(backGroundLabel);
@@ -257,6 +314,40 @@ public class GameFrame implements ActionListener {
             about.append("</html>");
 
             JOptionPane.showMessageDialog(myFrame, about.toString(), "Trivia Maze Game", JOptionPane.PLAIN_MESSAGE);
+        }
+        if(e.getSource() == submitButton) {
+            String correctAnswer = "Paris";
+            String userAnswer = "";
+            boolean isCorrect = false;
+
+            if (option1.isSelected()) {
+                userAnswer = option1.getText();
+                if(correctAnswer.equals(userAnswer)) {
+                    isCorrect = true;
+                }
+            } else if (option2.isSelected()) {
+                userAnswer = option2.getText();
+                if(correctAnswer.equals(userAnswer)) {
+                    isCorrect = true;
+                }
+            } else if (option3.isSelected()) {
+                userAnswer = option3.getText();
+                if(correctAnswer.equals(userAnswer)) {
+                    isCorrect = true;
+                }
+            } else if (option4.isSelected()) {
+                userAnswer = option4.getText();
+                if(correctAnswer.equals(userAnswer)) {
+                    isCorrect = true;
+                }
+            }
+
+            if(isCorrect) {
+                JOptionPane.showMessageDialog(null, "Congrats! Correct Answer");
+            } else {
+                JOptionPane.showMessageDialog(null, "Incorrect Answer!");
+            }
+
         }
     }
  }
