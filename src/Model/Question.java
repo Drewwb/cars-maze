@@ -32,7 +32,7 @@ public class Question {
     }
 
     public void setId(int id) {
-        if (id > 1 && id < 30) {
+        if(id > 0 && id < 11) {
             this.id = id;
         } else {
             throw new IllegalArgumentException("Invalid ID");
@@ -68,7 +68,7 @@ public class Question {
     //gets question based on id and returns it
     private void setQuestion(int id) {
         String question = null;
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:cars-maze/lib/QATable.db");
+        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:lib/QATable.db");
              PreparedStatement stmt = conn.prepareStatement("SELECT QUESTION FROM MultipleChoice WHERE ID = ?")) {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
@@ -84,7 +84,7 @@ public class Question {
     //gets answer based on id and returns it
     private void setAnswer(int id) {
         String answer = null;
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:cars-maze/lib/QATable.db");
+        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:lib/QATable.db");
              PreparedStatement stmt = conn.prepareStatement("SELECT ANSWER FROM MultipleChoice WHERE ID = ?")) {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
@@ -99,7 +99,7 @@ public class Question {
 
     private void setCategory(int id) {
         String category = null;
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:cars-maze/lib/QATable.db");
+        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:lib/QATable.db");
              PreparedStatement stmt = conn.prepareStatement("SELECT CATEGORY FROM MultipleChoice WHERE ID = ?")) {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
