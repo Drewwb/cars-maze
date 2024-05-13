@@ -10,11 +10,10 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class QuestionFactory {
-    private Random random;
-
+    private final Random random;
 
     public QuestionFactory() {
-        random = new Random();
+        this.random = new Random();
     }
 
     public Question createQuestion() {
@@ -30,7 +29,6 @@ public class QuestionFactory {
     public Question createMultipleChoiceQuestion() {
         return new MultipleChoiceQuestion(getIdFromDB("MultipleChoice"));
     }
-
 
     public Question createTrueFalseQuestion() {
         return new TrueFalseQuestion(getIdFromDB("TrueFalse"));
