@@ -181,22 +181,22 @@ public class GameFrame implements ActionListener {
         controlPanel.setBounds(10, 450, 350,120);
         controlPanel.setBackground(new Color(0, 0, 0, 100));
 
-        ImageIcon up = new ImageIcon("cars-maze/soundimage/up.png");
+        ImageIcon up = new ImageIcon("soundimage/up.png");
         JButton moveUp = new JButton();
         moveUp.setIcon(up);
         moveUp.setBounds(40, 15, 30,30);
 
-        ImageIcon left = new ImageIcon("cars-maze/soundimage/left.png");
+        ImageIcon left = new ImageIcon("soundimage/left.png");
         JButton moveLeft = new JButton();
         moveLeft.setIcon(left);
         moveLeft.setBounds(5, 50, 30,30);
 
-        ImageIcon right = new ImageIcon("cars-maze/soundimage/right.png");
+        ImageIcon right = new ImageIcon("soundimage/right.png");
         JButton moveRight = new JButton();
         moveRight.setIcon(right);
         moveRight.setBounds(75, 50, 30,30);
 
-        ImageIcon down = new ImageIcon("cars-maze/soundimage/down.png");
+        ImageIcon down = new ImageIcon("soundimage/down.png");
         JButton moveDown = new JButton();
         moveDown.setIcon(down);
         moveDown.setBounds(40, 85, 30,30);
@@ -227,6 +227,42 @@ public class GameFrame implements ActionListener {
         }
     }
 
+    private void drawDoors(Graphics g, int x, int y, int size) {
+        int doorWidth = size / 13;
+        int doorHeight = size / 4;
+        Color doorColor1 = new Color(5, 4, 4);
+        g.setColor(doorColor1);
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 4; j++) {
+                if ((i + j) % 2 == 0) {
+                    g.setColor(doorColor1);
+                } else {
+                    g.setColor(doorColor1);
+                }
+                g.fillRect(x + i * doorWidth, y + j * doorHeight, doorWidth, doorHeight);
+            }
+        }
+
+    }
+
+    private void drawDoors2(Graphics g, int x, int y, int size) {
+        int doorWidth = size / 5;
+        int doorHeight = size / 13;
+        Color doorColor1 = new Color(5, 4, 4);
+        g.setColor(doorColor1);
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 4; j++) {
+                if ((i + j) % 2 == 0) {
+                    g.setColor(doorColor1);
+                } else {
+                    g.setColor(doorColor1);
+                }
+                g.fillRect(x + i * doorWidth, y + j * doorHeight, doorWidth, doorHeight);
+            }
+        }
+
+    }
+
     private void initializeMazePanel() {
         mazePanel = new JPanel() {
             @Override
@@ -246,19 +282,23 @@ public class GameFrame implements ActionListener {
 
                 int[][] maze = {
                         {1, 1, 1, 1, 1, 1, 1, 1, 1},
-                        {1, 0, 0, 0, 0, 0, 0, 0, 1},
-                        {1, 0, 1, 0, 1, 0, 1, 0, 1},
-                        {1, 0, 0, 0, 0, 0, 0, 0, 1},
-                        {1, 0, 1, 0, 1, 0, 1, 0, 1},
-                        {1, 0, 0, 0, 0, 0, 0, 0, 1},
-                        {1, 0, 1, 0, 1, 0, 1, 0, 1},
-                        {1, 0, 0, 0, 0, 0, 0, 0, 1},
+                        {1, 0, 2, 0, 2, 0, 2, 0, 1},
+                        {1, 3, 1, 3, 1, 3, 1, 3, 1},
+                        {1, 0, 2, 0, 2, 0, 2, 0, 1},
+                        {1, 3, 1, 3, 1, 3, 1, 3, 1},
+                        {1, 0, 2, 0, 2, 0, 2, 0, 1},
+                        {1, 3, 1, 3, 1, 3, 1, 3, 1},
+                        {1, 0, 2, 0, 2, 0, 2, 0, 1},
                         {1, 1, 1, 1, 1, 1, 1, 1, 1}
                 };
                 for (int i = 0; i < maze.length; i++) {
                     for (int j = 0; j < maze[i].length; j++) {
                         if (maze[i][j] == 1) {
                             drawBrickWall(g, xOffset + j * cellSize, yOffset + i * cellSize, cellSize);
+                        } else if (maze[i][j] == 2) {
+                            drawDoors(g, xOffset + j * cellSize, yOffset + i * cellSize, cellSize);
+                        } else if (maze[i][j] == 3) {
+                            drawDoors2(g, xOffset + j * cellSize, yOffset + i * cellSize, cellSize);
                         }
                     }
                 }
@@ -322,7 +362,7 @@ public class GameFrame implements ActionListener {
     }
 
     private void initializeBackGround() {
-        myBackGroundIcon = new ImageIcon("cars-maze/soundimage/Background2.jpeg");
+        myBackGroundIcon = new ImageIcon("soundimage/Background2.jpeg");
         backGroundLabel = new JLabel(myBackGroundIcon);
         backGroundLabel.setBounds(0, 0, myFrame.getWidth(), myFrame.getHeight());
         myFrame.add(backGroundLabel);
