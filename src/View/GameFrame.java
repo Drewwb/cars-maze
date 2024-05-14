@@ -9,6 +9,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class GameFrame implements ActionListener {
+    private final String PATH = "cars-maze/";
     private JFrame myFrame;
     private JMenuBar myOptionBar;
     private JMenu myFile, myHelp;
@@ -181,22 +182,22 @@ public class GameFrame implements ActionListener {
         controlPanel.setBounds(10, 450, 350,120);
         controlPanel.setBackground(new Color(0, 0, 0, 100));
 
-        ImageIcon up = new ImageIcon("soundimage/up.png");
+        ImageIcon up = new ImageIcon(PATH + "soundimage/up.png");
         JButton moveUp = new JButton();
         moveUp.setIcon(up);
         moveUp.setBounds(40, 15, 30,30);
 
-        ImageIcon left = new ImageIcon("soundimage/left.png");
+        ImageIcon left = new ImageIcon(PATH + "soundimage/left.png");
         JButton moveLeft = new JButton();
         moveLeft.setIcon(left);
         moveLeft.setBounds(5, 50, 30,30);
 
-        ImageIcon right = new ImageIcon("soundimage/right.png");
+        ImageIcon right = new ImageIcon(PATH + "soundimage/right.png");
         JButton moveRight = new JButton();
         moveRight.setIcon(right);
         moveRight.setBounds(75, 50, 30,30);
 
-        ImageIcon down = new ImageIcon("soundimage/down.png");
+        ImageIcon down = new ImageIcon(PATH + "soundimage/down.png");
         JButton moveDown = new JButton();
         moveDown.setIcon(down);
         moveDown.setBounds(40, 85, 30,30);
@@ -362,7 +363,7 @@ public class GameFrame implements ActionListener {
     }
 
     private void initializeBackGround() {
-        myBackGroundIcon = new ImageIcon("soundimage/Background2.jpeg");
+        myBackGroundIcon = new ImageIcon(PATH + "soundimage/Background2.jpeg");
         backGroundLabel = new JLabel(myBackGroundIcon);
         backGroundLabel.setBounds(0, 0, myFrame.getWidth(), myFrame.getHeight());
         myFrame.add(backGroundLabel);
