@@ -59,7 +59,7 @@ public class GameFrame implements ActionListener {
         MultipleChoiceQuestion mcQuestion = (MultipleChoiceQuestion) question;
 
         String theQuestion = mcQuestion.getQuestion();
-        JLabel questionLabel = new JLabel(theQuestion);
+        JLabel questionLabel = new JLabel("<html><div style='width: 300px;'>" + theQuestion + "</div></html>");
         questionLabel.setBounds(10, 10, 300, 30);
 
         String theOption1 = mcQuestion.getOptions()[0];
@@ -95,7 +95,29 @@ public class GameFrame implements ActionListener {
 
         submitButton = new JButton("Submit");
         submitButton.setBounds(200, 170, 100, 30); // Set the bounds for the submit button
-        submitButton.addActionListener(this);
+        submitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String correctAnswer = mcQuestion.getAnswer();
+                boolean isCorrect = false;
+
+                if(option1.isSelected()) {
+                    isCorrect = option1.getText().equals(correctAnswer);
+                } else if (option2.isSelected()) {
+                    isCorrect = option2.getText().equals(correctAnswer);
+                } else if(option3.isSelected()) {
+                    isCorrect = option3.getText().equals(correctAnswer);
+                } else if(option4.isSelected()) {
+                    isCorrect = option4.getText().equals(correctAnswer);
+                }
+
+                if (isCorrect) {
+                    JOptionPane.showMessageDialog(null, "Congrats! Correct Answer");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Incorrect Answer!");
+                }
+            }
+        });
 
 
         questionPanel.add(questionLabel);
@@ -119,7 +141,7 @@ public class GameFrame implements ActionListener {
         ShortAnswerQuestion sqQuestion = (ShortAnswerQuestion) question;
         String theQuestion = sqQuestion.getQuestion();
 
-        JLabel questionLabel = new JLabel(theQuestion);
+        JLabel questionLabel = new JLabel("<html><div style='width: 300px;'>" + theQuestion + "</div></html>");
         questionLabel.setBounds(10, 10, 300, 30);
 
         JTextField textField = new JTextField(20);
@@ -130,7 +152,23 @@ public class GameFrame implements ActionListener {
 
         submitButton = new JButton("Submit");
         submitButton.setBounds(200, 170, 100, 30); // Set the bounds for the submit button
-        submitButton.addActionListener(this);
+        submitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String correctAnswer = textField.getText();
+                boolean isCorrect = false;
+
+                if(textField.getText().equals(correctAnswer)) {
+                    isCorrect = true;
+                }
+
+                if (isCorrect) {
+                    JOptionPane.showMessageDialog(null, "Congrats! Correct Answer");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Incorrect Answer!");
+                }
+            }
+        });
 
         questionPanel.add(questionLabel);
         questionPanel.add(textField);
@@ -149,7 +187,7 @@ public class GameFrame implements ActionListener {
         TrueFalseQuestion tfQuestion = (TrueFalseQuestion) question;
         String theQuestion = tfQuestion.getQuestion();
 
-        JLabel questionLabel = new JLabel(theQuestion);
+        JLabel questionLabel = new JLabel("<html><div style='width: 300px;'>" + theQuestion + "</div></html>");
         questionLabel.setBounds(10, 10, 300, 30);
 
         option1 = new JRadioButton("True");
@@ -170,7 +208,23 @@ public class GameFrame implements ActionListener {
 
         submitButton = new JButton("Submit");
         submitButton.setBounds(200, 170, 100, 30); // Set the bounds for the submit button
-        submitButton.addActionListener(this);
+        submitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String correctAnswer = tfQuestion.getAnswer();
+                boolean isCorrect = false;
+
+                if(tfQuestion.getAnswer().equals(correctAnswer)) {
+                    isCorrect = true;
+                }
+
+                if (isCorrect) {
+                    JOptionPane.showMessageDialog(null, "Congrats! Correct Answer");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Incorrect Answer!");
+                }
+            }
+        });
 
 
         questionPanel.add(questionLabel);
