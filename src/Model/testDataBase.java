@@ -13,6 +13,9 @@ public class testDataBase {
             MultipleChoiceQuestion mcQuestion = (MultipleChoiceQuestion) question;
             System.out.println("Multiple Choice Question:" + mcQuestion.getQuestion());
             System.out.println("Question ID: " + mcQuestion.getId());
+            System.out.println("Question type: " + mcQuestion.getType());
+            System.out.println("Question answer: " + mcQuestion.getAnswer());
+
             System.out.println("Options: ");
             for (String option : mcQuestion.getOptions()) {
                 System.out.println(option);
