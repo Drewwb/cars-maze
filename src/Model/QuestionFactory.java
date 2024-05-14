@@ -45,7 +45,7 @@ public class QuestionFactory {
 
     private static boolean isIdInQuestionsAsked(int id) {
         // SQLite database URL
-        String url = "jdbc:sqlite:lib/QATable.db";
+        String url = "jdbc:sqlite:cars-maze/lib/QATable.db";
 
         // SQL query to check if the ID exists in the QuestionsAsked table
         String sql = "SELECT COUNT(*) AS count FROM QuestionsAsked WHERE ID = " + id;

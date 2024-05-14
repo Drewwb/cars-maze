@@ -4,7 +4,7 @@ import javax.swing.*;
 
 import src.View.GameFrame;
 
-public class Launcher {
+public class  Launcher {
     public static void main(String[] agrs) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
