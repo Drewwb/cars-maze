@@ -2,6 +2,7 @@ package src.View;
 
 import src.Model.*;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
@@ -9,9 +10,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class GameFrame implements ActionListener {
-    private final String PATH = "cars-maze/";
+    private final String PATH = "";
     private JFrame myFrame;
     private JMenuBar myOptionBar;
     private JMenu myFile, myHelp;
@@ -21,8 +27,11 @@ public class GameFrame implements ActionListener {
     private ImageIcon myBackGroundIcon;
     private JRadioButton option1, option2, option3, option4;
     private JButton submitButton;
+    private Image doorImage, keyImage;
 
     public GameFrame() { //test for drew
+        loadDoorImage();
+        loadKeyImage();
         initializeFrame();
         initializeUserPanel(); // need to come first before set background
         initializeMazePanel();
@@ -348,6 +357,35 @@ public class GameFrame implements ActionListener {
 
     }
 
+    private void loadDoorImage() {
+        try {
+            doorImage = ImageIO.read(new File(PATH + "soundimage/exitdoor.png")); // Load the image
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadKeyImage() {
+        try {
+            keyImage = ImageIO.read(new File(PATH + "soundimage/key.png"));
+            System.out.println("Key image loaded successfully.");
+        } catch (IOException e) {
+            System.out.println("Error loading key image: " + e.getMessage());
+        }
+    }
+
+    private void displayKeyImage(Graphics g, int x, int y, int width, int height) {
+        if (keyImage != null) {
+            g.drawImage(keyImage, x, y, width, height, null);
+        }
+    }
+
+    private void displayDoorImage(Graphics g, int x, int y, int width, int height) {
+        if (doorImage != null) {
+            g.drawImage(doorImage, x, y, width, height, null);
+        }
+    }
+
     private void initializeMazePanel() {
         mazePanel = new JPanel() {
             @Override
@@ -365,25 +403,59 @@ public class GameFrame implements ActionListener {
                 int xOffset = (panelWidth - mazeWidth) / 2; // Offset to center the maze horizontally
                 int yOffset = (panelHeight - mazeHeight) / 2; // Offset to center the maze vertically
 
+                /*
+                LEGEND
+                0 = blank space (the key can spawn in these)
+                1 = Wall cannot pass
+                2 = Vertical Door
+                3 = Horizontal Door
+                4 = EXIT
+                8 = The start
+                 */
                 int[][] maze = {
                         {1, 1, 1, 1, 1, 1, 1, 1, 1},
-                        {1, 0, 2, 0, 2, 0, 2, 0, 1},
+                        {1, 8, 2, 0, 2, 0, 2, 0, 1},
                         {1, 3, 1, 3, 1, 3, 1, 3, 1},
                         {1, 0, 2, 0, 2, 0, 2, 0, 1},
                         {1, 3, 1, 3, 1, 3, 1, 3, 1},
                         {1, 0, 2, 0, 2, 0, 2, 0, 1},
                         {1, 3, 1, 3, 1, 3, 1, 3, 1},
-                        {1, 0, 2, 0, 2, 0, 2, 0, 1},
+                        {1, 0, 2, 0, 2, 0, 2, 4, 1},
                         {1, 1, 1, 1, 1, 1, 1, 1, 1}
                 };
+
+                // Determine random location for the key
+                List<Integer> zeroLocationsRow = new ArrayList<>();
+                List<Integer> zeroLocationsCol = new ArrayList<>();
                 for (int i = 0; i < maze.length; i++) {
                     for (int j = 0; j < maze[i].length; j++) {
+                        if (maze[i][j] == 0) {
+                            zeroLocationsRow.add(i);
+                            zeroLocationsCol.add(j);
+                        }
+                    }
+                }
+                //Generate random location for key based on 0's
+                int randomIndex = new Random().nextInt(zeroLocationsRow.size());
+                int keyRow = zeroLocationsRow.get(randomIndex);
+                int keyCol = zeroLocationsCol.get(randomIndex);
+
+                for (int i = 0; i < maze.length; i++) {
+                    for (int j = 0; j < maze[i].length; j++) {
+
+                        int x = xOffset + j * cellSize;
+                        int y = yOffset + i * cellSize;
+
                         if (maze[i][j] == 1) {
                             drawBrickWall(g, xOffset + j * cellSize, yOffset + i * cellSize, cellSize);
                         } else if (maze[i][j] == 2) {
                             drawDoors(g, xOffset + j * cellSize, yOffset + i * cellSize, cellSize);
                         } else if (maze[i][j] == 3) {
                             drawDoors2(g, xOffset + j * cellSize, yOffset + i * cellSize, cellSize);
+                        } else if (maze[i][j] == 4) {
+                            displayDoorImage(g, xOffset + j * cellSize, yOffset + i * cellSize, cellSize, cellSize);
+                        } else if (maze[i][j] == 0 && i == keyRow && j == keyCol) {
+                            displayKeyImage(g, xOffset + j * cellSize, yOffset + i * cellSize, cellSize, cellSize);
                         }
                     }
                 }
