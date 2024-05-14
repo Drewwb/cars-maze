@@ -52,7 +52,7 @@ public class GameFrame implements ActionListener {
         questionPanel = new JPanel();
         questionPanel.setLayout(null);
         questionPanel.setBorder(new LineBorder(Color.darkGray, 3));
-        questionPanel.setBounds(385, 450, 335, 225);
+        questionPanel.setBounds(360, 450, 365, 225);
         questionPanel.setBackground(new Color(240, 240, 240));
 
         // type cast question.
@@ -60,7 +60,7 @@ public class GameFrame implements ActionListener {
 
         String theQuestion = mcQuestion.getQuestion();
         JLabel questionLabel = new JLabel("<html><div style='width: 300px;'>" + theQuestion + "</div></html>");
-        questionLabel.setBounds(10, 10, 300, 30);
+        questionLabel.setBounds(10, 10, 335, 30);
 
         String theOption1 = mcQuestion.getOptions()[0];
         String theOption2 = mcQuestion.getOptions()[1];
@@ -134,7 +134,7 @@ public class GameFrame implements ActionListener {
         questionPanel = new JPanel();
         questionPanel.setLayout(null);
         questionPanel.setBorder(new LineBorder(Color.darkGray, 3));
-        questionPanel.setBounds(385, 450, 335, 225);
+        questionPanel.setBounds(360, 450, 365, 225);
         questionPanel.setBackground(new Color(240, 240, 240));
 
 
@@ -142,7 +142,7 @@ public class GameFrame implements ActionListener {
         String theQuestion = sqQuestion.getQuestion();
 
         JLabel questionLabel = new JLabel("<html><div style='width: 300px;'>" + theQuestion + "</div></html>");
-        questionLabel.setBounds(10, 10, 300, 30);
+        questionLabel.setBounds(10, 10, 335, 30);
 
         JTextField textField = new JTextField(20);
 
@@ -181,14 +181,14 @@ public class GameFrame implements ActionListener {
         questionPanel = new JPanel();
         questionPanel.setLayout(null);
         questionPanel.setBorder(new LineBorder(Color.darkGray, 3));
-        questionPanel.setBounds(385, 450, 335, 225);
+        questionPanel.setBounds(360, 450, 365, 225);
         questionPanel.setBackground(new Color(240, 240, 240));
 
         TrueFalseQuestion tfQuestion = (TrueFalseQuestion) question;
         String theQuestion = tfQuestion.getQuestion();
 
         JLabel questionLabel = new JLabel("<html><div style='width: 300px;'>" + theQuestion + "</div></html>");
-        questionLabel.setBounds(10, 10, 300, 30);
+        questionLabel.setBounds(10, 10, 335, 30);
 
         option1 = new JRadioButton("True");
         option2 = new JRadioButton("False");
@@ -253,7 +253,7 @@ public class GameFrame implements ActionListener {
         spellPanel = new JPanel();
         spellPanel.setLayout(null);
         spellPanel.setBorder(new LineBorder(Color.darkGray, 3));
-        spellPanel.setBounds(10, 590, 350,85);
+        spellPanel.setBounds(10, 590, 340,85);
         spellPanel.setBackground(new Color(0, 0, 0, 100));
 
         myFrame.add(spellPanel);
@@ -264,7 +264,7 @@ public class GameFrame implements ActionListener {
         controlPanel = new JPanel();
         controlPanel.setLayout(null);
         controlPanel.setBorder(new LineBorder(Color.darkGray, 3));
-        controlPanel.setBounds(10, 450, 350,120);
+        controlPanel.setBounds(10, 450, 340,120);
         controlPanel.setBackground(new Color(0, 0, 0, 100));
 
         ImageIcon up = new ImageIcon(PATH + "soundimage/up.png");
@@ -406,26 +406,30 @@ public class GameFrame implements ActionListener {
         myUserPanel.setBounds(10, 10, 715,50);
         myUserPanel.setBackground(new Color(0, 0, 0, 100));
 
-        JLabel userNameLabel = new JLabel("USER NAME: # ");
-        userNameLabel.setBounds(40,8,100,40);
+        JLabel userNameLabel = new JLabel("USER NAME:");
+        Font boldFont = new Font(userNameLabel.getFont().getName(), Font.BOLD, userNameLabel.getFont().getSize());
+        userNameLabel.setFont(boldFont);
+        userNameLabel.setBounds(20,8,100,40);
 
-        JLabel userWinSteaksLabel = new JLabel("WIN STREAKS: ");
-        userWinSteaksLabel.setBounds(235, 8, 100,40);
+        JLabel userPoints = new JLabel("POINTS:");
+        Font boldFont2 = new Font(userNameLabel.getFont().getName(), Font.BOLD, userPoints.getFont().getSize());
+        userPoints.setFont(boldFont2);
+        userPoints.setBounds(190, 8, 100,40);
 
-        JLabel userSpellLabel = new JLabel("SPELL: ");
-        userSpellLabel.setBounds(400, 8, 100,40);
+        JLabel userKeys = new JLabel("KEYS:");
+        Font boldFont3 = new Font(userNameLabel.getFont().getName(), Font.BOLD, userKeys.getFont().getSize());
+        userKeys.setFont(boldFont3);
+        userKeys.setBounds(350, 8, 100,40);
 
-        JLabel userSkipDoorSpell = new JLabel("skip door: # ");
-        userSkipDoorSpell.setBounds(500, 8, 100,40);
+        JLabel userStreak = new JLabel("STREAK:");
+        Font boldFont4 = new Font(userNameLabel.getFont().getName(), Font.BOLD, userStreak.getFont().getSize());
+        userStreak.setFont(boldFont4);
+        userStreak.setBounds(480, 8, 100,40);
 
-        JLabel userHintSpell = new JLabel("hint : # ");
-        userHintSpell.setBounds(640, 8, 100,40);
 
-
-        myUserPanel.add(userSpellLabel);
-        myUserPanel.add(userSkipDoorSpell);
-        myUserPanel.add(userHintSpell);
-        myUserPanel.add(userWinSteaksLabel);
+        myUserPanel.add(userKeys);
+        myUserPanel.add(userStreak);
+        myUserPanel.add(userPoints);
         myUserPanel.add(userNameLabel);
 
 
