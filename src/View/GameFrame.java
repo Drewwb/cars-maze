@@ -1,5 +1,7 @@
 package src.View;
 
+import src.Model.*;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
@@ -9,7 +11,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class GameFrame implements ActionListener {
-    private final String PATH = "";
+    private final String PATH = "cars-maze/";
     private JFrame myFrame;
     private JMenuBar myOptionBar;
     private JMenu myFile, myHelp;
@@ -26,27 +28,49 @@ public class GameFrame implements ActionListener {
         initializeMazePanel();
         initializeControlPanel();
         initializeSpellPanel();
-        initializeMCQuestionPanel();
+        initializeQuestionPanel();
 
         initializeBackGround();
         initializeOptionBar();
 
     }
+    private void initializeQuestionPanel() {
+        QuestionFactory question = new QuestionFactory();
 
-    private void initializeMCQuestionPanel() {
+        Question myQuestion = question.createQuestion();
+
+        if(myQuestion instanceof MultipleChoiceQuestion) {
+            initializeMCQuestionPanel(myQuestion);
+        } else if(myQuestion instanceof TrueFalseQuestion) {
+            initializeTFQuestionPanel(myQuestion);
+        } else if( myQuestion instanceof ShortAnswerQuestion) {
+            initializeSAQQuestionPanel(myQuestion);
+        }
+    }
+
+    private void initializeMCQuestionPanel(Question question) {
         questionPanel = new JPanel();
         questionPanel.setLayout(null);
         questionPanel.setBorder(new LineBorder(Color.darkGray, 3));
         questionPanel.setBounds(385, 450, 335, 225);
         questionPanel.setBackground(new Color(240, 240, 240));
 
-        JLabel questionLabel = new JLabel("What is the capital of France?");
+        // type cast question.
+        MultipleChoiceQuestion mcQuestion = (MultipleChoiceQuestion) question;
+
+        String theQuestion = mcQuestion.getQuestion();
+        JLabel questionLabel = new JLabel(theQuestion);
         questionLabel.setBounds(10, 10, 300, 30);
 
-        option1 = new JRadioButton("Paris");
-        option2 = new JRadioButton("London");
-        option3 = new JRadioButton("Berlin");
-        option4 = new JRadioButton("Madrid");
+        String theOption1 = mcQuestion.getOptions()[0];
+        String theOption2 = mcQuestion.getOptions()[1];
+        String theOption3 = mcQuestion.getOptions()[2];
+        String theOption4 = mcQuestion.getOptions()[3];
+
+        option1 = new JRadioButton(theOption1);
+        option2 = new JRadioButton(theOption2);
+        option3 = new JRadioButton(theOption3);
+        option4 = new JRadioButton(theOption4);
 
         option1.setBounds(10, 50, 150, 30); // Set the bounds for option1
         option2.setBounds(10, 90, 150, 30); // Set the bounds for option2
@@ -84,14 +108,18 @@ public class GameFrame implements ActionListener {
         myFrame.add(questionPanel);
     }
 
-    private void initializeSAQQuestionPanel() { //add action listener for user input
+    private void initializeSAQQuestionPanel(Question question) { //add action listener for user input
         questionPanel = new JPanel();
         questionPanel.setLayout(null);
         questionPanel.setBorder(new LineBorder(Color.darkGray, 3));
         questionPanel.setBounds(385, 450, 335, 225);
         questionPanel.setBackground(new Color(240, 240, 240));
 
-        JLabel questionLabel = new JLabel("What is the capital of France?");
+
+        ShortAnswerQuestion sqQuestion = (ShortAnswerQuestion) question;
+        String theQuestion = sqQuestion.getQuestion();
+
+        JLabel questionLabel = new JLabel(theQuestion);
         questionLabel.setBounds(10, 10, 300, 30);
 
         JTextField textField = new JTextField(20);
@@ -111,14 +139,17 @@ public class GameFrame implements ActionListener {
         myFrame.add(questionPanel);
     }
 
-    private void initializeTFQuestionPanel() {
+    private void initializeTFQuestionPanel(Question question) {
         questionPanel = new JPanel();
         questionPanel.setLayout(null);
         questionPanel.setBorder(new LineBorder(Color.darkGray, 3));
         questionPanel.setBounds(385, 450, 335, 225);
         questionPanel.setBackground(new Color(240, 240, 240));
 
-        JLabel questionLabel = new JLabel("True or False?");
+        TrueFalseQuestion tfQuestion = (TrueFalseQuestion) question;
+        String theQuestion = tfQuestion.getQuestion();
+
+        JLabel questionLabel = new JLabel(theQuestion);
         questionLabel.setBounds(10, 10, 300, 30);
 
         option1 = new JRadioButton("True");
