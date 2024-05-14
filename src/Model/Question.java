@@ -1,5 +1,4 @@
 package src.Model;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -18,8 +17,7 @@ public class Question {
     public Question(String type, int id) {
         setType(type);
         setId(id);
-        setQuestion(id);
-        setAnswer(id);
+        setQuestionAndAnswer(id, type); // Change to set question and answer based on type
         setCategory(id);
     }
 
@@ -59,41 +57,45 @@ public class Question {
         return category;
     }
 
-
     // Concrete method
     public boolean isCorrectAnswer(String userAnswer) {
         return answer.equalsIgnoreCase(userAnswer.trim());
     }
 
-    //gets question based on id and returns it
-    private void setQuestion(int id) {
+    // Method to set question and answer based on type
+    private void setQuestionAndAnswer(int id, String type) {
         String question = null;
+        String answer = null;
+        String tableName = null;
+
+        // Determine the table name based on the question type
+        switch (type) {
+            case "MultipleChoice":
+                tableName = "MultipleChoice";
+                break;
+            case "TrueFalse":
+                tableName = "TrueFalse";
+                break;
+            case "ShortAnswer":
+                tableName = "ShortAnswer";
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid question type");
+        }
+
         try (Connection conn = DriverManager.getConnection("jdbc:sqlite:cars-maze/lib/QATable.db");
-             PreparedStatement stmt = conn.prepareStatement("SELECT QUESTION FROM MultipleChoice WHERE ID = ?")) {
+             PreparedStatement stmt = conn.prepareStatement("SELECT QUESTION, ANSWER FROM " + tableName + " WHERE ID = ?")) {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 question = rs.getString("QUESTION");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        this.question = question;
-    }
-
-    //gets answer based on id and returns it
-    private void setAnswer(int id) {
-        String answer = null;
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:cars-maze/lib/QATable.db");
-             PreparedStatement stmt = conn.prepareStatement("SELECT ANSWER FROM MultipleChoice WHERE ID = ?")) {
-            stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
                 answer = rs.getString("ANSWER");
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        this.question = question;
         this.answer = answer;
     }
 
@@ -111,6 +113,7 @@ public class Question {
         }
         this.category = category;
     }
+
     @Override
     public String toString(){      //toString method tells us the state of the question object and other details.
         StringBuilder myQuestionDetails = new StringBuilder();
@@ -120,7 +123,5 @@ public class Question {
         myQuestionDetails.append("Type: " + type + lineSeparator);
         myQuestionDetails.append("Category: " + category + lineSeparator);
         return myQuestionDetails.toString();
-
     }
-
 }

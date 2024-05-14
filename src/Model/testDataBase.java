@@ -26,10 +26,14 @@ public class testDataBase {
             TrueFalseQuestion tfQuestion = (TrueFalseQuestion) question;
             System.out.println("True/False Question:" + tfQuestion.getQuestion());
             System.out.println("Question ID: " + tfQuestion.getId());
+            System.out.println("Question type: " + tfQuestion.getType());
+            System.out.println("Question answer: " + tfQuestion.getAnswer());
         } else if (question instanceof ShortAnswerQuestion) {
             ShortAnswerQuestion saQuestion = (ShortAnswerQuestion) question;
             System.out.println("Short Answer Question:" + saQuestion.getQuestion());
             System.out.println("Question ID: " + saQuestion.getId());
+            System.out.println("Question type: " + saQuestion.getType());
+            System.out.println("Question answer: " + saQuestion.getAnswer());
         }
     }
 }
