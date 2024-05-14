@@ -38,7 +38,7 @@ public class GameFrame implements ActionListener {
     private JButton submitButton;
     private BufferedImage exitImage;
 
-    public GameFrame() {
+    public GameFrame() { //test for huy pull
         initializeFrame();
         initializeUserPanel(); // need to come first before set background
         initializeMazePanel();
