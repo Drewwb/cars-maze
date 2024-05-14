@@ -9,7 +9,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class GameFrame implements ActionListener {
-    private final String PATH = "cars-maze/";
+    private final String PATH = "";
     private JFrame myFrame;
     private JMenuBar myOptionBar;
     private JMenu myFile, myHelp;
@@ -20,7 +20,7 @@ public class GameFrame implements ActionListener {
     private JRadioButton option1, option2, option3, option4;
     private JButton submitButton;
 
-    public GameFrame() { //test for huy pull
+    public GameFrame() { //test for drew
         initializeFrame();
         initializeUserPanel(); // need to come first before set background
         initializeMazePanel();
@@ -231,7 +231,7 @@ public class GameFrame implements ActionListener {
     private void drawDoors(Graphics g, int x, int y, int size) {
         int doorWidth = size / 13;
         int doorHeight = size / 4;
-        Color doorColor1 = new Color(5, 4, 4);
+        Color doorColor1 = new Color(192, 128, 64);
         g.setColor(doorColor1);
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 4; j++) {
@@ -243,13 +243,12 @@ public class GameFrame implements ActionListener {
                 g.fillRect(x + i * doorWidth, y + j * doorHeight, doorWidth, doorHeight);
             }
         }
-
     }
 
     private void drawDoors2(Graphics g, int x, int y, int size) {
         int doorWidth = size / 5;
         int doorHeight = size / 13;
-        Color doorColor1 = new Color(5, 4, 4);
+        Color doorColor1 = new Color(192, 128, 64);
         g.setColor(doorColor1);
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 4; j++) {
