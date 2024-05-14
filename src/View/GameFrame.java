@@ -1,5 +1,6 @@
 package src.View;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
@@ -7,17 +8,35 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+
+/*
+ROOT FOLDERS FOR SOUNDIMAGE
+DREW:
+soundimage/
+
+HUY:
+cars-maze/soundimage/
+
+JAFAR:
+cars-maze/soundimage/
+
+ */
 public class GameFrame implements ActionListener {
+    private final String PATH = "soundimage/"; //check comment above
     private JFrame myFrame;
     private JMenuBar myOptionBar;
     private JMenu myFile, myHelp;
     private JMenuItem mySaveGame, myLoadGame, myExitGame, myAbout, myGamePlayInstruction;
-    private JPanel myUserPanel, mazePanel, controlPanel, spellPanel, questionPanel;
+    private JPanel myUserPanel, mazePanel, controlPanel, spellPanel, questionPanel, exitPanel, keyPanel;
     private JLabel backGroundLabel;
     private ImageIcon myBackGroundIcon;
     private JRadioButton option1, option2, option3, option4;
     private JButton submitButton;
+    private BufferedImage exitImage;
 
     public GameFrame() {
         initializeFrame();
@@ -181,22 +200,22 @@ public class GameFrame implements ActionListener {
         controlPanel.setBounds(10, 450, 350,120);
         controlPanel.setBackground(new Color(0, 0, 0, 100));
 
-        ImageIcon up = new ImageIcon("soundimage/up.png");
+        ImageIcon up = new ImageIcon(PATH + "up.png");
         JButton moveUp = new JButton();
         moveUp.setIcon(up);
         moveUp.setBounds(40, 15, 30,30);
 
-        ImageIcon left = new ImageIcon("soundimage/left.png");
+        ImageIcon left = new ImageIcon(PATH + "left.png");
         JButton moveLeft = new JButton();
         moveLeft.setIcon(left);
         moveLeft.setBounds(5, 50, 30,30);
 
-        ImageIcon right = new ImageIcon("soundimage/right.png");
+        ImageIcon right = new ImageIcon(PATH + "right.png");
         JButton moveRight = new JButton();
         moveRight.setIcon(right);
         moveRight.setBounds(75, 50, 30,30);
 
-        ImageIcon down = new ImageIcon("soundimage/down.png");
+        ImageIcon down = new ImageIcon(PATH + "down.png");
         JButton moveDown = new JButton();
         moveDown.setIcon(down);
         moveDown.setBounds(40, 85, 30,30);
@@ -227,7 +246,7 @@ public class GameFrame implements ActionListener {
         }
     }
 
-    private void drawDoors(Graphics g, int x, int y, int size) {
+    private void drawDoorsVertical(Graphics g, int x, int y, int size) {
         int doorWidth = size / 13;
         int doorHeight = size / 4;
         Color doorColor1 = new Color(5, 4, 4);
@@ -242,10 +261,9 @@ public class GameFrame implements ActionListener {
                 g.fillRect(x + i * doorWidth, y + j * doorHeight, doorWidth, doorHeight);
             }
         }
-
     }
 
-    private void drawDoors2(Graphics g, int x, int y, int size) {
+    private void drawDoorsHorizontal(Graphics g, int x, int y, int size) {
         int doorWidth = size / 5;
         int doorHeight = size / 13;
         Color doorColor1 = new Color(5, 4, 4);
@@ -260,7 +278,29 @@ public class GameFrame implements ActionListener {
                 g.fillRect(x + i * doorWidth, y + j * doorHeight, doorWidth, doorHeight);
             }
         }
+    }
 
+    private void drawExit(Graphics g, int x, int y, int size) {
+        try {
+            // Load the image (adjust the file path as necessary)
+            exitImage = ImageIO.read(new File(PATH + "exitdoor.png"));
+            exitPanel = new JPanel() {
+                @Override
+                protected void paintComponent(Graphics g) {
+                    super.paintComponent(g);
+                    if (exitImage != null) {
+                        // Draw the image at (x, y) position with the specified size
+                        g.drawImage(exitImage, x, y, size, size, this);
+                    }
+                }
+            };
+
+            exitPanel.setBounds(x, y, size, size);  // Set the bounds of the panel
+            myFrame.add(exitPanel);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void initializeMazePanel() {
@@ -288,7 +328,7 @@ public class GameFrame implements ActionListener {
                         {1, 3, 1, 3, 1, 3, 1, 3, 1},
                         {1, 0, 2, 0, 2, 0, 2, 0, 1},
                         {1, 3, 1, 3, 1, 3, 1, 3, 1},
-                        {1, 0, 2, 0, 2, 0, 2, 0, 1},
+                        {1, 0, 2, 0, 2, 0, 2, 4, 1},
                         {1, 1, 1, 1, 1, 1, 1, 1, 1}
                 };
                 for (int i = 0; i < maze.length; i++) {
@@ -296,9 +336,11 @@ public class GameFrame implements ActionListener {
                         if (maze[i][j] == 1) {
                             drawBrickWall(g, xOffset + j * cellSize, yOffset + i * cellSize, cellSize);
                         } else if (maze[i][j] == 2) {
-                            drawDoors(g, xOffset + j * cellSize, yOffset + i * cellSize, cellSize);
+                            drawDoorsVertical(g, xOffset + j * cellSize, yOffset + i * cellSize, cellSize);
                         } else if (maze[i][j] == 3) {
-                            drawDoors2(g, xOffset + j * cellSize, yOffset + i * cellSize, cellSize);
+                            drawDoorsHorizontal(g, xOffset + j * cellSize, yOffset + i * cellSize, cellSize);
+                        } else if(maze[i][j] == 4) {
+                            drawExit(g, xOffset + j * cellSize, yOffset + i * cellSize, cellSize);
                         }
                     }
                 }
@@ -362,7 +404,7 @@ public class GameFrame implements ActionListener {
     }
 
     private void initializeBackGround() {
-        myBackGroundIcon = new ImageIcon("soundimage/Background2.jpeg");
+        myBackGroundIcon = new ImageIcon(PATH + "Background2.jpeg");
         backGroundLabel = new JLabel(myBackGroundIcon);
         backGroundLabel.setBounds(0, 0, myFrame.getWidth(), myFrame.getHeight());
         myFrame.add(backGroundLabel);
