@@ -22,11 +22,11 @@ HUY:
 cars-maze/soundimage/
 
 JAFAR:
-cars-maze/soundimage/
+cars-maze/src/soundimage/
 
  */
 public class GameFrame implements ActionListener {
-    private final String PATH = "soundimage/"; //check comment above
+    private final String PATH = "cars-maze/src/soundimage/"; //check comment above
     private JFrame myFrame;
     private JMenuBar myOptionBar;
     private JMenu myFile, myHelp;
