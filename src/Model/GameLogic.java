@@ -8,13 +8,13 @@ public class GameLogic {
     private int characterRow;
     private int characterCol;
 
+
     public GameLogic() {
         myMaze = new Maze(); // Maze that fully loaded
 
         this.points = 0;
         this.answerCorrect = false;
         this.gameOver = false;
-
         characterSpawn();
     }
 
@@ -22,6 +22,14 @@ public class GameLogic {
     private void characterSpawn() {
         this.characterRow = 1;
         this.characterCol = 1;
+    }
+
+    public int getCharacterRow() {
+        return characterRow;
+    }
+
+    public int getCharacterCol() {
+        return characterCol;
     }
 
     public int getPoints() {
@@ -72,7 +80,13 @@ public class GameLogic {
         if (isValidPosition(newRow, newCol)) {
             characterRow = newRow;
             characterCol = newCol;
+        } else if (isDoor(newRow, newCol)) {
+            interactWithDoor(direction);
         }
+    }
+    // Check if the position is a door
+    private boolean isDoor(int row, int col) {
+        return myMaze.getRooms()[row][col].getRoomNumber() == 2; // Assuming 2 is a door
     }
 
     // Check if the position is valid
@@ -83,8 +97,8 @@ public class GameLogic {
         return myMaze.getRooms()[row][col].getRoomNumber() != 1; // Assuming 1 is a wall
     }
 
-    // Interact with a door in the current room
     public void interactWithDoor(Direction direction) {
+        // Get the current room
         Room currentRoom = myMaze.getRooms()[characterRow][characterCol];
         Door[] doors = currentRoom.getDoors();
 
@@ -92,8 +106,9 @@ public class GameLogic {
             if (door.getMyDirection() == direction) {
                 // Ask the question
                 Question question = door.getMyQuestion();
-                // Assume we have a method to answer the question
+                // Simulate answering the question
                 boolean answerCorrect = answerQuestion(question);
+
                 if (answerCorrect) {
                     door.setDoorLock(false); // Unlock the door
                     incrementPoints(10); // Increment points
@@ -108,10 +123,7 @@ public class GameLogic {
 
     // Placeholder method for answering a question
     private boolean answerQuestion(Question question) {
-        // Implement your logic to ask the question and get the answer
-        // For now, we'll just return true to simulate a correct answer
+        // nothing here yet, it's 12PM I'm cooked ~~~
         return true;
     }
-
-    // Additional methods as needed
 }
