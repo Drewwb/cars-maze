@@ -27,12 +27,10 @@ public class GameFrame implements ActionListener {
     private ImageIcon myBackGroundIcon;
     private JRadioButton option1, option2, option3, option4;
     private JButton submitButton;
-    private Image doorImage, keyImage;
+    private GameLogic gameLogic;
 
     public GameFrame() { //test for drew
-        GameLogic gameLogic = new GameLogic();
-        //loadDoorImage();
-        //loadKeyImage();
+        gameLogic = new GameLogic();
         initializeFrame();
         initializeUserPanel(); // need to come first before set background
         initializeMazePanel();
@@ -274,29 +272,32 @@ public class GameFrame implements ActionListener {
         controlPanel = new JPanel();
         controlPanel.setLayout(null);
         controlPanel.setBorder(new LineBorder(Color.darkGray, 3));
-        controlPanel.setBounds(10, 450, 340,120);
+        controlPanel.setBounds(10, 450, 340, 120);
         controlPanel.setBackground(new Color(0, 0, 0, 100));
 
         ImageIcon up = new ImageIcon(PATH + "soundimage/up.png");
         JButton moveUp = new JButton();
         moveUp.setIcon(up);
-        moveUp.setBounds(40, 15, 30,30);
+        moveUp.setBounds(40, 15, 30, 30);
+        moveUp.addActionListener(e -> moveCharacter(Direction.NORTH));
 
         ImageIcon left = new ImageIcon(PATH + "soundimage/left.png");
         JButton moveLeft = new JButton();
         moveLeft.setIcon(left);
-        moveLeft.setBounds(5, 50, 30,30);
+        moveLeft.setBounds(5, 50, 30, 30);
+        moveLeft.addActionListener(e -> moveCharacter(Direction.WEST));
 
         ImageIcon right = new ImageIcon(PATH + "soundimage/right.png");
         JButton moveRight = new JButton();
         moveRight.setIcon(right);
-        moveRight.setBounds(75, 50, 30,30);
+        moveRight.setBounds(75, 50, 30, 30);
+        moveRight.addActionListener(e -> moveCharacter(Direction.EAST));
 
         ImageIcon down = new ImageIcon(PATH + "soundimage/down.png");
         JButton moveDown = new JButton();
         moveDown.setIcon(down);
-        moveDown.setBounds(40, 85, 30,30);
-
+        moveDown.setBounds(40, 85, 30, 30);
+        moveDown.addActionListener(e -> moveCharacter(Direction.SOUTH));
 
         controlPanel.add(moveUp);
         controlPanel.add(moveLeft);
@@ -305,89 +306,11 @@ public class GameFrame implements ActionListener {
 
         myFrame.add(controlPanel);
     }
-//
-//    private void drawBrickWall(Graphics g, int x, int y, int size) {
-//        int brickWidth = size / 5;
-//        int brickHeight = size / 4;
-//        Color brickColor1 = new Color(192, 128, 64);
-//        Color brickColor2 = new Color(160, 96, 48);
-//        for (int i = 0; i < 5; i++) {
-//            for (int j = 0; j < 4; j++) {
-//                if ((i + j) % 2 == 0) {
-//                    g.setColor(brickColor1);
-//                } else {
-//                    g.setColor(brickColor2);
-//                }
-//                g.fillRect(x + i * brickWidth, y + j * brickHeight, brickWidth, brickHeight);
-//            }
-//        }
-//    }
-//
-//    private void drawDoors(Graphics g, int x, int y, int size) {
-//        int doorWidth = size / 13;
-//        int doorHeight = size / 4;
-//        Color doorColor1 = new Color(192, 128, 64);
-//        g.setColor(doorColor1);
-//        for (int i = 0; i < 5; i++) {
-//            for (int j = 0; j < 4; j++) {
-//                if ((i + j) % 2 == 0) {
-//                    g.setColor(doorColor1);
-//                } else {
-//                    g.setColor(doorColor1);
-//                }
-//                g.fillRect(x + i * doorWidth, y + j * doorHeight, doorWidth, doorHeight);
-//            }
-//        }
-//    }
-//
-//    private void drawDoors2(Graphics g, int x, int y, int size) {
-//        int doorWidth = size / 5;
-//        int doorHeight = size / 13;
-//        Color doorColor1 = new Color(192, 128, 64);
-//        g.setColor(doorColor1);
-//        for (int i = 0; i < 5; i++) {
-//            for (int j = 0; j < 4; j++) {
-//                if ((i + j) % 2 == 0) {
-//                    g.setColor(doorColor1);
-//                } else {
-//                    g.setColor(doorColor1);
-//                }
-//                g.fillRect(x + i * doorWidth, y + j * doorHeight, doorWidth, doorHeight);
-//            }
-//        }
-//
-//    }
-//
-//    private void loadDoorImage() {
-//        try {
-//            doorImage = ImageIO.read(new File(PATH + "soundimage/exitdoor.png")); // Load the image
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    private void loadKeyImage() {
-//        try {
-//            keyImage = ImageIO.read(new File(PATH + "soundimage/key.png"));
-//            System.out.println("Key image loaded successfully.");
-//        } catch (IOException e) {
-//            System.out.println("Error loading key image: " + e.getMessage());
-//        }
-//    }
-//
-//    private void displayKeyImage(Graphics g, int x, int y, int width, int height) {
-//        if (keyImage != null) {
-//            g.drawImage(keyImage, x, y, width, height, null);
-//        }
-//    }
-//
-//    private void displayDoorImage(Graphics g, int x, int y, int width, int height) {
-//        if (doorImage != null) {
-//            g.drawImage(doorImage, x, y, width, height, null);
-//        }
-//    }
 
-
+    private void moveCharacter(Direction direction) {
+        gameLogic.moveCharacter(direction);
+        mazePanel.repaint(); // Repaint the maze panel to reflect the new position -> this is why key respawn very time we move
+    }
     private void initializeMazePanel() {
         mazePanel = new JPanel() {
             @Override
@@ -401,36 +324,36 @@ public class GameFrame implements ActionListener {
                 // we can do it inside the gameLogic class.
                 int[][] maze = {
                         {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                        {1, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 1},
-                        {1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1},
+                        {1, 10, 10, 2, 11, 11, 2, 12, 12, 2, 13, 13, 2, 14, 14, 1},
+                        {1, 10, 10, 1, 11, 11, 1, 12, 12, 1, 13, 13, 1, 14, 14, 1},
                         {1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1},
-                        {1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1},
-                        {1, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 1},
+                        {1, 15, 15, 1, 16, 16, 1, 17, 17, 1, 18, 18, 1, 19, 19, 1},
+                        {1, 15, 15, 2, 16, 16, 2, 17, 17, 2, 18, 18, 2, 19, 19, 1},
                         {1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1},
-                        {1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1},
-                        {1, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 3},
+                        {1, 20, 20, 1, 21, 21, 1, 22, 22, 1, 23, 23, 1, 24, 24, 1},
+                        {1, 20, 20, 2, 21, 21, 2, 22, 22, 2, 23, 23, 2, 24, 24, 3},
                         {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
                 };
 
-                List<Integer> zeroLocationsRow = new ArrayList<>();
-                List<Integer> zeroLocationsCol = new ArrayList<>();
+                List<Integer> keyLocationRow = new ArrayList<>();
+                List<Integer> keyLocationCol = new ArrayList<>();
 
-                for(int i = 0; i < maze.length; i++) {
-                    for(int j = 0; j < maze[i].length; j++) {
-                        if(maze[i][j] == 0) {
-                            zeroLocationsRow.add(i);
-                            zeroLocationsCol.add(j);
+                for (int i = 0; i < maze.length; i++) {
+                    for (int j = 0; j < maze[i].length; j++) {
+                        if (maze[i][j] >= 10) {
+                            keyLocationRow.add(i);
+                            keyLocationCol.add(j);
                         }
                     }
                 }
 
                 Random randRow = new Random();
-                int randRowIndex = randRow.nextInt(zeroLocationsRow.size());
-                int keyRowIndex = zeroLocationsRow.get(randRowIndex);
+                int randRowIndex = randRow.nextInt(keyLocationRow.size());
+                int keyRowIndex = keyLocationRow.get(randRowIndex);
 
-                Random randColumn= new Random();
-                int randColumnIndex = randRow.nextInt(zeroLocationsRow.size());
-                int keyColumnIndex = zeroLocationsRow.get(randColumnIndex);
+                Random randColumn = new Random();
+                int randColumnIndex = randColumn.nextInt(keyLocationCol.size());
+                int keyColumnIndex = keyLocationCol.get(randColumnIndex);
 
                 int panelWidth = getWidth();
                 int panelHeight = getHeight();
@@ -443,13 +366,19 @@ public class GameFrame implements ActionListener {
                     for (int col = 0; col < maze[row].length; col++) {
                         if (maze[row][col] == 1) {
                             drawBrickWall(g, col * cellWidth, row * cellHeight, cellWidth, cellHeight);
-                        } else if(maze[row][col] == 2) {
+                        } else if (maze[row][col] == 2) {
                             displayDoorImage(g, col * cellWidth, row * cellHeight, cellWidth, cellHeight);
-                        } else if(maze[row][col] == 3) {
+                        } else if (maze[row][col] == 3) {
                             displayExitDoor(g, col * cellWidth, row * cellHeight, cellWidth, cellHeight);
-                        } else if(maze[row][col] == 0 && row == keyColumnIndex && col == keyColumnIndex) {
+                        } else if (maze[row][col] >= 10 && row == keyRowIndex && col == keyColumnIndex) {
                             displayKey(g, col * cellWidth, row * cellHeight, cellWidth, cellHeight);
                         }
+
+                        // Display the character
+                        if (row == gameLogic.getCharacterRow() && col == gameLogic.getCharacterCol()) {
+                            displayCharacter(g, col * cellWidth, row * cellHeight, cellWidth, cellHeight);
+                        }
+
                         g.setColor(Color.GRAY); // Drawing the grid lines
                         g.drawRect(col * cellWidth, row * cellHeight, cellWidth, cellHeight);
                     }
@@ -461,7 +390,6 @@ public class GameFrame implements ActionListener {
         mazePanel.setBounds(100, 80, 550, 350);
         mazePanel.setBackground(new Color(0, 0, 0, 100));
         mazePanel.setOpaque(false);
-
 
         myFrame.add(mazePanel);
     }
@@ -512,92 +440,14 @@ public class GameFrame implements ActionListener {
         // Draw the door image at the specified position and size
         g.drawImage(doorImage, x, y, width, height, null);
     }
+    private void displayCharacter(Graphics g, int x, int y, int width, int height) {
+        // Load the door image (replace "doorImage.jpg" with the path to your image file)
+        ImageIcon icon = new ImageIcon("character.png");
+        Image doorImage = icon.getImage();
 
-//    private void initializeMazePanel() {
-//        mazePanel = new JPanel() {
-//            @Override
-//            protected void paintComponent(Graphics g) {
-//                super.paintComponent(g);
-//                int numRows = 9; // Number of rows in the maze
-//                int numCols = 9; // Number of columns in the maze
-//                int panelWidth = getWidth(); // Width of the panel
-//                int panelHeight = getHeight(); // Height of the panel
-//
-//                int cellSize = Math.min(panelWidth / numCols, panelHeight / numRows); // Calculate cell size to fit the maze in the panel
-//
-//                int mazeWidth = numCols * cellSize; // Actual width of the maze
-//                int mazeHeight = numRows * cellSize; // Actual height of the maze
-//                int xOffset = (panelWidth - mazeWidth) / 2; // Offset to center the maze horizontally
-//                int yOffset = (panelHeight - mazeHeight) / 2; // Offset to center the maze vertically
-//
-//                /*
-//                LEGEND
-//                0 = blank space (the key can spawn in these)
-//                1 = Wall cannot pass
-//                2 = Vertical Door
-//                3 = Horizontal Door
-//                4 = EXIT
-//                8 = The start
-//                 */
-//                int[][] maze = {
-//                        {1, 1, 1, 1, 1, 1, 1, 1, 1},
-//                        {1, 8, 2, 0, 2, 0, 2, 0, 1},
-//                        {1, 3, 1, 3, 1, 3, 1, 3, 1},
-//                        {1, 0, 2, 0, 2, 0, 2, 0, 1},
-//                        {1, 3, 1, 3, 1, 3, 1, 3, 1},
-//                        {1, 0, 2, 0, 2, 0, 2, 0, 1},
-//                        {1, 3, 1, 3, 1, 3, 1, 3, 1},
-//                        {1, 0, 2, 0, 2, 0, 2, 4, 1},
-//                        {1, 1, 1, 1, 1, 1, 1, 1, 1}
-//                };
-//
-//                // Determine random location for the key
-//                List<Integer> zeroLocationsRow = new ArrayList<>();
-//                List<Integer> zeroLocationsCol = new ArrayList<>();
-//                for (int i = 0; i < maze.length; i++) {
-//                    for (int j = 0; j < maze[i].length; j++) {
-//                        if (maze[i][j] == 0) {
-//                            zeroLocationsRow.add(i);
-//                            zeroLocationsCol.add(j);
-//                        }
-//                    }
-//                }
-//                //Generate random location for key based on 0's
-//                int randomIndex = new Random().nextInt(zeroLocationsRow.size());
-//                int keyRow = zeroLocationsRow.get(randomIndex);
-//                int keyCol = zeroLocationsCol.get(randomIndex);
-//
-//                for (int i = 0; i < maze.length; i++) {
-//                    for (int j = 0; j < maze[i].length; j++) {
-//
-//                        int x = xOffset + j * cellSize;
-//                        int y = yOffset + i * cellSize;
-//
-//                        if (maze[i][j] == 1) {
-//                            drawBrickWall(g, xOffset + j * cellSize, yOffset + i * cellSize, cellSize);
-//                        } else if (maze[i][j] == 2) {
-//                            drawDoors(g, xOffset + j * cellSize, yOffset + i * cellSize, cellSize);
-//                        } else if (maze[i][j] == 3) {
-//                            drawDoors2(g, xOffset + j * cellSize, yOffset + i * cellSize, cellSize);
-//                        } else if (maze[i][j] == 4) {
-//                            displayDoorImage(g, xOffset + j * cellSize, yOffset + i * cellSize, cellSize, cellSize);
-//                        } else if (maze[i][j] == 0 && i == keyRow && j == keyCol) {
-//                            displayKeyImage(g, xOffset + j * cellSize, yOffset + i * cellSize, cellSize, cellSize);
-//                        }
-//                    }
-//                }
-//            }
-//        };
-//        mazePanel.setLayout(null);
-//        mazePanel.setBorder(new LineBorder(Color.darkGray, 3));
-//        mazePanel.setBounds(10, 80, 350, 350); // Adjusted the size to fit the maze
-//        mazePanel.setBackground(new Color(0, 0, 0, 100));
-//
-//        myFrame.add(mazePanel);
-//    }
-
-
-
+        // Draw the door image at the specified position and size
+        g.drawImage(doorImage, x, y, width, height, null);
+    }
     private void initializeUserPanel() {
         myUserPanel = new JPanel();
         myUserPanel.setLayout(null);
