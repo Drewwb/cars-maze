@@ -6,6 +6,4 @@ public class TrueFalseQuestion extends Question {
         super("TrueFalse", id);
 
     }
-
-
 }

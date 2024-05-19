@@ -83,7 +83,7 @@ public class Question {
                 throw new IllegalArgumentException("Invalid question type");
         }
 
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:lib/QATable.db");
+        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:cars-maze/lib/QATable.db");
              PreparedStatement stmt = conn.prepareStatement("SELECT QUESTION, ANSWER FROM " + tableName + " WHERE ID = ?")) {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
@@ -101,7 +101,7 @@ public class Question {
 
     private void setCategory(int id) {
         String category = null;
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:lib/QATable.db");
+        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:cars-maze/lib/QATable.db");
              PreparedStatement stmt = conn.prepareStatement("SELECT CATEGORY FROM MultipleChoice WHERE ID = ?")) {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
