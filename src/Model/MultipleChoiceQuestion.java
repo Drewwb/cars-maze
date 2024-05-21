@@ -18,7 +18,7 @@ public class MultipleChoiceQuestion extends Question {
 
     private void setOptions(int id) {
         String[] allOptions = new String[4];
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:cars-maze/lib/QATable.db");
+        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:lib/QATable.db");
              PreparedStatement stmt = conn.prepareStatement("SELECT OPTION1, OPTION2, OPTION3, OPTION4 FROM MultipleChoice WHERE ID = ?")) {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
