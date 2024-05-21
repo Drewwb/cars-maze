@@ -46,17 +46,40 @@ public class GameFrame implements ActionListener {
 
     }
     private void initializeQuestionPanel() {
-        QuestionFactory question = new QuestionFactory();
+        if (questionPanel != null) {
+            questionPanel.removeAll();  //Clear existing content
+        } else {
+            questionPanel = new JPanel();
+            questionPanel.setLayout(null);
+            questionPanel.setBorder(new LineBorder(Color.darkGray, 3));
+            questionPanel.setBounds(360, 450, 365, 225);
+            questionPanel.setBackground(new Color(240, 240, 240));
+            myFrame.add(questionPanel);
+        }
 
-        Question myQuestion = question.createQuestion();
+        QuestionFactory questionFactory = new QuestionFactory();
+        Question myQuestion = questionFactory.createQuestion();
 
-        if(myQuestion instanceof MultipleChoiceQuestion) {
+        if (myQuestion instanceof MultipleChoiceQuestion) {
             initializeMCQuestionPanel(myQuestion);
-        } else if(myQuestion instanceof TrueFalseQuestion) {
+        } else if (myQuestion instanceof TrueFalseQuestion) {
             initializeTFQuestionPanel(myQuestion);
-        } else if( myQuestion instanceof ShortAnswerQuestion) {
+        } else if (myQuestion instanceof ShortAnswerQuestion) {
             initializeSAQQuestionPanel(myQuestion);
         }
+
+        JButton generateButton = new JButton("Generate");
+        generateButton.setBounds(10, 195, 345, 25); //adjust size and position accordingly
+        generateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                initializeQuestionPanel();  //Reinitialize the question panel
+            }
+        });
+
+        questionPanel.add(generateButton);
+        questionPanel.revalidate();
+        questionPanel.repaint();
     }
 
     private void initializeMCQuestionPanel(Question question) {
