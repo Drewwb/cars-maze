@@ -1,4 +1,7 @@
-package src.Model;
+package src.Model.Game;
+
+import src.Model.Questions.Question;
+import src.Model.Questions.QuestionFactory;
 
 public class Door {
     private Direction myDirection;

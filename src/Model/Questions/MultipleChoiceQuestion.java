@@ -1,4 +1,6 @@
-package src.Model;
+package src.Model.Questions;
+
+import src.Model.Questions.Question;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
