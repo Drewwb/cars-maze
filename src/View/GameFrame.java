@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Random;
 
 public class GameFrame implements ActionListener {
-    private final String PATH = "cars-maze/";
+    private final String PATH = "";
     private JFrame myFrame;
     private JMenuBar myOptionBar;
     private JMenu myFile, myHelp;
@@ -29,7 +29,7 @@ public class GameFrame implements ActionListener {
     private JButton submitButton;
     private GameLogic gameLogic;
 
-    public GameFrame() { //test for drew
+    public GameFrame() {
         gameLogic = new GameLogic();
         initializeFrame();
         initializeUserPanel(); // need to come first before set background
@@ -318,7 +318,7 @@ public class GameFrame implements ActionListener {
                 super.paintComponent(g);
 
                 // Fill the background with the translucent color
-                g.setColor(new Color(0, 0, 0, 100));
+                g.setColor(new Color(0, 0, 0, 150));
                 g.fillRect(0, 0, getWidth(), getHeight());
 
                 // we can do it inside the gameLogic class.
@@ -362,6 +362,7 @@ public class GameFrame implements ActionListener {
                 int cellWidth = panelWidth / maze[0].length;
                 int cellHeight = panelHeight / maze.length;
 
+
                 for (int row = 0; row < maze.length; row++) {
                     for (int col = 0; col < maze[row].length; col++) {
                         if (maze[row][col] == 1) {
@@ -370,8 +371,6 @@ public class GameFrame implements ActionListener {
                             displayDoorImage(g, col * cellWidth, row * cellHeight, cellWidth, cellHeight);
                         } else if (maze[row][col] == 3) {
                             displayExitDoor(g, col * cellWidth, row * cellHeight, cellWidth, cellHeight);
-                        } else if (maze[row][col] >= 10 && row == keyRowIndex && col == keyColumnIndex) {
-                            displayKey(g, col * cellWidth, row * cellHeight, cellWidth, cellHeight);
                         }
 
                         // Display the character
@@ -383,6 +382,7 @@ public class GameFrame implements ActionListener {
                         g.drawRect(col * cellWidth, row * cellHeight, cellWidth, cellHeight);
                     }
                 }
+                displayKey(g, cellWidth, cellHeight);
             }
         };
         mazePanel.setLayout(null);
@@ -432,13 +432,14 @@ public class GameFrame implements ActionListener {
         // Draw the door image at the specified position and size
         g.drawImage(doorImage, x, y, width, height, null);
     }
-    private void displayKey(Graphics g, int x, int y, int width, int height) {
+    private void displayKey(Graphics g, int width, int height) {
         // Load the door image (replace "doorImage.jpg" with the path to your image file)
         ImageIcon icon = new ImageIcon("key.png");
         Image doorImage = icon.getImage();
+        int[] keyCoords = gameLogic.getKeyLocation();
 
         // Draw the door image at the specified position and size
-        g.drawImage(doorImage, x, y, width, height, null);
+        g.drawImage(doorImage, keyCoords[0] * width, keyCoords[1] * height, width, height, null);
     }
     private void displayCharacter(Graphics g, int x, int y, int width, int height) {
         // Load the door image (replace "doorImage.jpg" with the path to your image file)

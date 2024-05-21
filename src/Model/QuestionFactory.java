@@ -14,6 +14,7 @@ public class QuestionFactory {
 
     public QuestionFactory() {
         this.random = new Random();
+        //gen q map
     }
 
     public Question createQuestion() {

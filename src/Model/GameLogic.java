@@ -7,11 +7,12 @@ public class GameLogic {
     private Maze myMaze;
     private int characterRow;
     private int characterCol;
+    private int[] keyLocation;
 
 
     public GameLogic() {
         myMaze = new Maze(); // Maze that fully loaded
-
+        keyLocation = myMaze.getKeyCoordinates();
         this.points = 0;
         this.answerCorrect = false;
         this.gameOver = false;
@@ -22,6 +23,10 @@ public class GameLogic {
     private void characterSpawn() {
         this.characterRow = 1;
         this.characterCol = 1;
+    }
+
+    public int[] getKeyLocation() {
+        return keyLocation;
     }
 
     public int getCharacterRow() {
