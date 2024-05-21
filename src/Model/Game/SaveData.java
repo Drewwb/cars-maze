@@ -16,7 +16,6 @@ public class SaveData { // this class will have a method to saveData and method 
             e.printStackTrace();
         }
     }
-
     // Method to load game data from a file
     public static Object loadGame(String fileName) {
         Object object = null;
@@ -32,7 +31,4 @@ public class SaveData { // this class will have a method to saveData and method 
         }
         return object;
     }
-
-
-
 }
