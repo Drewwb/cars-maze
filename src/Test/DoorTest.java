@@ -2,10 +2,10 @@ package src.Test;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import src.Model.Direction;
-import src.Model.Door;
-import src.Model.Question;
-import src.Model.QuestionFactory;
+import src.Model.Game.Direction;
+import src.Model.Game.Door;
+import src.Model.Questions.Question;
+import src.Model.Questions.QuestionFactory;
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -1,4 +1,6 @@
-package src.Model;
+package src.Model.Game;
+
+import src.Model.Questions.Question;
 
 public class GameLogic {
     private int points;
@@ -127,8 +129,13 @@ public class GameLogic {
     }
 
     // Placeholder method for answering a question
+    //possible logic below
     private boolean answerQuestion(Question question) {
-        // nothing here yet, it's 12PM I'm cooked ~~~
+        if(question == null) {
+            throw new IllegalArgumentException("null string in answerQuestion");
+        }
+        String answer = question.getAnswer();
+        //check if the users answer is equal to the questions answer
         return true;
     }
 }

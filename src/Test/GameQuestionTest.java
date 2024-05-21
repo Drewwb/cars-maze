@@ -1,6 +1,6 @@
 package src.Test;
 
-import src.Model.Question;
+import src.Model.Questions.Question;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 

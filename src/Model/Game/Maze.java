@@ -1,4 +1,4 @@
-package src.Model;
+package src.Model.Game;
 
 import java.util.ArrayList;
 import java.util.HashMap;

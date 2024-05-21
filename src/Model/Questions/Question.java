@@ -1,4 +1,4 @@
-package src.Model;
+package src.Model.Questions;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;

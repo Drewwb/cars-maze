@@ -1,4 +1,8 @@
-package src.Model;
+package src.Model.ModelTests;
+
+import src.Model.Game.Door;
+import src.Model.Game.Maze;
+import src.Model.Game.Room;
 
 public class MazeTest {
     public static void main(String[] args) {

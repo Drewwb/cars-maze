@@ -1,4 +1,10 @@
-package src.Model;
+package src.Model.ModelTests;
+
+import src.Model.Questions.MultipleChoiceQuestion;
+import src.Model.Questions.Question;
+import src.Model.Questions.QuestionFactory;
+import src.Model.Questions.ShortAnswerQuestion;
+import src.Model.Questions.TrueFalseQuestion;
 
 public class testDataBase {
     // test huyhuynh
