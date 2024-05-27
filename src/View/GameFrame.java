@@ -46,42 +46,53 @@ public class GameFrame implements ActionListener {
 
     }
     private void initializeQuestionPanel() {
-        if (questionPanel != null) {
-            questionPanel.removeAll();  //Clear existing content
-        } else {
-            questionPanel = new JPanel();
-            questionPanel.setLayout(null);
-            questionPanel.setBorder(new LineBorder(Color.darkGray, 3));
-            questionPanel.setBounds(360, 450, 365, 225);
-            questionPanel.setBackground(new Color(240, 240, 240));
-            myFrame.add(questionPanel);
-        }
+        QuestionFactory question = new QuestionFactory();
 
-        QuestionFactory questionFactory = new QuestionFactory();
-        Question myQuestion = questionFactory.createQuestion();
+        Question myQuestion = question.createQuestion();
 
-        if (myQuestion instanceof MultipleChoiceQuestion) {
+        if(myQuestion instanceof MultipleChoiceQuestion) {
             initializeMCQuestionPanel(myQuestion);
-        } else if (myQuestion instanceof TrueFalseQuestion) {
+        } else if(myQuestion instanceof TrueFalseQuestion) {
             initializeTFQuestionPanel(myQuestion);
-        } else if (myQuestion instanceof ShortAnswerQuestion) {
+        } else if( myQuestion instanceof ShortAnswerQuestion) {
             initializeSAQQuestionPanel(myQuestion);
         }
-
-        JButton generateButton = new JButton("Generate");
-        generateButton.setLayout(null);
-        generateButton.setBounds(10, 195, 345, 25); //adjust size and position accordingly
-        generateButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                initializeQuestionPanel();  //Reinitialize the question panel
-            }
-        });
-
-        questionPanel.add(generateButton);
-        questionPanel.revalidate();
-        questionPanel.repaint();
     }
+//    private void initializeQuestionPanel() {
+//
+//            questionPanel = new JPanel();
+//            questionPanel.setLayout(null);
+//            questionPanel.setBorder(new LineBorder(Color.darkGray, 3));
+//            questionPanel.setBounds(360, 450, 365, 225);
+//            questionPanel.setBackground(new Color(240, 240, 240));
+//            myFrame.add(questionPanel);
+//
+//
+//        QuestionFactory questionFactory = new QuestionFactory();
+//        Question myQuestion = questionFactory.createQuestion();
+//
+//        if (myQuestion instanceof MultipleChoiceQuestion) {
+//            initializeMCQuestionPanel(myQuestion);
+//        } else if (myQuestion instanceof TrueFalseQuestion) {
+//            initializeTFQuestionPanel(myQuestion);
+//        } else if (myQuestion instanceof ShortAnswerQuestion) {
+//            initializeSAQQuestionPanel(myQuestion);
+//        }
+////
+////        JButton generateButton = new JButton("Generate");
+////        generateButton.setLayout(null);
+////        generateButton.setBounds(10, 195, 345, 25); //adjust size and position accordingly
+////        generateButton.addActionListener(new ActionListener() {
+////            @Override
+////            public void actionPerformed(ActionEvent e) {
+////                initializeQuestionPanel();  //Reinitialize the question panel
+////            }
+////        });
+////
+////        questionPanel.add(generateButton);
+////        questionPanel.revalidate();
+////        questionPanel.repaint();
+//    }
 
     private void initializeMCQuestionPanel(Question question) {
         questionPanel = new JPanel();
@@ -246,11 +257,21 @@ public class GameFrame implements ActionListener {
         submitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String correctAnswer = tfQuestion.getAnswer();
-                boolean isCorrect = false;
+                String correctAnswer = tfQuestion.getAnswer().trim().toLowerCase();
+                boolean isCorrect;
+                String userAnswer = "";
 
-                if(tfQuestion.getAnswer().equals(correctAnswer)) {
+                if(option1.isSelected()) {
+                    userAnswer = "true";
+                } else if(option2.isSelected()) {
+                    userAnswer = "false";
+                }
+
+                // Normalize the userAnswer by trimming and converting to lowercase
+                if(correctAnswer.equals(userAnswer.trim().toLowerCase())) {
                     isCorrect = true;
+                } else {
+                    isCorrect = false;
                 }
 
                 if (isCorrect) {
@@ -260,7 +281,6 @@ public class GameFrame implements ActionListener {
                 }
             }
         });
-
 
         questionPanel.add(questionLabel);
         questionPanel.add(option1);

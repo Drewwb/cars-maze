@@ -77,6 +77,9 @@ public class Maze {
         keyRoom[1] = this.keyCol;
         return keyRoom;
     }
+    public int getCurrentValue(int row, int col) {
+        return layout[row][col];
+    }
 
 
     public Room[][] getRooms() {

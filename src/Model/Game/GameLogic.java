@@ -10,7 +10,7 @@ public class GameLogic {
     private int characterRow;
     private int characterCol;
     private int[] keyLocation;
-
+    private int currentRoomNumber; // Store the current room number
 
     public GameLogic() {
         myMaze = new Maze(); // Maze that fully loaded
@@ -19,12 +19,14 @@ public class GameLogic {
         this.answerCorrect = false;
         this.gameOver = false;
         characterSpawn();
+        currentRoomNumber = myMaze.getCurrentValue(characterRow, characterCol); // Initialize the current room number
     }
 
     // Spawn character at the starting point, e.g., (1, 1)
     private void characterSpawn() {
         this.characterRow = 1;
         this.characterCol = 1;
+        currentRoomNumber = myMaze.getCurrentValue(characterRow, characterCol); // Initialize the current room number
     }
 
     public int[] getKeyLocation() {
@@ -83,59 +85,73 @@ public class GameLogic {
                 break;
         }
 
-        // Check if the new position is valid (e.g., not out of bounds and not a wall)
+        System.out.println("Trying to move to row: " + newRow + ", col: " + newCol);
+        System.out.println("Current maze value at new position: " + myMaze.getCurrentValue(newRow, newCol));
+
         if (isValidPosition(newRow, newCol)) {
             characterRow = newRow;
             characterCol = newCol;
+            currentRoomNumber = myMaze.getCurrentValue(characterRow, characterCol); // Update current room number
         } else if (isDoor(newRow, newCol)) {
-            interactWithDoor(direction);
+            System.out.println("HITTING THE DOOR");
+            System.out.println("Encountered a door at row: " + newRow + ", col: " + newCol);
+            interactWithDoor(direction, newRow, newCol, currentRoomNumber); // Use the stored room number
+        } else {
+            System.out.println("Invalid move. Position is either out of bounds or a wall.");
         }
     }
-    // Check if the position is a door
+
     private boolean isDoor(int row, int col) {
-        return myMaze.getRooms()[row][col].getRoomNumber() == 2; // Assuming 2 is a door
+        int currentValue = myMaze.getCurrentValue(row, col);
+        return currentValue == 2;
     }
 
-    // Check if the position is valid
     private boolean isValidPosition(int row, int col) {
         if (row < 0 || row >= myMaze.getRooms().length || col < 0 || col >= myMaze.getRooms()[0].length) {
             return false;
         }
-        return myMaze.getRooms()[row][col].getRoomNumber() != 1; // Assuming 1 is a wall
+        return myMaze.getCurrentValue(row, col) != 1 && myMaze.getCurrentValue(row, col) != 2; // Assuming 1 is a wall and 2 is a door
     }
 
-    public void interactWithDoor(Direction direction) {
+    public void interactWithDoor(Direction direction, int row, int col, int currentRoomNumber) {
         // Get the current room
-        Room currentRoom = myMaze.getRooms()[characterRow][characterCol];
+        System.out.println("Current room number: " + currentRoomNumber);
+        Room currentRoom = null;
+        for (Room room : myMaze.getMyRoomList()) {
+            if (currentRoomNumber == room.getRoomNumber()) {
+                currentRoom = room;
+                break; // found the room, no need to continue loop
+            }
+        }
+
+        if (currentRoom == null) {
+            System.out.println("No room found for the current position.");
+            return;
+        }
+
         Door[] doors = currentRoom.getDoors();
+        boolean doorFound = false;
 
         for (Door door : doors) {
             if (door.getMyDirection() == direction) {
-                // Ask the question
+                doorFound = true;
                 Question question = door.getMyQuestion();
-                // Simulate answering the question
-                boolean answerCorrect = answerQuestion(question);
-
-                if (answerCorrect) {
-                    door.setDoorLock(false); // Unlock the door
-                    incrementPoints(10); // Increment points
-                    setAnswerStatement(true);
-                } else {
-                    setAnswerStatement(false);
-                }
+                System.out.println("The question for this door is: " + question.getQuestion());
                 break;
             }
         }
+
+        if (!doorFound) {
+            System.out.println("No door found in the specified direction.");
+        }
     }
 
-    // Placeholder method for answering a question
-    //possible logic below
     private boolean answerQuestion(Question question) {
-        if(question == null) {
+        if (question == null) {
             throw new IllegalArgumentException("null string in answerQuestion");
         }
         String answer = question.getAnswer();
-        //check if the users answer is equal to the questions answer
+        // check if the user's answer is equal to the question's answer
         return true;
     }
 }

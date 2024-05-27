@@ -44,6 +44,10 @@ public class Room {
         return doors;
     }
 
+    public void setDoors(Door[] doors) {
+        this.doors = doors;
+    }
+
     public int getRoomNumber() {
         return myRoomNumber;
     }
