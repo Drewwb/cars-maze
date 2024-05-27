@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Random;
 
 public class GameFrame implements ActionListener {
-    private final String PATH = "cars-maze/";
+    private final String PATH = "";
     private JFrame myFrame;
     private JMenuBar myOptionBar;
     private JMenu myFile, myHelp;

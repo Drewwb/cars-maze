@@ -83,7 +83,6 @@ public class Room {
                 doors[1] = new Door(direction2);
             }
         }
-
 //        if (roomNumber >= 10) {
 //            if (roomNumber == 10 || roomNumber == 14 || roomNumber == 20 || roomNumber == 24) {
 //                this.doors = new Door[2];
