@@ -12,8 +12,10 @@ public class Room {
         if (roomNumber >= 10) {
             if (roomNumber == 10 || roomNumber == 14 || roomNumber == 20 || roomNumber == 24) {
                 this.doors = new Door[2];
+
             } else if (roomNumber == 11 || roomNumber == 12 || roomNumber == 13 || roomNumber == 21 || roomNumber == 22 || roomNumber == 23) {
                 this.doors = new Door[3];
+
             } else {
                 this.doors = new Door[4];
             }
