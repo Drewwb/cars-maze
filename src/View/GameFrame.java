@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Random;
 
 public class GameFrame implements ActionListener {
-    private final String PATH = "";
+    private final String PATH = "cars-maze/";
     private JFrame myFrame;
     private JMenuBar myOptionBar;
     private JMenu myFile, myHelp;
@@ -69,6 +69,7 @@ public class GameFrame implements ActionListener {
         }
 
         JButton generateButton = new JButton("Generate");
+        generateButton.setLayout(null);
         generateButton.setBounds(10, 195, 345, 25); //adjust size and position accordingly
         generateButton.addActionListener(new ActionListener() {
             @Override
