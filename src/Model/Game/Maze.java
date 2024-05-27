@@ -13,6 +13,7 @@ public class Maze {
     private HashMap<Integer, int[]> validKeyCoordinates;
     private int keyRow;
     private int keyCol;
+    private int[] exitDoorCoordinates;
     private Random random;
 
     public Maze() {
@@ -46,7 +47,6 @@ public class Maze {
             for (int j = 0; j < layout[i].length; j++) {
                 int roomNumber = layout[i][j];
                 if (roomNumber >= 10) {
-
                     //valid room for a key so add the coordinates to map
                     int[] coords = new int[2];
                     coords[0] = i; //row
@@ -59,6 +59,10 @@ public class Maze {
                         myRoomList.add(rooms[i][j]);
                         roomNumbersSet.add(roomNumber);
                     }
+                } else if(roomNumber == 3) {
+                    exitDoorCoordinates = new int[2];
+                    exitDoorCoordinates[0] = i;
+                    exitDoorCoordinates[1] = j;
                 }
             }
         }
@@ -88,5 +92,8 @@ public class Maze {
 
     public ArrayList<Room> getMyRoomList() {
         return myRoomList;
+    }
+    public int[] getExitDoorCoordinates() {
+        return exitDoorCoordinates;
     }
 }
