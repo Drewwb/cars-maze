@@ -14,12 +14,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+
+
 
 public class GameFrame implements ActionListener {
-    private final String PATH = "";
+    private final String PATH = "cars-maze/";
     private JFrame myFrame;
     private JMenuBar myOptionBar;
     private JMenu myFile, myHelp;
@@ -128,34 +127,54 @@ public class GameFrame implements ActionListener {
                     isCorrect = option4.getText().equals(correctAnswer);
                 }
 
+                int newRow = gameLogic.getCharacterRow();
+                int newCol = gameLogic.getCharacterCol();
+
                 if (isCorrect) {
                     JOptionPane.showMessageDialog(null, "Congrats! Correct Answer");
-                    gameLogic.incrementPoints(10); // Add points for a correct answer
-
-                    int newRow = gameLogic.getCharacterRow();
-                    int newCol = gameLogic.getCharacterCol();
-                    if (gameLogic.getCurrentDirection() == Direction.NORTH) {
-                        newRow--;
-                    } else if (gameLogic.getCurrentDirection() == Direction.SOUTH) {
-                        newRow++;
-                    } else if (gameLogic.getCurrentDirection() == Direction.WEST) {
-                        newCol--;
-                    } else if (gameLogic.getCurrentDirection() == Direction.EAST) {
-                        newCol++;
+                    switch (gameLogic.getCurrentDirection()) {
+                        case NORTH:
+                            newRow--;
+                            break;
+                        case SOUTH:
+                            newRow++;
+                            break;
+                        case EAST:
+                            newCol++;
+                            break;
+                        case WEST:
+                            newCol--;
+                            break;
                     }
-
-                    // Update character position in the maze, so we can move back
-                    gameLogic.setCurrentRow(newRow);
+                    gameLogic.setCurrentRow(newRow); // update the -> we can step in that door
                     gameLogic.setCurrentCol(newCol);
                     gameLogic.getMyMaze().setCurrentValue(newRow, newCol, 100);
                     gameLogic.setCurrentQuestion(null);
+
                     questionPanel.setVisible(false);
-
-                    mazePanel.repaint(); // Repaint maze after moving the character
-
+                    mazePanel.repaint();
 
                 } else {
                     JOptionPane.showMessageDialog(null, "Incorrect Answer!");
+                    switch (gameLogic.getCurrentDirection()) {
+                        case NORTH:
+                            newRow--;
+                            break;
+                        case SOUTH:
+                            newRow++;
+                            break;
+                        case EAST:
+                            newCol++;
+                            break;
+                        case WEST:
+                            newCol--;
+                            break;
+                    }
+                    gameLogic.getMyMaze().setCurrentValue(newRow, newCol, 1);
+                    gameLogic.setCurrentQuestion(null);
+
+                    questionPanel.setVisible(false);
+                    mazePanel.repaint();
                 }
             }
         });
@@ -196,15 +215,17 @@ public class GameFrame implements ActionListener {
             public void actionPerformed(ActionEvent e) {
                 String correctAnswer = saqQuestion.getAnswer();
                 String userAnswer = textField.getText().trim(); // Trim to remove leading/trailing spaces
-                boolean isCorrect = correctAnswer.equalsIgnoreCase(userAnswer);
+                boolean isCorrect = false;
+
+                int newRow = gameLogic.getCharacterRow();
+                int newCol = gameLogic.getCharacterCol();
+                // Normalize the userAnswer by trimming and converting to lowercase
+                isCorrect = correctAnswer.equals(userAnswer.trim().toLowerCase());
 
                 if (isCorrect) {
                     JOptionPane.showMessageDialog(null, "Congrats! Correct Answer");
 
-                    // Update character position after correct answer
-                    int newRow = gameLogic.getCharacterRow();
-                    int newCol = gameLogic.getCharacterCol();
-                    // Determine the new position based on the current direction
+                    // Update character position based on the current direction
                     switch (gameLogic.getCurrentDirection()) {
                         case NORTH:
                             newRow--;
@@ -219,16 +240,35 @@ public class GameFrame implements ActionListener {
                             newCol--;
                             break;
                     }
-                    // Update character position in the maze
-                    gameLogic.setCurrentRow(newRow);
+
+                    gameLogic.setCurrentRow(newRow); // update the -> we can step in that door
                     gameLogic.setCurrentCol(newCol);
                     gameLogic.getMyMaze().setCurrentValue(newRow, newCol, 100);
                     gameLogic.setCurrentQuestion(null);
 
                     questionPanel.setVisible(false);
-                    mazePanel.repaint(); // Repaint maze after moving the character
+                    mazePanel.repaint();
                 } else {
                     JOptionPane.showMessageDialog(null, "Incorrect Answer!");
+                    switch (gameLogic.getCurrentDirection()) { // update to set the door locked not character position still same.
+                        case NORTH:
+                            newRow--;
+                            break;
+                        case SOUTH:
+                            newRow++;
+                            break;
+                        case EAST:
+                            newCol++;
+                            break;
+                        case WEST:
+                            newCol--;
+                            break;
+                    }
+                    gameLogic.getMyMaze().setCurrentValue(newRow, newCol, 1);
+
+                    gameLogic.setCurrentQuestion(null);
+                    questionPanel.setVisible(false);
+                    mazePanel.repaint();
                 }
             }
         });
@@ -285,7 +325,8 @@ public class GameFrame implements ActionListener {
                 } else if (option2.isSelected()) {
                     userAnswer = "false";
                 }
-
+                int newRow = gameLogic.getCharacterRow();
+                int newCol = gameLogic.getCharacterCol();
                 // Normalize the userAnswer by trimming and converting to lowercase
                 isCorrect = correctAnswer.equals(userAnswer.trim().toLowerCase());
 
@@ -293,9 +334,6 @@ public class GameFrame implements ActionListener {
                     JOptionPane.showMessageDialog(null, "Congrats! Correct Answer");
 
                     // Update character position based on the current direction
-                    int newRow = gameLogic.getCharacterRow();
-                    int newCol = gameLogic.getCharacterCol();
-
                     switch (gameLogic.getCurrentDirection()) {
                         case NORTH:
                             newRow--;
@@ -311,7 +349,7 @@ public class GameFrame implements ActionListener {
                             break;
                     }
 
-                    gameLogic.setCurrentRow(newRow);
+                    gameLogic.setCurrentRow(newRow); // update the -> we can step in that door
                     gameLogic.setCurrentCol(newCol);
                     gameLogic.getMyMaze().setCurrentValue(newRow, newCol, 100);
                     gameLogic.setCurrentQuestion(null);
@@ -320,6 +358,25 @@ public class GameFrame implements ActionListener {
                     mazePanel.repaint();
                 } else {
                     JOptionPane.showMessageDialog(null, "Incorrect Answer!");
+                    switch (gameLogic.getCurrentDirection()) { // update to set the door locked not character position still same.
+                        case NORTH:
+                            newRow--;
+                            break;
+                        case SOUTH:
+                            newRow++;
+                            break;
+                        case EAST:
+                            newCol++;
+                            break;
+                        case WEST:
+                            newCol--;
+                            break;
+                    }
+                    gameLogic.getMyMaze().setCurrentValue(newRow, newCol, 1);
+
+                    gameLogic.setCurrentQuestion(null);
+                    questionPanel.setVisible(false);
+                    mazePanel.repaint();
                 }
             }
         });
@@ -414,38 +471,7 @@ public class GameFrame implements ActionListener {
                 g.fillRect(0, 0, getWidth(), getHeight());
 
                 // we can do it inside the gameLogic class.
-                int[][] maze = {
-                        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                        {1, 10, 10, 2, 11, 11, 2, 12, 12, 2, 13, 13, 2, 14, 14, 1},
-                        {1, 10, 10, 1, 11, 11, 1, 12, 12, 1, 13, 13, 1, 14, 14, 1},
-                        {1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1},
-                        {1, 15, 15, 1, 16, 16, 1, 17, 17, 1, 18, 18, 1, 19, 19, 1},
-                        {1, 15, 15, 2, 16, 16, 2, 17, 17, 2, 18, 18, 2, 19, 19, 1},
-                        {1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1},
-                        {1, 20, 20, 1, 21, 21, 1, 22, 22, 1, 23, 23, 1, 24, 24, 1},
-                        {1, 20, 20, 2, 21, 21, 2, 22, 22, 2, 23, 23, 2, 24, 24, 3},
-                        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
-                };
-
-                List<Integer> keyLocationRow = new ArrayList<>();
-                List<Integer> keyLocationCol = new ArrayList<>();
-
-                for (int i = 0; i < maze.length; i++) {
-                    for (int j = 0; j < maze[i].length; j++) {
-                        if (maze[i][j] >= 10) {
-                            keyLocationRow.add(i);
-                            keyLocationCol.add(j);
-                        }
-                    }
-                }
-
-                Random randRow = new Random();
-                int randRowIndex = randRow.nextInt(keyLocationRow.size());
-                int keyRowIndex = keyLocationRow.get(randRowIndex);
-
-                Random randColumn = new Random();
-                int randColumnIndex = randColumn.nextInt(keyLocationCol.size());
-                int keyColumnIndex = keyLocationCol.get(randColumnIndex);
+                int[][] maze = gameLogic.getMyMaze().getLayout();
 
                 int panelWidth = getWidth();
                 int panelHeight = getHeight();
@@ -453,7 +479,6 @@ public class GameFrame implements ActionListener {
                 // Calculate the size of each cell
                 int cellWidth = panelWidth / maze[0].length;
                 int cellHeight = panelHeight / maze.length;
-
 
                 for (int row = 0; row < maze.length; row++) {
                     for (int col = 0; col < maze[row].length; col++) {
@@ -463,6 +488,10 @@ public class GameFrame implements ActionListener {
                             displayDoorImage(g, col * cellWidth, row * cellHeight, cellWidth, cellHeight);
                         } else if (maze[row][col] == 3) {
                             displayExitDoor(g, col * cellWidth, row * cellHeight, cellWidth, cellHeight);
+                        } else if (maze[row][col] == 100) {
+                            displayCheckImage(g, col * cellWidth, row * cellHeight, cellWidth, cellHeight);
+                        } else if (maze[row][col] == -1) {
+                            drawRedX(g, col * cellWidth, row * cellHeight, cellWidth, cellHeight);
                         }
 
                         // Display the character
@@ -484,6 +513,17 @@ public class GameFrame implements ActionListener {
         mazePanel.setOpaque(false);
 
         myFrame.add(mazePanel);
+    }
+    private void drawRedX(Graphics g, int x, int y, int width, int height) {
+        g.setColor(Color.RED);
+        g.drawLine(x, y, x + width, y + height);
+        g.drawLine(x + width, y, x, y + height);
+    }
+    private void displayCheckImage(Graphics g, int x, int y, int width, int height) {
+        ImageIcon icon = new ImageIcon("checkIcon.png");
+        Image checkImage = icon.getImage();
+
+        g.drawImage(checkImage, x, y, width, height, null);
     }
 
     private void drawBrickWall(Graphics g, int x, int y, int width, int height) {

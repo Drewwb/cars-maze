@@ -11,12 +11,14 @@ public class GameLogic {
     private int characterCol;
     private int[] keyLocation;
     private int currentRoomNumber; // Store the current room number
-  
+
     private Question currentQuestion;
     private boolean isDoorCheck;
     private Direction currentDirection;
     private boolean hasKey;
     private int[] exitDoorLocation;
+
+
 
     public GameLogic() {
         currentDirection = null;
@@ -24,10 +26,7 @@ public class GameLogic {
         keyLocation = myMaze.getKeyCoordinates();
         this.currentQuestion = null;
         this.isDoorCheck = false;
-        exitDoorLocation = myMaze.getExitDoorCoordinates();
-      
         this.points = 0;
-        this.hasKey = false;
         this.answerCorrect = false;
         this.gameOver = false;
         characterSpawn();
@@ -109,8 +108,6 @@ public class GameLogic {
             characterCol = newCol;
             isDoorCheck = false;
             currentRoomNumber = myMaze.getCurrentValue(characterRow, characterCol); // Update current room number
-            isKeyAtThisLocation(characterRow, characterCol);
-            isExitDoorAtThisLocation(characterRow, characterCol); //if yes and player has key then game over
         } else if (isDoor(newRow, newCol)) {
             System.out.println("HITTING THE DOOR");
             System.out.println("Encountered a door at row: " + newRow + ", col: " + newCol);
@@ -138,6 +135,13 @@ public class GameLogic {
     }
 
     public void interactWithDoor(Direction direction, int row, int col, int currentRoomNumber) {
+        // check to see if the door is locked or not
+        int currentValue = myMaze.getCurrentValue(row, col);
+        if(currentValue == -1) {
+            System.out.println("The door is locked!");
+        }
+
+
         // Get the current room
         System.out.println("Current room number: " + currentRoomNumber);
         Room currentRoom = null;
@@ -192,28 +196,4 @@ public class GameLogic {
     public Direction getCurrentDirection() {
         return currentDirection;
     }
-
-    public boolean doesCharacterHaveKey() { //getter method
-        return hasKey;
-    }
-
-    private void isKeyAtThisLocation(int row, int col) {
-        int keyRow = keyLocation[0];
-        int keyCol = keyLocation[1];
-        if(row == keyRow && col == keyCol) {
-            hasKey = true;
-        }
-    }
-
-    private void isExitDoorAtThisLocation(int row, int col){
-        if(row == exitDoorLocation[0] && col == exitDoorLocation[1]) { //true if exit door is there
-            if(doesCharacterHaveKey()) {
-                System.out.println("Congrats, you win!");
-                gameOver = true;
-            } else {
-                System.out.println("You need the key before entering.");
-            }
-        }
-    }
-
 }

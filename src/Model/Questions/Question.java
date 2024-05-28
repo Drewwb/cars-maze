@@ -17,7 +17,7 @@ public class Question {
     Huy: "cars-maze/"
     Jafar: "cars-maze/"
      */
-    private final String PATH = ""; //Put the correct string here from above
+    private final String PATH = "cars-maze/"; //Put the correct string here from above
 
     private String lineSeparator = System.lineSeparator();
 
