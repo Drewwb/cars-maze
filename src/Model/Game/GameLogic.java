@@ -11,7 +11,6 @@ public class GameLogic {
     private int characterCol;
     private int[] keyLocation;
     private int currentRoomNumber; // Store the current room number
-  
     private Question currentQuestion;
     private boolean isDoorCheck;
     private Direction currentDirection;
@@ -22,6 +21,8 @@ public class GameLogic {
         currentDirection = null;
         myMaze = new Maze(); // Maze that fully loaded
         keyLocation = myMaze.getKeyCoordinates();
+        System.out.println(keyLocation[0]);
+        System.out.println(keyLocation[1]);
         this.currentQuestion = null;
         this.isDoorCheck = false;
         exitDoorLocation = myMaze.getExitDoorCoordinates();
@@ -198,10 +199,11 @@ public class GameLogic {
     }
 
     private void isKeyAtThisLocation(int row, int col) {
-        int keyRow = keyLocation[0];
-        int keyCol = keyLocation[1];
+        int keyRow = keyLocation[1];
+        int keyCol = keyLocation[0];
         if(row == keyRow && col == keyCol) {
             hasKey = true;
+            System.out.println("USER PICKED UP KEY");
         }
     }
 
