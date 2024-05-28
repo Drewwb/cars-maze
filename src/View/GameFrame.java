@@ -4,7 +4,6 @@ import src.Model.Game.Direction;
 import src.Model.Game.GameLogic;
 import src.Model.Questions.MultipleChoiceQuestion;
 import src.Model.Questions.Question;
-import src.Model.Questions.QuestionFactory;
 import src.Model.Questions.ShortAnswerQuestion;
 import src.Model.Questions.TrueFalseQuestion;
 
@@ -31,6 +30,7 @@ public class GameFrame implements ActionListener {
     private JRadioButton option1, option2, option3, option4;
     private JButton submitButton;
     private GameLogic gameLogic;
+    private JTextField myUserName, myPoints, myKeys, mySteak;
 
     public GameFrame() {
         gameLogic = new GameLogic();
@@ -39,60 +39,35 @@ public class GameFrame implements ActionListener {
         initializeMazePanel();
         initializeControlPanel();
         initializeSpellPanel();
-        initializeQuestionPanel();
+        //initializeQuestionPanel();
 
         initializeBackGround();
         initializeOptionBar();
 
     }
-    private void initializeQuestionPanel() {
-        QuestionFactory question = new QuestionFactory();
-
-        Question myQuestion = question.createQuestion();
-
-        if(myQuestion instanceof MultipleChoiceQuestion) {
-            initializeMCQuestionPanel(myQuestion);
-        } else if(myQuestion instanceof TrueFalseQuestion) {
-            initializeTFQuestionPanel(myQuestion);
-        } else if( myQuestion instanceof ShortAnswerQuestion) {
-            initializeSAQQuestionPanel(myQuestion);
+    private void initializeQuestionPanel(Question currentQuestion) {
+        if (questionPanel != null) {
+            myFrame.remove(questionPanel);
         }
+
+        questionPanel = new JPanel();
+        questionPanel.setLayout(null);
+        questionPanel.setBorder(new LineBorder(Color.darkGray, 3));
+        questionPanel.setBounds(360, 450, 365, 225);
+        questionPanel.setBackground(new Color(240, 240, 240));
+
+        if (currentQuestion instanceof MultipleChoiceQuestion) {
+            initializeMCQuestionPanel(currentQuestion);
+        } else if (currentQuestion instanceof TrueFalseQuestion) {
+            initializeTFQuestionPanel(currentQuestion);
+        } else if (currentQuestion instanceof ShortAnswerQuestion) {
+            initializeSAQQuestionPanel(currentQuestion);
+        }
+
+        questionPanel.revalidate(); // Let's fucking goooo!
+        questionPanel.repaint();
+        myFrame.add(questionPanel);
     }
-//    private void initializeQuestionPanel() {
-//
-//            questionPanel = new JPanel();
-//            questionPanel.setLayout(null);
-//            questionPanel.setBorder(new LineBorder(Color.darkGray, 3));
-//            questionPanel.setBounds(360, 450, 365, 225);
-//            questionPanel.setBackground(new Color(240, 240, 240));
-//            myFrame.add(questionPanel);
-//
-//
-//        QuestionFactory questionFactory = new QuestionFactory();
-//        Question myQuestion = questionFactory.createQuestion();
-//
-//        if (myQuestion instanceof MultipleChoiceQuestion) {
-//            initializeMCQuestionPanel(myQuestion);
-//        } else if (myQuestion instanceof TrueFalseQuestion) {
-//            initializeTFQuestionPanel(myQuestion);
-//        } else if (myQuestion instanceof ShortAnswerQuestion) {
-//            initializeSAQQuestionPanel(myQuestion);
-//        }
-////
-////        JButton generateButton = new JButton("Generate");
-////        generateButton.setLayout(null);
-////        generateButton.setBounds(10, 195, 345, 25); //adjust size and position accordingly
-////        generateButton.addActionListener(new ActionListener() {
-////            @Override
-////            public void actionPerformed(ActionEvent e) {
-////                initializeQuestionPanel();  //Reinitialize the question panel
-////            }
-////        });
-////
-////        questionPanel.add(generateButton);
-////        questionPanel.revalidate();
-////        questionPanel.repaint();
-//    }
 
     private void initializeMCQuestionPanel(Question question) {
         questionPanel = new JPanel();
@@ -100,30 +75,26 @@ public class GameFrame implements ActionListener {
         questionPanel.setBorder(new LineBorder(Color.darkGray, 3));
         questionPanel.setBounds(360, 450, 365, 225);
         questionPanel.setBackground(new Color(240, 240, 240));
+        questionPanel.setVisible(true);
 
-        // type cast question.
+        // Type cast question
         MultipleChoiceQuestion mcQuestion = (MultipleChoiceQuestion) question;
 
-        String theQuestion = mcQuestion.getQuestion();
-        JLabel questionLabel = new JLabel("<html><div style='width: 300px;'>" + theQuestion + "</div></html>");
+        JLabel questionLabel = new JLabel("<html><div style='width: 300px;'>" + mcQuestion.getQuestion() + "</div></html>");
         questionLabel.setBounds(10, 10, 335, 30);
 
-        String theOption1 = mcQuestion.getOptions()[0];
-        String theOption2 = mcQuestion.getOptions()[1];
-        String theOption3 = mcQuestion.getOptions()[2];
-        String theOption4 = mcQuestion.getOptions()[3];
+        String[] options = mcQuestion.getOptions();
+        option1 = new JRadioButton(options[0]);
+        option2 = new JRadioButton(options[1]);
+        option3 = new JRadioButton(options[2]);
+        option4 = new JRadioButton(options[3]);
 
-        option1 = new JRadioButton(theOption1);
-        option2 = new JRadioButton(theOption2);
-        option3 = new JRadioButton(theOption3);
-        option4 = new JRadioButton(theOption4);
+        option1.setBounds(10, 50, 150, 30);
+        option2.setBounds(10, 90, 150, 30);
+        option3.setBounds(10, 130, 150, 30);
+        option4.setBounds(10, 170, 150, 30);
 
-        option1.setBounds(10, 50, 150, 30); // Set the bounds for option1
-        option2.setBounds(10, 90, 150, 30); // Set the bounds for option2
-        option3.setBounds(10, 130, 150, 30); // Set the bounds for option3
-        option4.setBounds(10, 170, 150, 30); // Set the bounds for option4
-
-        option1.setOpaque(false); // Set background color of radio buttons to transparent
+        option1.setOpaque(false);
         option2.setOpaque(false);
         option3.setOpaque(false);
         option4.setOpaque(false);
@@ -140,31 +111,54 @@ public class GameFrame implements ActionListener {
         optionGroup.add(option4);
 
         submitButton = new JButton("Submit");
-        submitButton.setBounds(200, 170, 100, 30); // Set the bounds for the submit button
+        submitButton.setBounds(200, 170, 100, 30);
         submitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String correctAnswer = mcQuestion.getAnswer();
                 boolean isCorrect = false;
 
-                if(option1.isSelected()) {
+                if (option1.isSelected()) {
                     isCorrect = option1.getText().equals(correctAnswer);
                 } else if (option2.isSelected()) {
                     isCorrect = option2.getText().equals(correctAnswer);
-                } else if(option3.isSelected()) {
+                } else if (option3.isSelected()) {
                     isCorrect = option3.getText().equals(correctAnswer);
-                } else if(option4.isSelected()) {
+                } else if (option4.isSelected()) {
                     isCorrect = option4.getText().equals(correctAnswer);
                 }
 
                 if (isCorrect) {
                     JOptionPane.showMessageDialog(null, "Congrats! Correct Answer");
+                    gameLogic.incrementPoints(10); // Add points for a correct answer
+
+                    int newRow = gameLogic.getCharacterRow();
+                    int newCol = gameLogic.getCharacterCol();
+                    if (gameLogic.getCurrentDirection() == Direction.NORTH) {
+                        newRow--;
+                    } else if (gameLogic.getCurrentDirection() == Direction.SOUTH) {
+                        newRow++;
+                    } else if (gameLogic.getCurrentDirection() == Direction.WEST) {
+                        newCol--;
+                    } else if (gameLogic.getCurrentDirection() == Direction.EAST) {
+                        newCol++;
+                    }
+
+                    // Update character position in the maze, so we can move back
+                    gameLogic.setCurrentRow(newRow);
+                    gameLogic.setCurrentCol(newCol);
+                    gameLogic.getMyMaze().setCurrentValue(newRow, newCol, 100);
+                    gameLogic.setCurrentQuestion(null);
+                    questionPanel.setVisible(false);
+
+                    mazePanel.repaint(); // Repaint maze after moving the character
+
+
                 } else {
                     JOptionPane.showMessageDialog(null, "Incorrect Answer!");
                 }
             }
         });
-
 
         questionPanel.add(questionLabel);
         questionPanel.add(option1);
@@ -176,40 +170,63 @@ public class GameFrame implements ActionListener {
         myFrame.add(questionPanel);
     }
 
-    private void initializeSAQQuestionPanel(Question question) { //add action listener for user input
+
+    private void initializeSAQQuestionPanel(Question question) {
         questionPanel = new JPanel();
         questionPanel.setLayout(null);
         questionPanel.setBorder(new LineBorder(Color.darkGray, 3));
         questionPanel.setBounds(360, 450, 365, 225);
         questionPanel.setBackground(new Color(240, 240, 240));
+        questionPanel.setVisible(true);
 
-
-        ShortAnswerQuestion sqQuestion = (ShortAnswerQuestion) question;
-        String theQuestion = sqQuestion.getQuestion();
+        ShortAnswerQuestion saqQuestion = (ShortAnswerQuestion) question;
+        String theQuestion = saqQuestion.getQuestion();
 
         JLabel questionLabel = new JLabel("<html><div style='width: 300px;'>" + theQuestion + "</div></html>");
         questionLabel.setBounds(10, 10, 335, 30);
 
         JTextField textField = new JTextField(20);
-
-        textField.setBounds(10, 50, 150, 30); // Set the bounds for option1
-
-        textField.setOpaque(false); // Set background color of radio buttons to transparent
+        textField.setBounds(10, 50, 150, 30);
+        textField.setOpaque(false);
 
         submitButton = new JButton("Submit");
-        submitButton.setBounds(200, 170, 100, 30); // Set the bounds for the submit button
+        submitButton.setBounds(200, 170, 100, 30);
         submitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String correctAnswer = textField.getText();
-                boolean isCorrect = false;
-
-                if(textField.getText().equals(correctAnswer)) {
-                    isCorrect = true;
-                }
+                String correctAnswer = saqQuestion.getAnswer();
+                String userAnswer = textField.getText().trim(); // Trim to remove leading/trailing spaces
+                boolean isCorrect = correctAnswer.equalsIgnoreCase(userAnswer);
 
                 if (isCorrect) {
                     JOptionPane.showMessageDialog(null, "Congrats! Correct Answer");
+
+                    // Update character position after correct answer
+                    int newRow = gameLogic.getCharacterRow();
+                    int newCol = gameLogic.getCharacterCol();
+                    // Determine the new position based on the current direction
+                    switch (gameLogic.getCurrentDirection()) {
+                        case NORTH:
+                            newRow--;
+                            break;
+                        case SOUTH:
+                            newRow++;
+                            break;
+                        case EAST:
+                            newCol++;
+                            break;
+                        case WEST:
+                            newCol--;
+                            break;
+                    }
+                    // Update character position in the maze
+                    gameLogic.setCurrentRow(newRow);
+                    gameLogic.setCurrentCol(newCol);
+                    gameLogic.getMyMaze().setCurrentValue(newRow, newCol, 100);
+                    gameLogic.setCurrentQuestion(null);
+
+                    questionPanel.setVisible(false);
+                    mazePanel.repaint(); // Repaint maze after moving the character
                 } else {
                     JOptionPane.showMessageDialog(null, "Incorrect Answer!");
                 }
@@ -223,13 +240,15 @@ public class GameFrame implements ActionListener {
         myFrame.add(questionPanel);
     }
 
+
+
     private void initializeTFQuestionPanel(Question question) {
         questionPanel = new JPanel();
         questionPanel.setLayout(null);
         questionPanel.setBorder(new LineBorder(Color.darkGray, 3));
         questionPanel.setBounds(360, 450, 365, 225);
         questionPanel.setBackground(new Color(240, 240, 240));
-
+        questionPanel.setVisible(true);
         TrueFalseQuestion tfQuestion = (TrueFalseQuestion) question;
         String theQuestion = tfQuestion.getQuestion();
 
@@ -261,27 +280,49 @@ public class GameFrame implements ActionListener {
                 boolean isCorrect;
                 String userAnswer = "";
 
-                if(option1.isSelected()) {
+                if (option1.isSelected()) {
                     userAnswer = "true";
-                } else if(option2.isSelected()) {
+                } else if (option2.isSelected()) {
                     userAnswer = "false";
                 }
 
                 // Normalize the userAnswer by trimming and converting to lowercase
-                if(correctAnswer.equals(userAnswer.trim().toLowerCase())) {
-                    isCorrect = true;
-                } else {
-                    isCorrect = false;
-                }
+                isCorrect = correctAnswer.equals(userAnswer.trim().toLowerCase());
 
                 if (isCorrect) {
                     JOptionPane.showMessageDialog(null, "Congrats! Correct Answer");
+
+                    // Update character position based on the current direction
+                    int newRow = gameLogic.getCharacterRow();
+                    int newCol = gameLogic.getCharacterCol();
+
+                    switch (gameLogic.getCurrentDirection()) {
+                        case NORTH:
+                            newRow--;
+                            break;
+                        case SOUTH:
+                            newRow++;
+                            break;
+                        case EAST:
+                            newCol++;
+                            break;
+                        case WEST:
+                            newCol--;
+                            break;
+                    }
+
+                    gameLogic.setCurrentRow(newRow);
+                    gameLogic.setCurrentCol(newCol);
+                    gameLogic.getMyMaze().setCurrentValue(newRow, newCol, 100);
+                    gameLogic.setCurrentQuestion(null);
+
+                    questionPanel.setVisible(false);
+                    mazePanel.repaint();
                 } else {
                     JOptionPane.showMessageDialog(null, "Incorrect Answer!");
                 }
             }
         });
-
         questionPanel.add(questionLabel);
         questionPanel.add(option1);
         questionPanel.add(option2);
@@ -355,8 +396,12 @@ public class GameFrame implements ActionListener {
     }
 
     private void moveCharacter(Direction direction) {
-        gameLogic.moveCharacter(direction);
-        mazePanel.repaint(); // Repaint the maze panel to reflect the new position -> this is why key respawn very time we move
+        gameLogic.moveCharacter(direction); // it has all logic with door interact here
+        mazePanel.repaint();
+
+        Question currentQuestion = gameLogic.getCurrentQuestion();
+
+        initializeQuestionPanel(currentQuestion);
     }
     private void initializeMazePanel() {
         mazePanel = new JPanel() {
@@ -508,6 +553,11 @@ public class GameFrame implements ActionListener {
         userNameLabel.setFont(boldFont);
         userNameLabel.setBounds(20,8,100,40);
 
+//        myUserName = new JTextField();
+//        myUserName.setBounds(30,20, 100, 40);
+//        myUserName.setEditable(false);
+
+
         JLabel userPoints = new JLabel("POINTS:");
         Font boldFont2 = new Font(userNameLabel.getFont().getName(), Font.BOLD, userPoints.getFont().getSize());
         userPoints.setFont(boldFont2);
@@ -523,7 +573,7 @@ public class GameFrame implements ActionListener {
         userStreak.setFont(boldFont4);
         userStreak.setBounds(480, 8, 100,40);
 
-
+        //myUserName.add(myUserName);
         myUserPanel.add(userKeys);
         myUserPanel.add(userStreak);
         myUserPanel.add(userPoints);
@@ -644,4 +694,4 @@ public class GameFrame implements ActionListener {
 
         }
     }
- }
+}
