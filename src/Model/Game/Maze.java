@@ -67,6 +67,9 @@ public class Maze {
             }
         }
     }
+    public int[][] getLayout() {
+        return layout;
+    }
 
     public void setKeyCoordinates() {
         int keyRoom = random.nextInt(validKeyCoordinates.size());

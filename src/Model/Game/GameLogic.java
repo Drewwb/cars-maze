@@ -25,10 +25,7 @@ public class GameLogic {
         System.out.println(keyLocation[1]);
         this.currentQuestion = null;
         this.isDoorCheck = false;
-        exitDoorLocation = myMaze.getExitDoorCoordinates();
-      
         this.points = 0;
-        this.hasKey = false;
         this.answerCorrect = false;
         this.gameOver = false;
         characterSpawn();
@@ -110,8 +107,6 @@ public class GameLogic {
             characterCol = newCol;
             isDoorCheck = false;
             currentRoomNumber = myMaze.getCurrentValue(characterRow, characterCol); // Update current room number
-            isKeyAtThisLocation(characterRow, characterCol);
-            isExitDoorAtThisLocation(characterRow, characterCol); //if yes and player has key then game over
         } else if (isDoor(newRow, newCol)) {
             System.out.println("HITTING THE DOOR");
             System.out.println("Encountered a door at row: " + newRow + ", col: " + newCol);
@@ -139,6 +134,12 @@ public class GameLogic {
     }
 
     public void interactWithDoor(Direction direction, int row, int col, int currentRoomNumber) {
+        // check to see if the door is locked or not
+        int currentValue = myMaze.getCurrentValue(row, col);
+        if(currentValue == -1) {
+            System.out.println("The door is locked!");
+        }
+
         // Get the current room
         System.out.println("Current room number: " + currentRoomNumber);
         Room currentRoom = null;
@@ -217,5 +218,4 @@ public class GameLogic {
             }
         }
     }
-
 }
