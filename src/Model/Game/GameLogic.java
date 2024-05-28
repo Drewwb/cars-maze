@@ -135,6 +135,13 @@ public class GameLogic {
     }
 
     public void interactWithDoor(Direction direction, int row, int col, int currentRoomNumber) {
+        // check to see if the door is locked or not
+        int currentValue = myMaze.getCurrentValue(row, col);
+        if(currentValue == -1) {
+            System.out.println("The door is locked!");
+        }
+
+
         // Get the current room
         System.out.println("Current room number: " + currentRoomNumber);
         Room currentRoom = null;

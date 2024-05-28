@@ -130,30 +130,52 @@ public class GameFrame implements ActionListener {
                 int newRow = gameLogic.getCharacterRow();
                 int newCol = gameLogic.getCharacterCol();
 
-                if (gameLogic.getCurrentDirection() == Direction.NORTH) {
-                    newRow--;
-                } else if (gameLogic.getCurrentDirection() == Direction.SOUTH) {
-                    newRow++;
-                } else if (gameLogic.getCurrentDirection() == Direction.WEST) {
-                    newCol--;
-                } else if (gameLogic.getCurrentDirection() == Direction.EAST) {
-                    newCol++;
-                }
-
                 if (isCorrect) {
                     JOptionPane.showMessageDialog(null, "Congrats! Correct Answer");
-                    gameLogic.incrementPoints(10); // Add points for a correct answer
-                    gameLogic.getMyMaze().setCurrentValue(newRow, newCol, 100); // Update maze value
+                    switch (gameLogic.getCurrentDirection()) {
+                        case NORTH:
+                            newRow--;
+                            break;
+                        case SOUTH:
+                            newRow++;
+                            break;
+                        case EAST:
+                            newCol++;
+                            break;
+                        case WEST:
+                            newCol--;
+                            break;
+                    }
+                    gameLogic.setCurrentRow(newRow); // update the -> we can step in that door
+                    gameLogic.setCurrentCol(newCol);
+                    gameLogic.getMyMaze().setCurrentValue(newRow, newCol, 100);
+                    gameLogic.setCurrentQuestion(null);
+
+                    questionPanel.setVisible(false);
+                    mazePanel.repaint();
+
                 } else {
                     JOptionPane.showMessageDialog(null, "Incorrect Answer!");
-                    gameLogic.getMyMaze().setCurrentValue(newRow, newCol, -1);
-                }
+                    switch (gameLogic.getCurrentDirection()) {
+                        case NORTH:
+                            newRow--;
+                            break;
+                        case SOUTH:
+                            newRow++;
+                            break;
+                        case EAST:
+                            newCol++;
+                            break;
+                        case WEST:
+                            newCol--;
+                            break;
+                    }
+                    gameLogic.getMyMaze().setCurrentValue(newRow, newCol, 1);
+                    gameLogic.setCurrentQuestion(null);
 
-                gameLogic.setCurrentRow(newRow);
-                gameLogic.setCurrentCol(newCol);
-                gameLogic.setCurrentQuestion(null); // To not display again after repaint
-                questionPanel.setVisible(false);
-                mazePanel.repaint(); // Repaint maze after moving the character
+                    questionPanel.setVisible(false);
+                    mazePanel.repaint();
+                }
             }
         });
 
@@ -193,15 +215,17 @@ public class GameFrame implements ActionListener {
             public void actionPerformed(ActionEvent e) {
                 String correctAnswer = saqQuestion.getAnswer();
                 String userAnswer = textField.getText().trim(); // Trim to remove leading/trailing spaces
-                boolean isCorrect = correctAnswer.equalsIgnoreCase(userAnswer);
+                boolean isCorrect = false;
+
+                int newRow = gameLogic.getCharacterRow();
+                int newCol = gameLogic.getCharacterCol();
+                // Normalize the userAnswer by trimming and converting to lowercase
+                isCorrect = correctAnswer.equals(userAnswer.trim().toLowerCase());
 
                 if (isCorrect) {
                     JOptionPane.showMessageDialog(null, "Congrats! Correct Answer");
 
-                    // Update character position after correct answer
-                    int newRow = gameLogic.getCharacterRow();
-                    int newCol = gameLogic.getCharacterCol();
-                    // Determine the new position based on the current direction
+                    // Update character position based on the current direction
                     switch (gameLogic.getCurrentDirection()) {
                         case NORTH:
                             newRow--;
@@ -216,16 +240,35 @@ public class GameFrame implements ActionListener {
                             newCol--;
                             break;
                     }
-                    // Update character position in the maze
-                    gameLogic.setCurrentRow(newRow);
+
+                    gameLogic.setCurrentRow(newRow); // update the -> we can step in that door
                     gameLogic.setCurrentCol(newCol);
                     gameLogic.getMyMaze().setCurrentValue(newRow, newCol, 100);
                     gameLogic.setCurrentQuestion(null);
 
                     questionPanel.setVisible(false);
-                    mazePanel.repaint(); // Repaint maze after moving the character
+                    mazePanel.repaint();
                 } else {
                     JOptionPane.showMessageDialog(null, "Incorrect Answer!");
+                    switch (gameLogic.getCurrentDirection()) { // update to set the door locked not character position still same.
+                        case NORTH:
+                            newRow--;
+                            break;
+                        case SOUTH:
+                            newRow++;
+                            break;
+                        case EAST:
+                            newCol++;
+                            break;
+                        case WEST:
+                            newCol--;
+                            break;
+                    }
+                    gameLogic.getMyMaze().setCurrentValue(newRow, newCol, 1);
+
+                    gameLogic.setCurrentQuestion(null);
+                    questionPanel.setVisible(false);
+                    mazePanel.repaint();
                 }
             }
         });
@@ -282,7 +325,8 @@ public class GameFrame implements ActionListener {
                 } else if (option2.isSelected()) {
                     userAnswer = "false";
                 }
-
+                int newRow = gameLogic.getCharacterRow();
+                int newCol = gameLogic.getCharacterCol();
                 // Normalize the userAnswer by trimming and converting to lowercase
                 isCorrect = correctAnswer.equals(userAnswer.trim().toLowerCase());
 
@@ -290,9 +334,6 @@ public class GameFrame implements ActionListener {
                     JOptionPane.showMessageDialog(null, "Congrats! Correct Answer");
 
                     // Update character position based on the current direction
-                    int newRow = gameLogic.getCharacterRow();
-                    int newCol = gameLogic.getCharacterCol();
-
                     switch (gameLogic.getCurrentDirection()) {
                         case NORTH:
                             newRow--;
@@ -308,7 +349,7 @@ public class GameFrame implements ActionListener {
                             break;
                     }
 
-                    gameLogic.setCurrentRow(newRow);
+                    gameLogic.setCurrentRow(newRow); // update the -> we can step in that door
                     gameLogic.setCurrentCol(newCol);
                     gameLogic.getMyMaze().setCurrentValue(newRow, newCol, 100);
                     gameLogic.setCurrentQuestion(null);
@@ -317,6 +358,25 @@ public class GameFrame implements ActionListener {
                     mazePanel.repaint();
                 } else {
                     JOptionPane.showMessageDialog(null, "Incorrect Answer!");
+                    switch (gameLogic.getCurrentDirection()) { // update to set the door locked not character position still same.
+                        case NORTH:
+                            newRow--;
+                            break;
+                        case SOUTH:
+                            newRow++;
+                            break;
+                        case EAST:
+                            newCol++;
+                            break;
+                        case WEST:
+                            newCol--;
+                            break;
+                    }
+                    gameLogic.getMyMaze().setCurrentValue(newRow, newCol, 1);
+
+                    gameLogic.setCurrentQuestion(null);
+                    questionPanel.setVisible(false);
+                    mazePanel.repaint();
                 }
             }
         });
