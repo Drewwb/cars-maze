@@ -11,19 +11,18 @@ public class GameLogic {
     private int characterCol;
     private int[] keyLocation;
     private int currentRoomNumber; // Store the current room number
-
     private Question currentQuestion;
     private boolean isDoorCheck;
     private Direction currentDirection;
     private boolean hasKey;
     private int[] exitDoorLocation;
 
-
-
     public GameLogic() {
         currentDirection = null;
         myMaze = new Maze(); // Maze that fully loaded
         keyLocation = myMaze.getKeyCoordinates();
+        System.out.println(keyLocation[0]);
+        System.out.println(keyLocation[1]);
         this.currentQuestion = null;
         this.isDoorCheck = false;
         this.points = 0;
@@ -141,7 +140,6 @@ public class GameLogic {
             System.out.println("The door is locked!");
         }
 
-
         // Get the current room
         System.out.println("Current room number: " + currentRoomNumber);
         Room currentRoom = null;
@@ -195,5 +193,29 @@ public class GameLogic {
     }
     public Direction getCurrentDirection() {
         return currentDirection;
+    }
+
+    public boolean doesCharacterHaveKey() { //getter method
+        return hasKey;
+    }
+
+    private void isKeyAtThisLocation(int row, int col) {
+        int keyRow = keyLocation[1];
+        int keyCol = keyLocation[0];
+        if(row == keyRow && col == keyCol) {
+            hasKey = true;
+            System.out.println("USER PICKED UP KEY");
+        }
+    }
+
+    private void isExitDoorAtThisLocation(int row, int col){
+        if(row == exitDoorLocation[0] && col == exitDoorLocation[1]) { //true if exit door is there
+            if(doesCharacterHaveKey()) {
+                System.out.println("Congrats, you win!");
+                gameOver = true;
+            } else {
+                System.out.println("You need the key before entering.");
+            }
+        }
     }
 }

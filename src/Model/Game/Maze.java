@@ -49,12 +49,12 @@ public class Maze {
                 if (roomNumber >= 10) {
                     //valid room for a key so add the coordinates to map
                     int[] coords = new int[2];
-                    coords[0] = i; //row
-                    coords[1] = j; //col
+                    coords[0] = j; //col
+                    coords[1] = i; //row
                     validKeyCoordinates.put(totalRooms, coords);
                     totalRooms++; //total rooms is the key for the map
-
                     rooms[i][j] = new Room(roomNumber);
+
                     if (!roomNumbersSet.contains(roomNumber)) {
                         myRoomList.add(rooms[i][j]);
                         roomNumbersSet.add(roomNumber);
@@ -74,14 +74,14 @@ public class Maze {
     public void setKeyCoordinates() {
         int keyRoom = random.nextInt(validKeyCoordinates.size());
         int[] keyCoords = validKeyCoordinates.get(keyRoom);
-        this.keyRow = keyCoords[0];
-        this.keyCol = keyCoords[1];
+        this.keyRow = keyCoords[1];
+        this.keyCol = keyCoords[0];
     }
 
     public int[] getKeyCoordinates() {
         int[] keyRoom = new int[2];
-        keyRoom[0] = this.keyRow;
-        keyRoom[1] = this.keyCol;
+        keyRoom[1] = this.keyRow;
+        keyRoom[0] = this.keyCol;
         return keyRoom;
     }
     public int getCurrentValue(int row, int col) {

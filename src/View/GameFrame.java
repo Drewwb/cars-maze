@@ -680,6 +680,7 @@ public class GameFrame implements ActionListener {
 
         this.myFrame.setJMenuBar(myOptionBar);
     }
+
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == myExitGame) {
             int option = JOptionPane.showConfirmDialog(myFrame, "Are you sure to exit?", "Exit Game",
@@ -731,7 +732,6 @@ public class GameFrame implements ActionListener {
             } else {
                 JOptionPane.showMessageDialog(null, "Incorrect Answer!");
             }
-
         }
     }
 }
