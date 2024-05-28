@@ -11,10 +11,18 @@ public class GameLogic {
     private int characterCol;
     private int[] keyLocation;
     private int currentRoomNumber; // Store the current room number
+    private Question currentQuestion;
+    private boolean isDoorCheck;
+    private Direction currentDirection;
+
+
 
     public GameLogic() {
+        currentDirection = null;
         myMaze = new Maze(); // Maze that fully loaded
         keyLocation = myMaze.getKeyCoordinates();
+        this.currentQuestion = null;
+        this.isDoorCheck = false;
         this.points = 0;
         this.answerCorrect = false;
         this.gameOver = false;
@@ -73,15 +81,19 @@ public class GameLogic {
         switch (direction) {
             case NORTH:
                 newRow--;
+                currentDirection = Direction.NORTH;
                 break;
             case EAST:
                 newCol++;
+                currentDirection = Direction.EAST;
                 break;
             case SOUTH:
                 newRow++;
+                currentDirection = Direction.SOUTH;
                 break;
             case WEST:
                 newCol--;
+                currentDirection = Direction.WEST;
                 break;
         }
 
@@ -91,6 +103,7 @@ public class GameLogic {
         if (isValidPosition(newRow, newCol)) {
             characterRow = newRow;
             characterCol = newCol;
+            isDoorCheck = false;
             currentRoomNumber = myMaze.getCurrentValue(characterRow, characterCol); // Update current room number
         } else if (isDoor(newRow, newCol)) {
             System.out.println("HITTING THE DOOR");
@@ -101,9 +114,14 @@ public class GameLogic {
         }
     }
 
-    private boolean isDoor(int row, int col) {
+    public boolean isDoor(int row, int col) {
         int currentValue = myMaze.getCurrentValue(row, col);
-        return currentValue == 2;
+        if(currentValue == 2) {
+            isDoorCheck = true;
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private boolean isValidPosition(int row, int col) {
@@ -136,6 +154,8 @@ public class GameLogic {
             if (door.getMyDirection() == direction) {
                 doorFound = true;
                 Question question = door.getMyQuestion();
+                this.currentQuestion = question;
+
                 System.out.println("The question for this door is: " + question.getQuestion());
                 break;
             }
@@ -145,13 +165,25 @@ public class GameLogic {
             System.out.println("No door found in the specified direction.");
         }
     }
-
-    private boolean answerQuestion(Question question) {
-        if (question == null) {
-            throw new IllegalArgumentException("null string in answerQuestion");
-        }
-        String answer = question.getAnswer();
-        // check if the user's answer is equal to the question's answer
-        return true;
+    public Question getCurrentQuestion() {
+        return currentQuestion;
+    }
+    public void setCurrentQuestion(Question currentQuestion) {
+        this.currentQuestion = currentQuestion;
+    }
+    public boolean getIsDoorCheck() {
+        return isDoorCheck;
+    }
+    public Maze getMyMaze() {
+        return myMaze;
+    }
+    public void setCurrentRow(int row) {
+        this.characterRow = row;
+    }
+    public void setCurrentCol(int col) {
+        this.characterCol= col;
+    }
+    public Direction getCurrentDirection() {
+        return currentDirection;
     }
 }
