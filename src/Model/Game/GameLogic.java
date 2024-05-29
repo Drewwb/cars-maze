@@ -19,7 +19,6 @@ public class GameLogic {
     private int[] exitDoorLocation;
 
 
-
     public GameLogic() {
         currentDirection = null;
         myMaze = new Maze(); // Maze that fully loaded
@@ -102,7 +101,6 @@ public class GameLogic {
 
         System.out.println("Trying to move to row: " + newRow + ", col: " + newCol);
         System.out.println("Current maze value at new position: " + myMaze.getCurrentValue(newRow, newCol));
-
         if (isValidPosition(newRow, newCol)) {
             characterRow = newRow;
             characterCol = newCol;
@@ -114,6 +112,11 @@ public class GameLogic {
             interactWithDoor(direction, newRow, newCol, currentRoomNumber); // Use the stored room number
         } else {
             System.out.println("Invalid move. Position is either out of bounds or a wall.");
+        }
+        if(checkSurrounded(myMaze.getLayout(), newRow, newCol)) {
+            // Lose the game.
+            this.gameOver = true;
+            System.out.println("Game Over Bitch!");
         }
     }
 
@@ -195,5 +198,121 @@ public class GameLogic {
     }
     public Direction getCurrentDirection() {
         return currentDirection;
+    }
+
+
+    // GAME LOGIC FOR LOSE/WIN
+
+    public boolean checkSurrounded(int[][] board, int characterRow, int characterCol) {
+        // Check position
+        int position = 0;
+
+        if(isInScope(board[characterRow + 1][characterCol]) && isInScope(board[characterRow][characterCol + 1])) {
+            position = 1;
+        } else if(isInScope(board[characterRow + 1][characterCol]) && isInScope(board[characterRow][characterCol - 1])) {
+            position = 2;
+        } else if(isInScope(board[characterRow - 1][characterCol]) && isInScope(board[characterRow][characterCol + 1])) {
+            position = 3;
+        } else if(isInScope(board[characterRow - 1][characterCol]) && isInScope(board[characterRow][characterCol - 1])) {
+            position = 4;
+        }
+        int count = 0;
+        if(position == 1) {
+            if(checkCase(board, characterRow, characterCol) == 5) {
+                count++;
+            }
+            if(checkCase(board, characterRow, characterCol + 1) == 5) {
+                count++;
+            }
+            if(checkCase(board, characterRow + 1, characterCol) == 5) {
+                count++;
+            }
+            if(checkCase(board, characterRow + 1, characterCol + 1) == 5) {
+                count++;
+            }
+        } else if(position == 2) {
+            if(checkCase(board, characterRow, characterCol) == 5) {
+                count++;
+            }
+            if(checkCase(board, characterRow, characterCol - 1) == 5) {
+                count++;
+            }
+            if(checkCase(board, characterRow + 1, characterCol) == 5) {
+                count++;
+            }
+            if(checkCase(board, characterRow + 1, characterCol - 1) == 5) {
+                count++;
+            }
+        } else if(position == 3) {
+            if(checkCase(board, characterRow, characterCol) == 5) {
+                count++;
+            }
+            if(checkCase(board, characterRow - 1, characterCol) == 5) {
+                count++;
+            }
+            if(checkCase(board, characterRow, characterCol + 1) == 5) {
+                count++;
+            }
+            if(checkCase(board, characterRow - 1, characterCol + 1) == 5) {
+                count++;
+            }
+        } else if(position == 4) {
+            if(checkCase(board, characterRow, characterCol) == 5) {
+                count++;
+            }
+            if(checkCase(board, characterRow - 1, characterCol) == 5) {
+                count++;
+            }
+            if(checkCase(board, characterRow, characterCol - 1) == 5) {
+                count++;
+            }
+            if(checkCase(board, characterRow - 1, characterCol - 1) == 5) {
+                count++;
+            }
+        }
+        System.out.println("Position: " + position);
+        System.out.println("Count: " + count);
+        return count == 4;
+    }
+
+    private boolean isInScope(int value) {
+        return value >= 10 && value <= 24;
+    }
+
+    public int checkCase(int[][] board, int characterCol, int characterRow) {
+        int count = 0;
+        if (board[characterRow - 1][characterCol] == 1) { // check top
+            count++;
+            System.out.println("Check 1");
+        }
+        if (board[characterRow + 1][characterCol] == 1) { // check bottom
+            count++;
+            System.out.println("Check 2");
+        }
+        if (board[characterRow][characterCol - 1] == 1) { // check left
+            count++;
+            System.out.println("Check 3");
+        }
+        if (board[characterRow][characterCol + 1] == 1) { // check right
+            count++;
+            System.out.println("Check 4");
+        }
+        if (board[characterRow - 1][characterCol - 1] == 1) { // check left corner upper
+            count++;
+            System.out.println("Check 5");
+        }
+        if (board[characterRow - 1][characterCol + 1] == 1) { // check right corner upper
+            count++;
+            System.out.println("Check 6");
+        }
+        if (board[characterRow + 1][characterCol - 1] == 1) { // check right corner lower
+            count++;
+            System.out.println("Check 7");
+        }
+        if (board[characterRow + 1][characterCol + 1] == 1) { // check left corner right
+            count++;
+            System.out.println("Check 8");
+        }
+        return count;
     }
 }
