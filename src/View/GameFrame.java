@@ -214,6 +214,7 @@ public class GameFrame implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String correctAnswer = saqQuestion.getAnswer();
+                System.out.println("Answer is: " + correctAnswer);
                 String userAnswer = textField.getText().trim(); // Trim to remove leading/trailing spaces
                 boolean isCorrect = false;
 

@@ -113,7 +113,7 @@ public class GameLogic {
         } else {
             System.out.println("Invalid move. Position is either out of bounds or a wall.");
         }
-        if(checkSurrounded(myMaze.getLayout(), newRow, newCol)) {
+        if(checkSurrounded(myMaze.getLayout(), characterRow, characterCol)) {
             // Lose the game.
             this.gameOver = true;
             System.out.println("Game Over Bitch!");
@@ -279,7 +279,7 @@ public class GameLogic {
         return value >= 10 && value <= 24;
     }
 
-    public int checkCase(int[][] board, int characterCol, int characterRow) {
+    public int checkCase(int[][] board, int characterRow, int characterCol) {
         int count = 0;
         if (board[characterRow - 1][characterCol] == 1) { // check top
             count++;
