@@ -3,8 +3,10 @@ package src.Model.Game;
 import src.Model.Questions.Question;
 
 public class GameLogic {
-    private int points;
-    private boolean answerCorrect;
+    private String userName;
+    private int myPoints;
+    private int myStreak;
+    private int myHearts;
     private boolean gameOver;
     private Maze myMaze;
     private int characterRow;
@@ -17,6 +19,7 @@ public class GameLogic {
     private Direction currentDirection;
     private boolean hasKey;
     private int[] exitDoorLocation;
+    private boolean playerWin;
 
 
     public GameLogic() {
@@ -25,9 +28,11 @@ public class GameLogic {
         keyLocation = myMaze.getKeyCoordinates();
         this.currentQuestion = null;
         this.isDoorCheck = false;
-        this.points = 0;
-        this.answerCorrect = false;
+        this.myPoints = 0;
+        this.myStreak = 0;
+        this.myHearts = 3; // user Health is 3
         this.gameOver = false;
+        this.playerWin = false;
         characterSpawn();
         currentRoomNumber = myMaze.getCurrentValue(characterRow, characterCol); // Initialize the current room number
     }
@@ -38,6 +43,13 @@ public class GameLogic {
         this.characterCol = 1;
         currentRoomNumber = myMaze.getCurrentValue(characterRow, characterCol); // Initialize the current room number
     }
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+    public String getUserName() {
+        return this.userName;
+    }
+
 
     public int[] getKeyLocation() {
         return keyLocation;
@@ -52,27 +64,43 @@ public class GameLogic {
     }
 
     public int getPoints() {
-        return this.points;
+        return this.myPoints;
     }
-
     public void setPoints(int points) {
-        this.points = points;
+        this.myPoints = points;
+    }
+    public void incrementPoints() {
+        this.myPoints += 10;
+    }
+    public int getMyStreak() {
+        return myStreak;
+    }
+    public void setMyStreak(int myStreak) {
+        this.myStreak = myStreak;
+    }
+    public void incrementStreak() {
+        this.myStreak++;
+    }
+    public void decrementPoints() {
+        this.myPoints -= 5;
+
+        if(this.myPoints < 0) {
+            this.setPoints(0);
+        }
+    }
+    public int getMyHearts() {
+        return myHearts;
+    }
+    public void decrementMyHearts() {
+        this.myHearts--;
     }
 
-    public boolean getAnswerStatement() {
-        return this.answerCorrect;
-    }
-
-    public void setAnswerStatement(boolean answerCorrect) {
-        this.answerCorrect = answerCorrect;
-    }
-
-    public void incrementPoints(int points) {
-        this.points += points;
-    }
 
     public void setGameOver(boolean gameOver) {
         this.gameOver = gameOver;
+    }
+    public boolean getGameOver() {
+        return this.gameOver;
     }
 
     // Move character in the maze
@@ -115,8 +143,12 @@ public class GameLogic {
         }
         if(checkSurrounded(myMaze.getLayout(), characterRow, characterCol)) {
             // Lose the game.
-            this.gameOver = true;
+            this.setGameOver(true);
             System.out.println("Game Over Bitch!");
+        }
+        if(myMaze.getCurrentValue(characterRow, characterCol) == 3) {
+            this.setPlayerWin(true);
+            System.out.println("Player Win!!!");
         }
     }
 
@@ -199,6 +231,12 @@ public class GameLogic {
     public Direction getCurrentDirection() {
         return currentDirection;
     }
+    public void setPlayerWin(boolean playerWin) {
+        this.playerWin = playerWin;
+    }
+    public boolean getPlayerWin() {
+        return playerWin;
+    }
 
 
     // GAME LOGIC FOR LOSE/WIN
@@ -276,7 +314,7 @@ public class GameLogic {
     }
 
     private boolean isInScope(int value) {
-        return value >= 10 && value <= 24;
+        return value >= 10 && value <= 25;
     }
 
     public int checkCase(int[][] board, int characterRow, int characterCol) {
