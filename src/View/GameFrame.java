@@ -2,6 +2,7 @@ package src.View;
 
 import src.Model.Game.Direction;
 import src.Model.Game.GameLogic;
+import src.Model.Game.SaveData;
 import src.Model.Questions.MultipleChoiceQuestion;
 import src.Model.Questions.Question;
 import src.Model.Questions.ShortAnswerQuestion;
@@ -29,7 +30,8 @@ public class GameFrame implements ActionListener {
     private JRadioButton option1, option2, option3, option4;
     private JButton submitButton;
     private GameLogic gameLogic;
-    private JTextField myUserName, myPoints, myKeys, myStreak, myHearts;
+    private JTextField myUserName, myPoints, myKeys, myStreak;
+    private ImageIcon keyIcon;
 
 
     public GameFrame(GameLogic theGameLogic) {
@@ -547,6 +549,8 @@ public class GameFrame implements ActionListener {
         Question currentQuestion = gameLogic.getCurrentQuestion();
         initializeQuestionPanel(currentQuestion);
 
+        myKeys.setText(String.valueOf(gameLogic.getMyKeys()));
+
         // Repaint again to ensure the UI is updated before showing the question panel
         mazePanel.repaint();
     }
@@ -655,13 +659,16 @@ public class GameFrame implements ActionListener {
         g.drawImage(doorImage, x, y, width, height, null);
     }
     private void displayKey(Graphics g, int width, int height) {
-        // Load the door image (replace "doorImage.jpg" with the path to your image file)
-        ImageIcon icon = new ImageIcon("key.png");
-        Image doorImage = icon.getImage();
-        int[] keyCoords = gameLogic.getKeyLocation();
+        if(gameLogic.getMyKeys() == 0) {
+            // Load the door image (replace "doorImage.jpg" with the path to your image file)
+            keyIcon = new ImageIcon("key.png");
+            Image doorImage = keyIcon.getImage();
+            int[] keyCoords = gameLogic.getKeyLocation();
 
-        // Draw the door image at the specified position and size
-        g.drawImage(doorImage, keyCoords[0] * width, keyCoords[1] * height, width, height, null);
+            // Draw the door image at the specified position and size
+            g.drawImage(doorImage, keyCoords[0] * width, keyCoords[1] * height, width, height, null);
+        }
+
     }
     private void displayCharacter(Graphics g, int x, int y, int width, int height) {
         // Load the door image (replace "doorImage.jpg" with the path to your image file)
@@ -705,6 +712,13 @@ public class GameFrame implements ActionListener {
         userKeys.setFont(boldFont3);
         userKeys.setBounds(350, 8, 100,40);
 
+        myKeys = new JTextField();
+        myKeys.setEditable(false);
+        myKeys.setLayout(null);
+        myKeys.setBounds(400, 15, 40, 25);
+        myKeys.setText(String.valueOf(gameLogic.getMyKeys()));
+
+
         JLabel userStreak = new JLabel("STREAK:");
         Font boldFont4 = new Font(userNameLabel.getFont().getName(), Font.BOLD, userStreak.getFont().getSize());
         userStreak.setFont(boldFont4);
@@ -716,6 +730,8 @@ public class GameFrame implements ActionListener {
         myStreak.setBounds(550,15,40,25);
         myStreak.setText(String.valueOf(gameLogic.getMyStreak()));
 
+
+        myUserPanel.add(myKeys);
         myUserPanel.add(myUserName);
         myUserPanel.add(myPoints);
         myUserPanel.add(myStreak);
@@ -724,8 +740,6 @@ public class GameFrame implements ActionListener {
         myUserPanel.add(userStreak);
         myUserPanel.add(userPoints);
         myUserPanel.add(userNameLabel);
-
-
 
         myFrame.add(myUserPanel);
     }
@@ -837,6 +851,11 @@ public class GameFrame implements ActionListener {
                 JOptionPane.showMessageDialog(null, "Incorrect Answer!");
             }
 
+        }
+        if(e.getSource() == mySaveGame){    // Jafar implementation attempt of saving game
+            JOptionPane.showMessageDialog(myFrame, "Game Saved", "Trivia Maze", JOptionPane.PLAIN_MESSAGE);
+            SaveData myGameSave = new SaveData();
+            myGameSave.saveGame(gameLogic.getInstance(), ""); //
         }
     }
 }

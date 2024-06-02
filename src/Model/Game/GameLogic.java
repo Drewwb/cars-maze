@@ -7,11 +7,12 @@ public class GameLogic {
     private int myPoints;
     private int myStreak;
     private int myHearts;
+    private int myKeys;
     private boolean gameOver;
     private Maze myMaze;
     private int characterRow;
     private int characterCol;
-    private int[] keyLocation;
+    private int[] keyLocation; // coordinate for key 0 - row / 1 - col
     private int currentRoomNumber; // Store the current room number
 
     private Question currentQuestion;
@@ -26,15 +27,22 @@ public class GameLogic {
         currentDirection = null;
         myMaze = new Maze(); // Maze that fully loaded
         keyLocation = myMaze.getKeyCoordinates();
+        System.out.println(keyLocation[0]); // CHECK
+        System.out.println(keyLocation[1]); // CHECK
         this.currentQuestion = null;
         this.isDoorCheck = false;
         this.myPoints = 0;
         this.myStreak = 0;
         this.myHearts = 3; // user Health is 3
+        this.myKeys = 0;
         this.gameOver = false;
         this.playerWin = false;
+        this.hasKey = false;
         characterSpawn();
         currentRoomNumber = myMaze.getCurrentValue(characterRow, characterCol); // Initialize the current room number
+    }
+    public GameLogic getInstance(){
+        return this;
     }
 
     // Spawn character at the starting point, e.g., (1, 1)
@@ -94,6 +102,15 @@ public class GameLogic {
     public void decrementMyHearts() {
         this.myHearts--;
     }
+    public void incrementKeys() {
+        myKeys++;
+    }
+    public int getMyKeys() {
+        return myKeys;
+    }
+    public void setMyKeys(int myKeys) {
+        this.myKeys = myKeys;
+    }
 
 
     public void setGameOver(boolean gameOver) {
@@ -152,6 +169,12 @@ public class GameLogic {
         }
         if(this.getMyHearts() <= 0) {
             this.setGameOver(true);
+        }
+
+        isKeyAtThisLocation(characterRow, characterCol);
+        if(hasKey) {
+            incrementKeys();
+            hasKey = false;
         }
     }
 
@@ -355,5 +378,29 @@ public class GameLogic {
             System.out.println("Check 8");
         }
         return count;
+    }
+    public boolean doesCharacterHaveKey() { //getter method
+        return hasKey;
+    }
+    private void isKeyAtThisLocation(int row, int col) {
+        int keyRow = keyLocation[1];
+        int keyCol = keyLocation[0];
+        if(row == keyRow && col == keyCol) {
+            hasKey = true;
+            // set the key coordinate to 0, 0 so user can not access it no more.
+            keyLocation[1] = 0;
+            keyLocation[0] = 0;
+            System.out.println("USER PICKED UP KEY");
+        }
+    }
+    private void isExitDoorAtThisLocation(int row, int col){
+        if(row == exitDoorLocation[0] && col == exitDoorLocation[1]) { //true if exit door is there
+            if(doesCharacterHaveKey()) {
+                System.out.println("Congrats, you win!");
+                gameOver = true;
+            } else {
+                System.out.println("You need the key before entering.");
+            }
+        }
     }
 }
