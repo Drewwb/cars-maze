@@ -105,6 +105,9 @@ public class GameLogic {
     public void incrementKeys() {
         myKeys++;
     }
+    public void decrementKeys() {
+        myKeys--;
+    }
     public int getMyKeys() {
         return myKeys;
     }
