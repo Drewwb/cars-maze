@@ -239,7 +239,7 @@ public class GameFrame implements ActionListener {
 
                 gameLogic.decrementKeys();
                 myKeys.setText(String.valueOf(gameLogic.getMyKeys()));
-
+                gameLogic.getMyMaze().setCurrentValue(0,0,1);
                 mazePanel.repaint();
             }
         });
@@ -396,6 +396,7 @@ public class GameFrame implements ActionListener {
 
                 gameLogic.decrementKeys();
                 myKeys.setText(String.valueOf(gameLogic.getMyKeys()));
+                gameLogic.getMyMaze().setCurrentValue(0,0,1);
 
                 mazePanel.repaint();
             }
@@ -568,7 +569,7 @@ public class GameFrame implements ActionListener {
 
                 gameLogic.decrementKeys();
                 myKeys.setText(String.valueOf(gameLogic.getMyKeys()));
-
+                gameLogic.getMyMaze().setCurrentValue(0,0,1);
                 mazePanel.repaint();
             }
         });
@@ -793,7 +794,7 @@ public class GameFrame implements ActionListener {
         g.drawImage(doorImage, x, y, width, height, null);
     }
     private void displayKey(Graphics g, int width, int height) {
-        if(gameLogic.getMyKeys() == 0) {
+        //if(gameLogic.getMyKeys() == 0) {
             // Load the door image (replace "doorImage.jpg" with the path to your image file)
             keyIcon = new ImageIcon("key.png");
             Image doorImage = keyIcon.getImage();
@@ -801,7 +802,7 @@ public class GameFrame implements ActionListener {
 
             // Draw the door image at the specified position and size
             g.drawImage(doorImage, keyCoords[0] * width, keyCoords[1] * height, width, height, null);
-        }
+        //}
 
     }
     private void displayCharacter(Graphics g, int x, int y, int width, int height) {

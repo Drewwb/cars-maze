@@ -179,6 +179,10 @@ public class GameLogic {
             incrementKeys();
             hasKey = false;
         }
+        if(this.getMyStreak() % 3 == 0 && this.getMyStreak() != 0){
+            incrementKeys();
+            this.setMyStreak(this.getMyStreak() - 3);
+        }
     }
 
     public boolean isDoor(int row, int col) {
@@ -393,6 +397,7 @@ public class GameLogic {
             // set the key coordinate to 0, 0 so user can not access it no more.
             keyLocation[1] = 0;
             keyLocation[0] = 0;
+            this.myMaze.setCurrentValue(0,0,1); // make it a wall?
             System.out.println("USER PICKED UP KEY");
         }
     }
