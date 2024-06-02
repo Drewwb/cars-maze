@@ -183,6 +183,16 @@ public class GameFrame implements ActionListener {
                     gameLogic.setMyStreak(0);
                     myStreak.setText(String.valueOf(gameLogic.getMyStreak()));
 
+                    gameLogic.decrementMyHearts();
+                    System.out.println("Current Heart is: " + gameLogic.getMyHearts());
+                    if(gameLogic.getMyHearts() == 2) {
+                        myHeart1.setVisible(false);
+                    } else if(gameLogic.getMyHearts() == 1) {
+                        myHeart2.setVisible(false);
+                    } else if(gameLogic.getMyHearts() == 0) {
+                        myHeart3.setVisible(false);
+                    }
+
                     questionPanel.setVisible(false);
                     mazePanel.repaint();
                 }
@@ -286,6 +296,15 @@ public class GameFrame implements ActionListener {
                     myPoints.setText(String.valueOf(gameLogic.getPoints()));
                     gameLogic.setMyStreak(0);
                     myStreak.setText(String.valueOf(gameLogic.getMyStreak()));
+                    gameLogic.decrementMyHearts();
+                    System.out.println("Current Heart is: " + gameLogic.getMyHearts());
+                    if(gameLogic.getMyHearts() == 2) {
+                        myHeart1.setVisible(false);
+                    } else if(gameLogic.getMyHearts() == 1) {
+                        myHeart2.setVisible(false);
+                    } else if(gameLogic.getMyHearts() == 0) {
+                        myHeart3.setVisible(false);
+                    }
 
                     questionPanel.setVisible(false);
                     mazePanel.repaint();
@@ -404,6 +423,15 @@ public class GameFrame implements ActionListener {
                     myPoints.setText(String.valueOf(gameLogic.getPoints()));
                     gameLogic.setMyStreak(0);
                     myStreak.setText(String.valueOf(gameLogic.getMyStreak()));
+                    gameLogic.decrementMyHearts();
+                    System.out.println("Current Heart is: " + gameLogic.getMyHearts());
+                    if(gameLogic.getMyHearts() == 2) {
+                        myHeart1.setVisible(false);
+                    } else if(gameLogic.getMyHearts() == 1) {
+                        myHeart2.setVisible(false);
+                    } else if(gameLogic.getMyHearts() == 0) {
+                        myHeart3.setVisible(false);
+                    }
 
                     questionPanel.setVisible(false);
                     mazePanel.repaint();
@@ -508,7 +536,6 @@ public class GameFrame implements ActionListener {
     private void moveCharacter(Direction direction) {
         gameLogic.moveCharacter(direction); // it has all logic with door interact here
         mazePanel.repaint();
-
         // Use invokeLater to ensure the dialog is shown after repaint
         if (gameLogic.getGameOver()) {
             JOptionPane.showMessageDialog(null, "Game Over");

@@ -150,6 +150,9 @@ public class GameLogic {
             this.setPlayerWin(true);
             System.out.println("Player Win!!!");
         }
+        if(this.getMyHearts() <= 0) {
+            this.setGameOver(true);
+        }
     }
 
     public boolean isDoor(int row, int col) {
