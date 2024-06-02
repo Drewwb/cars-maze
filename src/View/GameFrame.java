@@ -18,7 +18,7 @@ import java.awt.event.MouseEvent;
 
 
 public class GameFrame implements ActionListener {
-    private final String PATH = "cars-maze/";
+    private final String PATH = "";
     private JFrame myFrame;
     private JMenuBar myOptionBar;
     private JMenu myFile, myHelp;
