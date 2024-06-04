@@ -102,4 +102,10 @@ public class Maze implements Serializable {
     public int[] getExitDoorCoordinates() {
         return exitDoorCoordinates;
     }
+    public void setKeyRow(int keyRow) {
+        this.keyRow = keyRow;
+    }
+    public void setKeyCol(int keyCol) {
+        this.keyCol = keyCol;
+    }
 }

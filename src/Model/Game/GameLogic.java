@@ -2,36 +2,62 @@ package src.Model.Game;
 
 import src.Model.Questions.Question;
 
+<<<<<<< HEAD
 import java.io.Serializable;
 
 public class GameLogic implements Serializable {
     private int points;
     private boolean answerCorrect;
+=======
+public class GameLogic {
+    private String userName;
+    private int myPoints;
+    private int myStreak;
+    private int myHearts;
+    private int myKeys;
+>>>>>>> 783592acb9b99502e7b5fdb686c63f131a2b2250
     private boolean gameOver;
     private Maze myMaze;
     private int characterRow;
     private int characterCol;
-    private int[] keyLocation;
+    private int[] keyLocation; // coordinate for key 0 - row / 1 - col
     private int currentRoomNumber; // Store the current room number
     private Question currentQuestion;
     private boolean isDoorCheck;
     private Direction currentDirection;
     private boolean hasKey;
     private int[] exitDoorLocation;
+<<<<<<< HEAD
+=======
+    private boolean playerWin;
+
+>>>>>>> 783592acb9b99502e7b5fdb686c63f131a2b2250
 
     public GameLogic() {
         currentDirection = null;
         myMaze = new Maze(); // Maze that fully loaded
         keyLocation = myMaze.getKeyCoordinates();
+<<<<<<< HEAD
         System.out.println(keyLocation[0]); //col
         System.out.println(keyLocation[1]); //row
+=======
+        System.out.println(keyLocation[0]); // CHECK
+        System.out.println(keyLocation[1]); // CHECK
+>>>>>>> 783592acb9b99502e7b5fdb686c63f131a2b2250
         this.currentQuestion = null;
         this.isDoorCheck = false;
-        this.points = 0;
-        this.answerCorrect = false;
+        this.myPoints = 0;
+        this.myStreak = 0;
+        this.myHearts = 3; // user Health is 3
+        this.myKeys = 0;
         this.gameOver = false;
+        this.playerWin = false;
+        this.hasKey = false;
         characterSpawn();
         currentRoomNumber = myMaze.getCurrentValue(characterRow, characterCol); // Initialize the current room number
+    }
+    public GameLogic getInstance(){
+        return this;
     }
 
     // Spawn character at the starting point, e.g., (1, 1)
@@ -40,6 +66,13 @@ public class GameLogic implements Serializable {
         this.characterCol = 1;
         currentRoomNumber = myMaze.getCurrentValue(characterRow, characterCol); // Initialize the current room number
     }
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+    public String getUserName() {
+        return this.userName;
+    }
+
 
     public int[] getKeyLocation() {
         return keyLocation;
@@ -66,27 +99,55 @@ public class GameLogic implements Serializable {
     }
 
     public int getPoints() {
-        return this.points;
+        return this.myPoints;
     }
-
     public void setPoints(int points) {
-        this.points = points;
+        this.myPoints = points;
+    }
+    public void incrementPoints() {
+        this.myPoints += 10;
+    }
+    public int getMyStreak() {
+        return myStreak;
+    }
+    public void setMyStreak(int myStreak) {
+        this.myStreak = myStreak;
+    }
+    public void incrementStreak() {
+        this.myStreak++;
+    }
+    public void decrementPoints() {
+        this.myPoints -= 5;
+
+        if(this.myPoints < 0) {
+            this.setPoints(0);
+        }
+    }
+    public int getMyHearts() {
+        return myHearts;
+    }
+    public void decrementMyHearts() {
+        this.myHearts--;
+    }
+    public void incrementKeys() {
+        myKeys++;
+    }
+    public void decrementKeys() {
+        myKeys--;
+    }
+    public int getMyKeys() {
+        return myKeys;
+    }
+    public void setMyKeys(int myKeys) {
+        this.myKeys = myKeys;
     }
 
-    public boolean getAnswerStatement() {
-        return this.answerCorrect;
-    }
-
-    public void setAnswerStatement(boolean answerCorrect) {
-        this.answerCorrect = answerCorrect;
-    }
-
-    public void incrementPoints(int points) {
-        this.points += points;
-    }
 
     public void setGameOver(boolean gameOver) {
         this.gameOver = gameOver;
+    }
+    public boolean getGameOver() {
+        return this.gameOver;
     }
 
     // Move character in the maze
@@ -115,7 +176,6 @@ public class GameLogic implements Serializable {
 
         System.out.println("Trying to move to row: " + newRow + ", col: " + newCol);
         System.out.println("Current maze value at new position: " + myMaze.getCurrentValue(newRow, newCol));
-
         if (isValidPosition(newRow, newCol)) {
             characterRow = newRow;
             characterCol = newCol;
@@ -127,6 +187,28 @@ public class GameLogic implements Serializable {
             interactWithDoor(direction, newRow, newCol, currentRoomNumber); // Use the stored room number
         } else {
             System.out.println("Invalid move. Position is either out of bounds or a wall.");
+        }
+        if(checkSurrounded(myMaze.getLayout(), characterRow, characterCol)) {
+            // Lose the game.
+            this.setGameOver(true);
+            System.out.println("Game Over Bitch!");
+        }
+        if(myMaze.getCurrentValue(characterRow, characterCol) == 3) {
+            this.setPlayerWin(true);
+            System.out.println("Player Win!!!");
+        }
+        if(this.getMyHearts() <= 0) {
+            this.setGameOver(true);
+        }
+
+        isKeyAtThisLocation(characterRow, characterCol);
+        if(hasKey) {
+            incrementKeys();
+            hasKey = false;
+        }
+        if(this.getMyStreak() % 3 == 0 && this.getMyStreak() != 0){
+            incrementKeys();
+            this.setMyStreak(this.getMyStreak() - 3);
         }
     }
 
@@ -208,20 +290,158 @@ public class GameLogic implements Serializable {
     public Direction getCurrentDirection() {
         return currentDirection;
     }
+<<<<<<< HEAD
 
     public boolean doesCharacterHaveKey() { //getter method
         return hasKey;
     }
 
+=======
+    public void setPlayerWin(boolean playerWin) {
+        this.playerWin = playerWin;
+    }
+    public boolean getPlayerWin() {
+        return playerWin;
+    }
+
+
+    // GAME LOGIC FOR LOSE/WIN
+
+    public boolean checkSurrounded(int[][] board, int characterRow, int characterCol) {
+        // Check position
+        int position = 0;
+
+        if(isInScope(board[characterRow + 1][characterCol]) && isInScope(board[characterRow][characterCol + 1])) {
+            position = 1;
+        } else if(isInScope(board[characterRow + 1][characterCol]) && isInScope(board[characterRow][characterCol - 1])) {
+            position = 2;
+        } else if(isInScope(board[characterRow - 1][characterCol]) && isInScope(board[characterRow][characterCol + 1])) {
+            position = 3;
+        } else if(isInScope(board[characterRow - 1][characterCol]) && isInScope(board[characterRow][characterCol - 1])) {
+            position = 4;
+        }
+        int count = 0;
+        if(position == 1) {
+            if(checkCase(board, characterRow, characterCol) == 5) {
+                count++;
+            }
+            if(checkCase(board, characterRow, characterCol + 1) == 5) {
+                count++;
+            }
+            if(checkCase(board, characterRow + 1, characterCol) == 5) {
+                count++;
+            }
+            if(checkCase(board, characterRow + 1, characterCol + 1) == 5) {
+                count++;
+            }
+        } else if(position == 2) {
+            if(checkCase(board, characterRow, characterCol) == 5) {
+                count++;
+            }
+            if(checkCase(board, characterRow, characterCol - 1) == 5) {
+                count++;
+            }
+            if(checkCase(board, characterRow + 1, characterCol) == 5) {
+                count++;
+            }
+            if(checkCase(board, characterRow + 1, characterCol - 1) == 5) {
+                count++;
+            }
+        } else if(position == 3) {
+            if(checkCase(board, characterRow, characterCol) == 5) {
+                count++;
+            }
+            if(checkCase(board, characterRow - 1, characterCol) == 5) {
+                count++;
+            }
+            if(checkCase(board, characterRow, characterCol + 1) == 5) {
+                count++;
+            }
+            if(checkCase(board, characterRow - 1, characterCol + 1) == 5) {
+                count++;
+            }
+        } else if(position == 4) {
+            if(checkCase(board, characterRow, characterCol) == 5) {
+                count++;
+            }
+            if(checkCase(board, characterRow - 1, characterCol) == 5) {
+                count++;
+            }
+            if(checkCase(board, characterRow, characterCol - 1) == 5) {
+                count++;
+            }
+            if(checkCase(board, characterRow - 1, characterCol - 1) == 5) {
+                count++;
+            }
+        }
+        System.out.println("Position: " + position);
+        System.out.println("Count: " + count);
+        return count == 4;
+    }
+
+    private boolean isInScope(int value) {
+        return value >= 10 && value <= 25;
+    }
+
+    public int checkCase(int[][] board, int characterRow, int characterCol) {
+        int count = 0;
+        if (board[characterRow - 1][characterCol] == 1) { // check top
+            count++;
+            System.out.println("Check 1");
+        }
+        if (board[characterRow + 1][characterCol] == 1) { // check bottom
+            count++;
+            System.out.println("Check 2");
+        }
+        if (board[characterRow][characterCol - 1] == 1) { // check left
+            count++;
+            System.out.println("Check 3");
+        }
+        if (board[characterRow][characterCol + 1] == 1) { // check right
+            count++;
+            System.out.println("Check 4");
+        }
+        if (board[characterRow - 1][characterCol - 1] == 1) { // check left corner upper
+            count++;
+            System.out.println("Check 5");
+        }
+        if (board[characterRow - 1][characterCol + 1] == 1) { // check right corner upper
+            count++;
+            System.out.println("Check 6");
+        }
+        if (board[characterRow + 1][characterCol - 1] == 1) { // check right corner lower
+            count++;
+            System.out.println("Check 7");
+        }
+        if (board[characterRow + 1][characterCol + 1] == 1) { // check left corner right
+            count++;
+            System.out.println("Check 8");
+        }
+        return count;
+    }
+    public boolean doesCharacterHaveKey() { //getter method
+        return hasKey;
+    }
+>>>>>>> 783592acb9b99502e7b5fdb686c63f131a2b2250
     private void isKeyAtThisLocation(int row, int col) {
         int keyRow = keyLocation[1];
         int keyCol = keyLocation[0];
         if(row == keyRow && col == keyCol) {
             hasKey = true;
+<<<<<<< HEAD
             System.out.println("USER PICKED UP KEY");
         }
     }
 
+=======
+            // set the key coordinate to 0, 0 so user can not access it no more.
+            keyLocation[1] = 0;
+            keyLocation[0] = 0;
+            this.myMaze.setCurrentValue(0,0,1); // make it a wall?
+            System.out.println("USER PICKED UP KEY");
+        }
+    }
+>>>>>>> 783592acb9b99502e7b5fdb686c63f131a2b2250
     private void isExitDoorAtThisLocation(int row, int col){
         if(row == exitDoorLocation[0] && col == exitDoorLocation[1]) { //true if exit door is there
             if(doesCharacterHaveKey()) {

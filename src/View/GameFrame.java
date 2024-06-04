@@ -25,22 +25,22 @@ public class GameFrame implements ActionListener {
     private JMenu myFile, myHelp;
     private JMenuItem mySaveGame, myLoadGame, myExitGame, myAbout, myGamePlayInstruction;
     private JPanel myUserPanel, mazePanel, controlPanel, spellPanel, questionPanel;
-    private JLabel backGroundLabel;
+    private JLabel backGroundLabel, myHeart1, myHeart2, myHeart3;
     private ImageIcon myBackGroundIcon;
     private JRadioButton option1, option2, option3, option4;
-    private JButton submitButton;
+    private JButton submitButton, myUseKey;
     private GameLogic gameLogic;
-    private JTextField myUserName, myPoints, myKeys, mySteak;
+    private JTextField myUserName, myPoints, myKeys, myStreak;
+    private ImageIcon keyIcon;
 
-    public GameFrame() {
-        gameLogic = new GameLogic();
+
+    public GameFrame(GameLogic theGameLogic) {
+        this.gameLogic = theGameLogic;
         initializeFrame();
         initializeUserPanel(); // need to come first before set background
         initializeMazePanel();
         initializeControlPanel();
         initializeSpellPanel();
-        //initializeQuestionPanel();
-
         initializeBackGround();
         initializeOptionBar();
 
@@ -111,7 +111,7 @@ public class GameFrame implements ActionListener {
         optionGroup.add(option4);
 
         submitButton = new JButton("Submit");
-        submitButton.setBounds(200, 170, 100, 30);
+        submitButton.setBounds(250, 170, 100, 30);
         submitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -151,6 +151,11 @@ public class GameFrame implements ActionListener {
                     gameLogic.setCurrentCol(newCol);
                     gameLogic.getMyMaze().setCurrentValue(newRow, newCol, 100);
                     gameLogic.setCurrentQuestion(null);
+                    gameLogic.incrementPoints();
+                    myPoints.setText(String.valueOf(gameLogic.getPoints()));
+
+                    gameLogic.incrementStreak();
+                    myStreak.setText(String.valueOf(gameLogic.getMyStreak()));
 
                     questionPanel.setVisible(false);
                     mazePanel.repaint();
@@ -174,11 +179,71 @@ public class GameFrame implements ActionListener {
                     gameLogic.getMyMaze().setCurrentValue(newRow, newCol, 1);
                     gameLogic.setCurrentQuestion(null);
 
+                    gameLogic.decrementPoints();
+                    myPoints.setText(String.valueOf(gameLogic.getPoints()));
+
+                    gameLogic.setMyStreak(0);
+                    myStreak.setText(String.valueOf(gameLogic.getMyStreak()));
+
+                    gameLogic.decrementMyHearts();
+                    System.out.println("Current Heart is: " + gameLogic.getMyHearts());
+                    if(gameLogic.getMyHearts() == 2) {
+                        myHeart1.setVisible(false);
+                    } else if(gameLogic.getMyHearts() == 1) {
+                        myHeart2.setVisible(false);
+                    } else if(gameLogic.getMyHearts() == 0) {
+                        myHeart3.setVisible(false);
+                    }
+
                     questionPanel.setVisible(false);
                     mazePanel.repaint();
                 }
             }
         });
+
+        myUseKey = new JButton("Use Key");
+        myUseKey.setBounds(150, 170, 100, 30);
+        myUseKey.setEnabled(false);
+        if(gameLogic.getMyKeys() >= 1) {
+            myUseKey.setEnabled(true);
+        }
+        myUseKey.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int newRow = gameLogic.getCharacterRow();
+                int newCol = gameLogic.getCharacterCol();
+
+                switch (gameLogic.getCurrentDirection()) {
+                    case NORTH:
+                        newRow--;
+                        break;
+                    case SOUTH:
+                        newRow++;
+                        break;
+                    case EAST:
+                        newCol++;
+                        break;
+                    case WEST:
+                        newCol--;
+                        break;
+                }
+                gameLogic.setCurrentRow(newRow); // update the -> we can step in that door
+                gameLogic.setCurrentCol(newCol);
+                gameLogic.getMyMaze().setCurrentValue(newRow, newCol, 100);
+                gameLogic.setCurrentQuestion(null);
+                gameLogic.incrementPoints();
+                myPoints.setText(String.valueOf(gameLogic.getPoints()));
+
+                gameLogic.incrementStreak();
+                myStreak.setText(String.valueOf(gameLogic.getMyStreak()));
+                questionPanel.setVisible(false);
+
+                gameLogic.decrementKeys();
+                myKeys.setText(String.valueOf(gameLogic.getMyKeys()));
+                gameLogic.getMyMaze().setCurrentValue(0,0,1);
+                mazePanel.repaint();
+            }
+        });
+
 
         questionPanel.add(questionLabel);
         questionPanel.add(option1);
@@ -186,6 +251,7 @@ public class GameFrame implements ActionListener {
         questionPanel.add(option3);
         questionPanel.add(option4);
         questionPanel.add(submitButton);
+        questionPanel.add(myUseKey);
 
         myFrame.add(questionPanel);
     }
@@ -210,18 +276,18 @@ public class GameFrame implements ActionListener {
         textField.setOpaque(false);
 
         submitButton = new JButton("Submit");
-        submitButton.setBounds(200, 170, 100, 30);
+        submitButton.setBounds(250, 170, 100, 30);
         submitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String correctAnswer = saqQuestion.getAnswer();
-                String userAnswer = textField.getText().trim(); // Trim to remove leading/trailing spaces
+                String userAnswer = textField.getText().toLowerCase();
                 boolean isCorrect = false;
 
                 int newRow = gameLogic.getCharacterRow();
                 int newCol = gameLogic.getCharacterCol();
                 // Normalize the userAnswer by trimming and converting to lowercase
-                isCorrect = correctAnswer.equals(userAnswer.trim().toLowerCase());
+                isCorrect = userAnswer.equals(correctAnswer.toLowerCase());
 
                 if (isCorrect) {
                     JOptionPane.showMessageDialog(null, "Congrats! Correct Answer");
@@ -247,10 +313,15 @@ public class GameFrame implements ActionListener {
                     gameLogic.getMyMaze().setCurrentValue(newRow, newCol, 100);
                     gameLogic.setCurrentQuestion(null);
 
+                    gameLogic.incrementPoints();
+                    myPoints.setText(String.valueOf(gameLogic.getPoints()));
+                    gameLogic.incrementStreak();
+                    myStreak.setText(String.valueOf(gameLogic.getMyStreak()));
+
                     questionPanel.setVisible(false);
                     mazePanel.repaint();
                 } else {
-                    JOptionPane.showMessageDialog(null, "Incorrect Answer!");
+                    JOptionPane.showMessageDialog(null, "Incorrect Answer! The correct answer is: " + correctAnswer);
                     switch (gameLogic.getCurrentDirection()) { // update to set the door locked not character position still same.
                         case NORTH:
                             newRow--;
@@ -266,17 +337,76 @@ public class GameFrame implements ActionListener {
                             break;
                     }
                     gameLogic.getMyMaze().setCurrentValue(newRow, newCol, 1);
-
                     gameLogic.setCurrentQuestion(null);
+
+                    gameLogic.decrementPoints();
+                    myPoints.setText(String.valueOf(gameLogic.getPoints()));
+                    gameLogic.setMyStreak(0);
+                    myStreak.setText(String.valueOf(gameLogic.getMyStreak()));
+                    gameLogic.decrementMyHearts();
+                    System.out.println("Current Heart is: " + gameLogic.getMyHearts());
+                    if(gameLogic.getMyHearts() == 2) {
+                        myHeart1.setVisible(false);
+                    } else if(gameLogic.getMyHearts() == 1) {
+                        myHeart2.setVisible(false);
+                    } else if(gameLogic.getMyHearts() == 0) {
+                        myHeart3.setVisible(false);
+                    }
+
                     questionPanel.setVisible(false);
                     mazePanel.repaint();
                 }
             }
         });
+        myUseKey = new JButton("Use Key");
+        myUseKey.setBounds(150, 170, 100, 30);
+        myUseKey.setEnabled(false);
+        if(gameLogic.getMyKeys() >= 1) {
+            myUseKey.setEnabled(true);
+        }
+        myUseKey.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int newRow = gameLogic.getCharacterRow();
+                int newCol = gameLogic.getCharacterCol();
+
+                switch (gameLogic.getCurrentDirection()) {
+                    case NORTH:
+                        newRow--;
+                        break;
+                    case SOUTH:
+                        newRow++;
+                        break;
+                    case EAST:
+                        newCol++;
+                        break;
+                    case WEST:
+                        newCol--;
+                        break;
+                }
+                gameLogic.setCurrentRow(newRow); // update the -> we can step in that door
+                gameLogic.setCurrentCol(newCol);
+                gameLogic.getMyMaze().setCurrentValue(newRow, newCol, 100);
+                gameLogic.setCurrentQuestion(null);
+                gameLogic.incrementPoints();
+                myPoints.setText(String.valueOf(gameLogic.getPoints()));
+
+                gameLogic.incrementStreak();
+                myStreak.setText(String.valueOf(gameLogic.getMyStreak()));
+                questionPanel.setVisible(false);
+
+                gameLogic.decrementKeys();
+                myKeys.setText(String.valueOf(gameLogic.getMyKeys()));
+                gameLogic.getMyMaze().setCurrentValue(0,0,1);
+
+                mazePanel.repaint();
+            }
+        });
+
 
         questionPanel.add(questionLabel);
         questionPanel.add(textField);
         questionPanel.add(submitButton);
+        questionPanel.add(myUseKey);
 
         myFrame.add(questionPanel);
     }
@@ -313,7 +443,7 @@ public class GameFrame implements ActionListener {
         optionGroup.add(option2);
 
         submitButton = new JButton("Submit");
-        submitButton.setBounds(200, 170, 100, 30); // Set the bounds for the submit button
+        submitButton.setBounds(250, 170, 100, 30); // Set the bounds for the submit button
         submitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -355,6 +485,11 @@ public class GameFrame implements ActionListener {
                     gameLogic.getMyMaze().setCurrentValue(newRow, newCol, 100);
                     gameLogic.setCurrentQuestion(null);
 
+                    gameLogic.incrementPoints();
+                    myPoints.setText(String.valueOf(gameLogic.getPoints()));
+                    gameLogic.incrementStreak();
+                    myStreak.setText(String.valueOf(gameLogic.getMyStreak()));
+
                     questionPanel.setVisible(false);
                     mazePanel.repaint();
                 } else {
@@ -374,17 +509,76 @@ public class GameFrame implements ActionListener {
                             break;
                     }
                     gameLogic.getMyMaze().setCurrentValue(newRow, newCol, 1);
-
                     gameLogic.setCurrentQuestion(null);
+
+                    gameLogic.decrementPoints();
+                    myPoints.setText(String.valueOf(gameLogic.getPoints()));
+                    gameLogic.setMyStreak(0);
+                    myStreak.setText(String.valueOf(gameLogic.getMyStreak()));
+                    gameLogic.decrementMyHearts();
+                    System.out.println("Current Heart is: " + gameLogic.getMyHearts());
+                    if(gameLogic.getMyHearts() == 2) {
+                        myHeart1.setVisible(false);
+                    } else if(gameLogic.getMyHearts() == 1) {
+                        myHeart2.setVisible(false);
+                    } else if(gameLogic.getMyHearts() == 0) {
+                        myHeart3.setVisible(false);
+                    }
+
                     questionPanel.setVisible(false);
                     mazePanel.repaint();
                 }
             }
         });
+
+        myUseKey = new JButton("Use Key");
+        myUseKey.setBounds(150, 170, 100, 30);
+        myUseKey.setEnabled(false);
+        if(gameLogic.getMyKeys() >= 1) {
+            myUseKey.setEnabled(true);
+        }
+        myUseKey.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int newRow = gameLogic.getCharacterRow();
+                int newCol = gameLogic.getCharacterCol();
+
+                switch (gameLogic.getCurrentDirection()) {
+                    case NORTH:
+                        newRow--;
+                        break;
+                    case SOUTH:
+                        newRow++;
+                        break;
+                    case EAST:
+                        newCol++;
+                        break;
+                    case WEST:
+                        newCol--;
+                        break;
+                }
+                gameLogic.setCurrentRow(newRow); // update the -> we can step in that door
+                gameLogic.setCurrentCol(newCol);
+                gameLogic.getMyMaze().setCurrentValue(newRow, newCol, 100);
+                gameLogic.setCurrentQuestion(null);
+                gameLogic.incrementPoints();
+                myPoints.setText(String.valueOf(gameLogic.getPoints()));
+
+                gameLogic.incrementStreak();
+                myStreak.setText(String.valueOf(gameLogic.getMyStreak()));
+                questionPanel.setVisible(false);
+
+                gameLogic.decrementKeys();
+                myKeys.setText(String.valueOf(gameLogic.getMyKeys()));
+                gameLogic.getMyMaze().setCurrentValue(0,0,1);
+                mazePanel.repaint();
+            }
+        });
+
         questionPanel.add(questionLabel);
         questionPanel.add(option1);
         questionPanel.add(option2);
         questionPanel.add(submitButton);
+        questionPanel.add(myUseKey);
 
         myFrame.add(questionPanel);
     }
@@ -407,8 +601,31 @@ public class GameFrame implements ActionListener {
         spellPanel = new JPanel();
         spellPanel.setLayout(null);
         spellPanel.setBorder(new LineBorder(Color.darkGray, 3));
-        spellPanel.setBounds(10, 590, 340,85);
+        spellPanel.setBounds(95, 590, 250,85);
         spellPanel.setBackground(new Color(0, 0, 0, 100));
+
+        myHeart1 = new JLabel();
+        myHeart1.setLayout(null);
+        myHeart1.setBounds(10, 10, 60, 60);
+        ImageIcon heart1 = new ImageIcon("heart.png");
+        myHeart1.setIcon(heart1);
+
+        myHeart2 = new JLabel();
+        myHeart2.setLayout(null);
+        myHeart2.setBounds(70, 10, 60, 60);
+        ImageIcon heart2 = new ImageIcon("heart.png");
+        myHeart2.setIcon(heart2);
+
+
+        myHeart3 = new JLabel();
+        myHeart3.setLayout(null);
+        myHeart3.setBounds(130, 10, 60, 60);
+        ImageIcon heart3 = new ImageIcon("heart.png");
+        myHeart3.setIcon(heart3);
+
+        spellPanel.add(myHeart1);
+        spellPanel.add(myHeart2);
+        spellPanel.add(myHeart3);
 
         myFrame.add(spellPanel);
 
@@ -418,7 +635,7 @@ public class GameFrame implements ActionListener {
         controlPanel = new JPanel();
         controlPanel.setLayout(null);
         controlPanel.setBorder(new LineBorder(Color.darkGray, 3));
-        controlPanel.setBounds(10, 450, 340, 120);
+        controlPanel.setBounds(95, 450, 250, 120);
         controlPanel.setBackground(new Color(0, 0, 0, 100));
 
         ImageIcon up = new ImageIcon(PATH + "soundimage/up.png");
@@ -456,10 +673,21 @@ public class GameFrame implements ActionListener {
     private void moveCharacter(Direction direction) {
         gameLogic.moveCharacter(direction); // it has all logic with door interact here
         mazePanel.repaint();
+        // Use invokeLater to ensure the dialog is shown after repaint
+        if (gameLogic.getGameOver()) {
+            JOptionPane.showMessageDialog(null, "Game Over");
+        }
+        if(gameLogic.getPlayerWin()){
+            JOptionPane.showMessageDialog(null, "You won!");
+        }
 
         Question currentQuestion = gameLogic.getCurrentQuestion();
-
         initializeQuestionPanel(currentQuestion);
+
+        myKeys.setText(String.valueOf(gameLogic.getMyKeys()));
+
+        // Repaint again to ensure the UI is updated before showing the question panel
+        mazePanel.repaint();
     }
     private void initializeMazePanel() {
         mazePanel = new JPanel() {
@@ -566,13 +794,16 @@ public class GameFrame implements ActionListener {
         g.drawImage(doorImage, x, y, width, height, null);
     }
     private void displayKey(Graphics g, int width, int height) {
-        // Load the door image (replace "doorImage.jpg" with the path to your image file)
-        ImageIcon icon = new ImageIcon("key.png");
-        Image doorImage = icon.getImage();
-        int[] keyCoords = gameLogic.getKeyLocation();
+        //if(gameLogic.getMyKeys() == 0) {
+            // Load the door image (replace "doorImage.jpg" with the path to your image file)
+            keyIcon = new ImageIcon("key.png");
+            Image doorImage = keyIcon.getImage();
+            int[] keyCoords = gameLogic.getKeyLocation();
 
-        // Draw the door image at the specified position and size
-        g.drawImage(doorImage, keyCoords[0] * width, keyCoords[1] * height, width, height, null);
+            // Draw the door image at the specified position and size
+            g.drawImage(doorImage, keyCoords[0] * width, keyCoords[1] * height, width, height, null);
+        //}
+
     }
     private void displayCharacter(Graphics g, int x, int y, int width, int height) {
         // Load the door image (replace "doorImage.jpg" with the path to your image file)
@@ -594,33 +825,56 @@ public class GameFrame implements ActionListener {
         userNameLabel.setFont(boldFont);
         userNameLabel.setBounds(20,8,100,40);
 
-//        myUserName = new JTextField();
-//        myUserName.setBounds(30,20, 100, 40);
-//        myUserName.setEditable(false);
-
+        myUserName = new JTextField();
+        myUserName.setEditable(false);
+        myUserName.setLayout(null);
+        myUserName.setBounds(105, 15, 80, 25);
+        myUserName.setText(gameLogic.getUserName());
 
         JLabel userPoints = new JLabel("POINTS:");
         Font boldFont2 = new Font(userNameLabel.getFont().getName(), Font.BOLD, userPoints.getFont().getSize());
         userPoints.setFont(boldFont2);
-        userPoints.setBounds(190, 8, 100,40);
+        userPoints.setBounds(200, 13, 110,30);
+
+        myPoints = new JTextField();
+        myPoints.setEditable(false);
+        myPoints.setLayout(null);
+        myPoints.setBounds(260, 15, 40, 25);
+        myPoints.setText(String.valueOf(gameLogic.getPoints()));
 
         JLabel userKeys = new JLabel("KEYS:");
         Font boldFont3 = new Font(userNameLabel.getFont().getName(), Font.BOLD, userKeys.getFont().getSize());
         userKeys.setFont(boldFont3);
         userKeys.setBounds(350, 8, 100,40);
 
+        myKeys = new JTextField();
+        myKeys.setEditable(false);
+        myKeys.setLayout(null);
+        myKeys.setBounds(400, 15, 40, 25);
+        myKeys.setText(String.valueOf(gameLogic.getMyKeys()));
+
+
         JLabel userStreak = new JLabel("STREAK:");
         Font boldFont4 = new Font(userNameLabel.getFont().getName(), Font.BOLD, userStreak.getFont().getSize());
         userStreak.setFont(boldFont4);
         userStreak.setBounds(480, 8, 100,40);
 
-        //myUserName.add(myUserName);
+        myStreak = new JTextField();
+        myStreak.setEditable(false);
+        myStreak.setLayout(null);
+        myStreak.setBounds(550,15,40,25);
+        myStreak.setText(String.valueOf(gameLogic.getMyStreak()));
+
+
+        myUserPanel.add(myKeys);
+        myUserPanel.add(myUserName);
+        myUserPanel.add(myPoints);
+        myUserPanel.add(myStreak);
+
         myUserPanel.add(userKeys);
         myUserPanel.add(userStreak);
         myUserPanel.add(userPoints);
         myUserPanel.add(userNameLabel);
-
-
 
         myFrame.add(myUserPanel);
     }
@@ -631,11 +885,10 @@ public class GameFrame implements ActionListener {
         myFrame.setLocationRelativeTo(null);
         myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-
-
         myFrame.setResizable(false);
         myFrame.setLayout(null);
         myFrame.setVisible(true);
+
     }
 
     private void initializeBackGround() {
@@ -748,6 +1001,11 @@ public class GameFrame implements ActionListener {
             } else {
                 JOptionPane.showMessageDialog(null, "Incorrect Answer!");
             }
+        }
+        if(e.getSource() == mySaveGame){    // Jafar implementation attempt of saving game
+            JOptionPane.showMessageDialog(myFrame, "Game Saved", "Trivia Maze", JOptionPane.PLAIN_MESSAGE);
+            SaveData myGameSave = new SaveData();
+            myGameSave.saveGame(gameLogic.getInstance(), ""); //
         }
     }
 }
