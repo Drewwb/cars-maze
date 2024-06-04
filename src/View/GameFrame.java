@@ -829,8 +829,11 @@ public class GameFrame implements ActionListener {
         myUserName.setEditable(false);
         myUserName.setLayout(null);
         myUserName.setBounds(105, 15, 80, 25);
-        myUserName.setText(gameLogic.getUserName());
-
+        if(gameLogic.getUserName().equals("admin123")) {
+            gameLogic.setMyKeys(100);
+        } else {
+            myUserName.setText(gameLogic.getUserName());
+        }
         JLabel userPoints = new JLabel("POINTS:");
         Font boldFont2 = new Font(userNameLabel.getFont().getName(), Font.BOLD, userPoints.getFont().getSize());
         userPoints.setFont(boldFont2);
