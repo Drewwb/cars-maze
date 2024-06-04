@@ -607,20 +607,20 @@ public class GameFrame implements ActionListener {
         myHeart1 = new JLabel();
         myHeart1.setLayout(null);
         myHeart1.setBounds(10, 10, 60, 60);
-        ImageIcon heart1 = new ImageIcon("heart.png");
+        ImageIcon heart1 = new ImageIcon("soundimage/heart.png");
         myHeart1.setIcon(heart1);
 
         myHeart2 = new JLabel();
         myHeart2.setLayout(null);
         myHeart2.setBounds(70, 10, 60, 60);
-        ImageIcon heart2 = new ImageIcon("heart.png");
+        ImageIcon heart2 = new ImageIcon("soundimage/heart.png");
         myHeart2.setIcon(heart2);
 
 
         myHeart3 = new JLabel();
         myHeart3.setLayout(null);
         myHeart3.setBounds(130, 10, 60, 60);
-        ImageIcon heart3 = new ImageIcon("heart.png");
+        ImageIcon heart3 = new ImageIcon("soundimage/heart.png");
         myHeart3.setIcon(heart3);
 
         spellPanel.add(myHeart1);
@@ -749,7 +749,7 @@ public class GameFrame implements ActionListener {
         g.drawLine(x + width, y, x, y + height);
     }
     private void displayCheckImage(Graphics g, int x, int y, int width, int height) {
-        ImageIcon icon = new ImageIcon("checkIcon.png");
+        ImageIcon icon = new ImageIcon("soundimage/checkIcon.png");
         Image checkImage = icon.getImage();
 
         g.drawImage(checkImage, x, y, width, height, null);
@@ -778,7 +778,7 @@ public class GameFrame implements ActionListener {
 
     private void displayDoorImage(Graphics g, int x, int y, int width, int height) {
         // Load the door image (replace "doorImage.jpg" with the path to your image file)
-        ImageIcon icon = new ImageIcon("door.png");
+        ImageIcon icon = new ImageIcon("soundimage/door.png");
         Image doorImage = icon.getImage();
 
         // Draw the door image at the specified position and size
@@ -787,7 +787,7 @@ public class GameFrame implements ActionListener {
 
     private void displayExitDoor(Graphics g, int x, int y, int width, int height) {
         // Load the door image (replace "doorImage.jpg" with the path to your image file)
-        ImageIcon icon = new ImageIcon("exitDoor.png");
+        ImageIcon icon = new ImageIcon("soundimage/exitDoor.png");
         Image doorImage = icon.getImage();
 
         // Draw the door image at the specified position and size
@@ -796,7 +796,7 @@ public class GameFrame implements ActionListener {
     private void displayKey(Graphics g, int width, int height) {
         //if(gameLogic.getMyKeys() == 0) {
             // Load the door image (replace "doorImage.jpg" with the path to your image file)
-            keyIcon = new ImageIcon("key.png");
+            keyIcon = new ImageIcon("soundimage/key.png");
             Image doorImage = keyIcon.getImage();
             int[] keyCoords = gameLogic.getKeyLocation();
 
@@ -807,7 +807,7 @@ public class GameFrame implements ActionListener {
     }
     private void displayCharacter(Graphics g, int x, int y, int width, int height) {
         // Load the door image (replace "doorImage.jpg" with the path to your image file)
-        ImageIcon icon = new ImageIcon("character.png");
+        ImageIcon icon = new ImageIcon("soundimage/character.png");
         Image doorImage = icon.getImage();
 
         // Draw the door image at the specified position and size
@@ -908,7 +908,7 @@ public class GameFrame implements ActionListener {
         this.myExitGame = new JMenuItem("Exit");
 
         this.mySaveGame.addActionListener(this);
-        this.mySaveGame.addActionListener(this);
+        this.myLoadGame.addActionListener(this);
         this.myExitGame.addActionListener(this);
 
         this.myFile.add(mySaveGame);
@@ -957,7 +957,7 @@ public class GameFrame implements ActionListener {
             JOptionPane.showMessageDialog(myFrame, "Game Saved", "Trivia Maze",
                 JOptionPane.PLAIN_MESSAGE);
             SaveData myGameSave = new SaveData();
-            myGameSave.saveGame(gameLogic.getInstance(), "GameData.ser");
+            myGameSave.saveGame(gameLogic.getInstance(), "");
         }
         if(e.getSource() == myAbout) {
             StringBuilder about = new StringBuilder();

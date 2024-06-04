@@ -10,6 +10,9 @@ public class  Launcher {
             @Override
             public void run() {
                 //GameFrame game = new GameFrame();
+
+                src.Model.Game.GameLogic gameLogic = new src.Model.Game.GameLogic(); // Create an instance of GameLogic
+                GameFrame gameFrame = new GameFrame(gameLogic); // Pass the GameLogic instance to the GameFrame constructor
             }
         });
     }

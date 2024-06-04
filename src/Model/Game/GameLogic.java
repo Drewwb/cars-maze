@@ -6,7 +6,7 @@ import src.Model.Questions.Question;
 import java.io.Serializable;
 
 
-public class GameLogic {
+public class GameLogic implements Serializable {
     private String userName;
     private int myPoints;
     private int myStreak;
@@ -14,16 +14,16 @@ public class GameLogic {
     private int myKeys;
 
     private boolean gameOver;
-    private Maze myMaze;
+    private transient Maze myMaze;
     private int characterRow;
     private int characterCol;
-    private int[] keyLocation; // coordinate for key 0 - row / 1 - col
+    private transient int[] keyLocation; // coordinate for key 0 - row / 1 - col
     private int currentRoomNumber; // Store the current room number
     private Question currentQuestion;
     private boolean isDoorCheck;
     private Direction currentDirection;
     private boolean hasKey;
-    private int[] exitDoorLocation;
+    private transient int[] exitDoorLocation;
     private boolean playerWin;
 
 
