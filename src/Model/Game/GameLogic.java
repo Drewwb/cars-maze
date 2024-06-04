@@ -2,20 +2,17 @@ package src.Model.Game;
 
 import src.Model.Questions.Question;
 
-<<<<<<< HEAD
+
 import java.io.Serializable;
 
-public class GameLogic implements Serializable {
-    private int points;
-    private boolean answerCorrect;
-=======
+
 public class GameLogic {
     private String userName;
     private int myPoints;
     private int myStreak;
     private int myHearts;
     private int myKeys;
->>>>>>> 783592acb9b99502e7b5fdb686c63f131a2b2250
+
     private boolean gameOver;
     private Maze myMaze;
     private int characterRow;
@@ -27,23 +24,21 @@ public class GameLogic {
     private Direction currentDirection;
     private boolean hasKey;
     private int[] exitDoorLocation;
-<<<<<<< HEAD
-=======
     private boolean playerWin;
 
->>>>>>> 783592acb9b99502e7b5fdb686c63f131a2b2250
+
 
     public GameLogic() {
         currentDirection = null;
         myMaze = new Maze(); // Maze that fully loaded
         keyLocation = myMaze.getKeyCoordinates();
-<<<<<<< HEAD
+
         System.out.println(keyLocation[0]); //col
         System.out.println(keyLocation[1]); //row
-=======
+
         System.out.println(keyLocation[0]); // CHECK
         System.out.println(keyLocation[1]); // CHECK
->>>>>>> 783592acb9b99502e7b5fdb686c63f131a2b2250
+
         this.currentQuestion = null;
         this.isDoorCheck = false;
         this.myPoints = 0;
@@ -55,9 +50,6 @@ public class GameLogic {
         this.hasKey = false;
         characterSpawn();
         currentRoomNumber = myMaze.getCurrentValue(characterRow, characterCol); // Initialize the current room number
-    }
-    public GameLogic getInstance(){
-        return this;
     }
 
     // Spawn character at the starting point, e.g., (1, 1)
@@ -290,13 +282,8 @@ public class GameLogic {
     public Direction getCurrentDirection() {
         return currentDirection;
     }
-<<<<<<< HEAD
 
-    public boolean doesCharacterHaveKey() { //getter method
-        return hasKey;
-    }
 
-=======
     public void setPlayerWin(boolean playerWin) {
         this.playerWin = playerWin;
     }
@@ -422,26 +409,16 @@ public class GameLogic {
     public boolean doesCharacterHaveKey() { //getter method
         return hasKey;
     }
->>>>>>> 783592acb9b99502e7b5fdb686c63f131a2b2250
     private void isKeyAtThisLocation(int row, int col) {
         int keyRow = keyLocation[1];
         int keyCol = keyLocation[0];
         if(row == keyRow && col == keyCol) {
             hasKey = true;
-<<<<<<< HEAD
+
             System.out.println("USER PICKED UP KEY");
         }
     }
 
-=======
-            // set the key coordinate to 0, 0 so user can not access it no more.
-            keyLocation[1] = 0;
-            keyLocation[0] = 0;
-            this.myMaze.setCurrentValue(0,0,1); // make it a wall?
-            System.out.println("USER PICKED UP KEY");
-        }
-    }
->>>>>>> 783592acb9b99502e7b5fdb686c63f131a2b2250
     private void isExitDoorAtThisLocation(int row, int col){
         if(row == exitDoorLocation[0] && col == exitDoorLocation[1]) { //true if exit door is there
             if(doesCharacterHaveKey()) {
