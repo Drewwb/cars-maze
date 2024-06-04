@@ -1,6 +1,8 @@
 package src.Model.Game;
 
-public class Room {
+import java.io.Serializable;
+
+public class Room implements Serializable {
     private Door[] doors;
     private boolean visited;
     private int myRoomNumber;

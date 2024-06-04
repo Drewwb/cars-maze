@@ -1,6 +1,8 @@
 package src.Model.Game;
 
-public enum Direction {
+import java.io.Serializable;
+
+public enum Direction implements Serializable {
     NORTH,
     EAST,
     SOUTH,

@@ -1,11 +1,12 @@
 package src.Model.Game;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Random;
 
-public class Maze {
+public class Maze implements Serializable {
     private ArrayList<Room> myRoomList;
     private Room[][] rooms;
     private HashSet<Integer> roomNumbersSet;
@@ -100,5 +101,11 @@ public class Maze {
     }
     public int[] getExitDoorCoordinates() {
         return exitDoorCoordinates;
+    }
+    public void setKeyRow(int keyRow) {
+        this.keyRow = keyRow;
+    }
+    public void setKeyCol(int keyCol) {
+        this.keyCol = keyCol;
     }
 }

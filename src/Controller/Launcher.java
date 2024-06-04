@@ -9,7 +9,7 @@ public class  Launcher {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                GameFrame game = new GameFrame();
+                //GameFrame game = new GameFrame();
             }
         });
     }

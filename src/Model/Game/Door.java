@@ -3,7 +3,9 @@ package src.Model.Game;
 import src.Model.Questions.Question;
 import src.Model.Questions.QuestionFactory;
 
-public class Door {
+import java.io.Serializable;
+
+public class Door implements Serializable {
     private Direction myDirection;
     private Question myQuestion;
     private boolean myDoorLock;
