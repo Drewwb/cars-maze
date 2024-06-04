@@ -21,8 +21,8 @@ public class GameLogic {
         currentDirection = null;
         myMaze = new Maze(); // Maze that fully loaded
         keyLocation = myMaze.getKeyCoordinates();
-        System.out.println(keyLocation[0]);
-        System.out.println(keyLocation[1]);
+        System.out.println(keyLocation[0]); //col
+        System.out.println(keyLocation[1]); //row
         this.currentQuestion = null;
         this.isDoorCheck = false;
         this.points = 0;
