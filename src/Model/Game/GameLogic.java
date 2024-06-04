@@ -12,7 +12,6 @@ public class GameLogic {
     private int myStreak;
     private int myHearts;
     private int myKeys;
-
     private boolean gameOver;
     private Maze myMaze;
     private int characterRow;
@@ -25,8 +24,6 @@ public class GameLogic {
     private boolean hasKey;
     private int[] exitDoorLocation;
     private boolean playerWin;
-
-
 
     public GameLogic() {
         currentDirection = null;
