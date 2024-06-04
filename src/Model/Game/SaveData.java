@@ -2,7 +2,7 @@ package src.Model.Game;
 
 import java.io.*;
 
-public class SaveData { // this class will have a method to saveData and method to loadData using serializable
+public class SaveData implements Serializable{ // this class will have a method to saveData and method to loadData using serializable
     // Method to save player data to a file
     public static void saveGame(Object object, String fileName) {
         try {

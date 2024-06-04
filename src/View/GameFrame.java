@@ -2,6 +2,7 @@ package src.View;
 
 import src.Model.Game.Direction;
 import src.Model.Game.GameLogic;
+import src.Model.Game.SaveData;
 import src.Model.Questions.MultipleChoiceQuestion;
 import src.Model.Questions.Question;
 import src.Model.Questions.ShortAnswerQuestion;
@@ -689,6 +690,21 @@ public class GameFrame implements ActionListener {
             if(option == JOptionPane.OK_OPTION) {
                 myFrame.dispose();
             }
+        }
+        if(e.getSource() == myLoadGame){    // Jafar implementation attempt of loading game
+            JOptionPane.showMessageDialog(myFrame, "Game Loaded", "Trivia Maze", JOptionPane.PLAIN_MESSAGE);
+            SaveData myGameSave = new SaveData();
+            GameLogic placeHolder = (GameLogic) myGameSave.loadGame("GameData.ser");
+            gameLogic.setCharacterRow(placeHolder.getCharacterRow());
+            gameLogic.setCharacterCol(placeHolder.getCharacterCol());
+            System.out.println(gameLogic.getCharacterRow());
+            mazePanel.repaint();
+        }
+        if(e.getSource() == mySaveGame) {    // Jafar implementation attempt of saving game
+            JOptionPane.showMessageDialog(myFrame, "Game Saved", "Trivia Maze",
+                JOptionPane.PLAIN_MESSAGE);
+            SaveData myGameSave = new SaveData();
+            myGameSave.saveGame(gameLogic.getInstance(), "GameData.ser");
         }
         if(e.getSource() == myAbout) {
             StringBuilder about = new StringBuilder();
