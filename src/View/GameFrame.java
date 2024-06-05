@@ -911,7 +911,7 @@ public class GameFrame implements ActionListener {
         this.myExitGame = new JMenuItem("Exit");
 
         this.mySaveGame.addActionListener(this);
-        this.mySaveGame.addActionListener(this);
+        this.myLoadGame.addActionListener(this);
         this.myExitGame.addActionListener(this);
 
         this.myFile.add(mySaveGame);
@@ -990,10 +990,24 @@ public class GameFrame implements ActionListener {
             }
 
         }
-        if(e.getSource() == mySaveGame){    // Jafar implementation attempt of saving game
+        if (e.getSource() == myLoadGame) {
+            JOptionPane.showMessageDialog(myFrame, "Game Loaded", "Trivia Maze", JOptionPane.PLAIN_MESSAGE);
+            SaveData myGameSave = new SaveData();
+            GameLogic placeHolder = (GameLogic) myGameSave.loadGame("gameSave.ser"); // Provide a valid filename
+            if (placeHolder != null) {
+                gameLogic.setCharacterRow(placeHolder.getCharacterRow());
+                gameLogic.setCharacterCol(placeHolder.getCharacterCol());
+                System.out.println(gameLogic.getCharacterRow());
+                mazePanel.repaint();
+            } else {
+                System.out.println("Failed to load game data.");
+            }
+        }
+
+        if (e.getSource() == mySaveGame) {
             JOptionPane.showMessageDialog(myFrame, "Game Saved", "Trivia Maze", JOptionPane.PLAIN_MESSAGE);
             SaveData myGameSave = new SaveData();
-            myGameSave.saveGame(gameLogic.getInstance(), ""); //
+            myGameSave.saveGame(gameLogic.getInstance(), "gameSave.ser"); // Provide a valid filename
         }
     }
 }

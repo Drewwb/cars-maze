@@ -2,7 +2,9 @@ package src.Model.Game;
 
 import src.Model.Questions.Question;
 
-public class GameLogic {
+import java.io.Serializable;
+
+public class GameLogic implements Serializable {
     private String userName;
     private int myPoints;
     private int myStreak;
@@ -66,11 +68,11 @@ public class GameLogic {
     public int getCharacterRow() {
         return characterRow;
     }
-
+    public void setCharacterRow(int row) { this.characterRow = row;}
     public int getCharacterCol() {
         return characterCol;
     }
-
+    public void setCharacterCol(int col) { this.characterCol = col;}
     public int getPoints() {
         return this.myPoints;
     }
