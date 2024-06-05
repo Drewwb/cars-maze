@@ -908,7 +908,7 @@ public class GameFrame implements ActionListener {
         this.myExitGame = new JMenuItem("Exit");
 
         this.mySaveGame.addActionListener(this);
-        this.mySaveGame.addActionListener(this);
+        this.myLoadGame.addActionListener(this);
         this.myExitGame.addActionListener(this);
 
         this.myFile.add(mySaveGame);
