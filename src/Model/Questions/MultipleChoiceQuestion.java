@@ -2,6 +2,7 @@ package src.Model.Questions;
 
 import src.Model.Questions.Question;
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -9,7 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
-public class MultipleChoiceQuestion extends Question {
+public class MultipleChoiceQuestion extends Question implements Serializable {
 
     private String[] options = new String[4];
 

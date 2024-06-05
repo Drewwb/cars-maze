@@ -1,6 +1,7 @@
 package src.Model.Questions;
 
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -8,7 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Random;
 
-public class QuestionFactory {
+public class QuestionFactory implements Serializable {
     private final Random random;
 
     public QuestionFactory() {
