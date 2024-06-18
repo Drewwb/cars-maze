@@ -13,8 +13,13 @@ Java Swing GUI: The game features a graphical user interface built using Java Sw
 
 # How to Play
 Start the Game: Run the game using the instructions above.
+
 Navigate the Maze: Use the arrow keys to move your character through the maze.
+
 Answer Trivia Questions: Approach a door and answer the trivia question to unlock it.
+
 Find the Key: Locate the key randomly placed in the maze.
+
 Exit the Maze: Navigate to the exit door once you have the key to win the game.
+
 Save and Load: Use the save option to save your current game state and load it later to continue playing.
