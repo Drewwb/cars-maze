@@ -15,7 +15,7 @@ Welcome to our 2D Trivia Maze Game! This game was developed as a group project b
 **Java Swing GUI**: The game features a graphical user interface built using Java Swing.
 
 # How to Play
-**Start the Game**: Run the game using the instructions above.
+**Start the Game**: Run the game from the Controller folder.
 
 **Navigate the Maze**: Use the arrow keys to move your character through the maze.
 
